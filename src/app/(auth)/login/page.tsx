@@ -1,8 +1,11 @@
+import Login from '@/components/auth/Login'
 import React from 'react'
 
 function page() {
   return (
-    <div>page</div>
+    <div>
+      <Login />
+    </div>
   )
 }
 
