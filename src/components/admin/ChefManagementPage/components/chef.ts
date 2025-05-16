@@ -2,7 +2,7 @@ export type Chef = {
   id: number;
   name: string;
   email: string;
-  experience: number;
+  experience: string;
   location: { lat: number; lng: number };
   state: string;
   district: string;

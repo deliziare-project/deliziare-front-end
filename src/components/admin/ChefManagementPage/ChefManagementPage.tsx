@@ -9,6 +9,7 @@ import ChefsTable from './components/ChefsTable';
 import ChefDetailModal from './components/ChefDetailModal';
 import CertificateModal from './components/CertificateModal';
 import EmptyState from './components/EmptyState';
+import axiosInstance from '@/api/axiosInstance';
 
 const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
   const [chefs, setChefs] = useState<Chef[]>(initialChefs);
@@ -36,15 +37,25 @@ const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
     });
   }, [chefs, searchTerm, filterDistrict, filterBlocked]);
 
-  const toggleBlockStatus = (id: number) => {
-    setChefs((prev) =>
-      prev.map((chef) =>
-        chef.id === id ? { ...chef, isBlocked: !chef.isBlocked } : chef
-      )
-    );
-    if (selectedChef && selectedChef.id === id) {
-      setSelectedChef({ ...selectedChef, isBlocked: !selectedChef.isBlocked });
-    }
+  const toggleBlockStatus = async(id: number) => {
+   
+        try {
+          const response = await axiosInstance.patch(`/admin/chefs/${id}/toggle-block`);
+        const updatedStatus = response.data.isBlocked;
+        setChefs((prev) =>
+        prev.map((chef) =>
+        chef.id === id ? { ...chef, isBlocked: updatedStatus } : chef
+        )
+        );
+        
+       if (selectedChef && selectedChef.id === id) {
+        setSelectedChef({ ...selectedChef, isBlocked: updatedStatus });
+        }
+        } catch (error) {
+            console.error('Failed to toggle block status:', error);
+    alert('Failed to update block status. Please try again.');
+        }
+
   };
 
   return (

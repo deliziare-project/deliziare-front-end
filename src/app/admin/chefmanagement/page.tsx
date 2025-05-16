@@ -1,77 +1,35 @@
+'use client'
 
-import ChefManagementPage from '@/components/admin/ChefManagementPage/ChefManagementPage'
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '@/api/axiosInstance';
+import ChefManagementPage from '@/components/admin/ChefManagementPage/ChefManagementPage';
 
-const page = () => {
-  
-const initialChef= [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    experience: 5,
-    location: { lat: 8.5241, lng: 76.9366 }, 
-    state: 'Kerala',
-    district: 'Thiruvananthapuram',
-    isBlocked: false,
-    specialisations: ['Italian', 'Dessert'],
-    certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    experience: 3,
-    location: { lat: 9.5011, lng: 76.5484 },
-    state: 'Kerala',
-    district: 'Alappuzha',
-    isBlocked: true,
-    specialisations: ['Chinese', 'Vegan'],
-    certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
-  },
-  {
-    id: 3,
-    name: 'Michael Johnson',
-    email: 'michael@example.com',
-    experience: 7,
-    location: { lat: 10.8505, lng: 76.2711 }, 
-    state: 'Kerala',
-    district: 'Palakkad',
-    isBlocked: false,
-    specialisations: ['French', 'Mediterranean'],
-    certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
-  },
-  {
-    id: 4,
-    name: 'Sarah Williams',
-    email: 'sarah@example.com',
-    experience: 4,
-    location: { lat: 11.8745, lng: 75.3704 }, 
-    state: 'Kerala',
-    district: 'Kannur',
-    isBlocked: false,
-    specialisations: ['Seafood', 'Caribbean'],
-    certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
-  },
-   {
-    id: 5,
-    name: 'bob',
-    email: 'bob@example.com',
-    experience: 8,
-    location: { lat: 11.8745, lng: 75.3704 }, 
-    state: 'Kerala',
-    district: 'Malappuram',
-    isBlocked: true,
-    specialisations: ['Seafood', 'Caribbean'],
-    certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
-  },
-];
+const Page = () => {
+  const [chefs, setChefs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchChefs = async () => {
+      try {
+        const response = await axiosInstance.get('/admin/getchefs');
+        setChefs(response.data);
+      } catch (error) {
+        console.error('Error fetching chefs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChefs();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div>
-      
-        <ChefManagementPage initialChefs={initialChef} />
+      <ChefManagementPage initialChefs={chefs} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
