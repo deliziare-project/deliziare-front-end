@@ -1,16 +1,40 @@
-'use client'; // Only if you're using app directory in Next.js 13+
 
-import React, { useState } from 'react';
+
+'use client'; 
+
+
+import React, { useState, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/store'; 
+import { loginUser, resetRegisterState } from '../../features/authSlice';
+import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { loading, error, success, registrationData } = useAppSelector((state) => state.auth);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic
+
+   
+    dispatch(loginUser({ email, password }));
+    router.push('/user/home')
+
+
     console.log('Logging in with:', { email, password });
+
   };
+
+  useEffect(() => {
+    if (success) {
+      alert('Login successful!');
+      console.log('User data:', registrationData.user);
+      
+    }
+  }, [success, registrationData]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -39,11 +63,13 @@ const Login: React.FC = () => {
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
           </div>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-[#213D72] text-white py-2 rounded-xl font-semibold hover:bg-[#1a2f5c] transition"
+            disabled={loading}
+            className="w-full bg-[#213D72] text-white py-2 rounded-xl font-semibold hover:bg-[#1a2f5c] transition disabled:opacity-50"
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>

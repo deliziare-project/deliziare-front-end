@@ -13,19 +13,19 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex flex-col gap-8 flex-1 items-center">
-        <Link href="/admin/dashboard">
+        <Link href="/admin">
           <div title="Dashboard" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
             <LayoutDashboard size={24} />
           </div>
         </Link>
 
-        <Link href="/admin/usermanagement">
+        <Link href="/admin/users">
           <div title="Users" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
             <Users size={24} />
           </div>
         </Link>
 
-        <Link href="/admin/chefmanagement">
+        <Link href="/admin/chefs">
           <div title="Chefs" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
             <ChefHat size={24} />
           </div>

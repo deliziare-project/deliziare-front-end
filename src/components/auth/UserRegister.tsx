@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { checkEmailExists, registerHost, resetRegisterState } from "@/features/authSlice";
+import { registerHost, resetRegisterState ,sendOtpForHost,setRegistrationData,checkEmailExists} from "@/features/authSlice";
 import { useRouter } from 'next/navigation';
 import * as Yup from "yup";
 import { registerValidationSchema } from "../validation/formValidation";
@@ -63,15 +63,23 @@ const validateField = async (name: string, value: string) => {
       password: form.password,
     };
 
-    dispatch(registerHost(hostData));
+   // dispatch(registerHost(hostData));
+    dispatch(setRegistrationData(hostData));
+    dispatch(sendOtpForHost(hostData));
+    
+    
   };
+  
 
   useEffect(() => {
     if (success) {
-      router.push(`/verifyotp?email=${form.email}`);
+      router.push(`/verifyotp?email=${form.email}&role=host`);
       dispatch(resetRegisterState());
     }
-  }, [success, dispatch, router, form.email]);
+
+  }, [success]);
+  
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
