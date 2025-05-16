@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerChef, resetRegisterState } from '../../features/authSlice';
+import { registerChef, resetRegisterState,sendOtpForChef,setRegistrationData } from '../../features/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import dynamic from 'next/dynamic';
 import { Plus, X } from 'lucide-react';
@@ -38,6 +38,19 @@ const ChefRegister = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const chefData = {
+      name,
+      email,
+      phone,
+      password,
+      experience,
+      specializations,
+      location,
+      // Do not include certificate file here
+    };
+    dispatch(setRegistrationData(chefData));
+    
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -48,7 +61,7 @@ const ChefRegister = () => {
     formData.append('locationLat', location.lat.toString());
     formData.append('locationLng', location.lng.toString());
     if (certificate) formData.append('certificate', certificate);
-    dispatch(registerChef(formData));
+    dispatch(sendOtpForChef(formData));
   };
 
   useEffect(() => {

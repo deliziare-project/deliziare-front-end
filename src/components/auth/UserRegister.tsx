@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { registerHost, resetRegisterState } from "@/features/authSlice";
+import { registerHost, resetRegisterState ,sendOtpForHost,setRegistrationData} from "@/features/authSlice";
 import { useRouter } from 'next/navigation';
 
 
@@ -32,15 +32,20 @@ export default function RegisterPage() {
       phone: Number(form.phone),
       password: form.password,
     };
-    dispatch(registerHost(hostData));
+    dispatch(setRegistrationData(hostData));
+    dispatch(sendOtpForHost(hostData));
+    
+    //localStorage.setItem('pendingHostData', JSON.stringify(hostData));
   };
+  
 
   useEffect(() => {
     if (success) {
-      router.push(`/verifyotp?email=${form.email}`);
+      router.push(`/verifyotp?email=${form.email}&role=host`);
       dispatch(resetRegisterState());
     }
-  }, [success, dispatch, router, form.email]);
+  }, [success]);
+  
   
 
   return (

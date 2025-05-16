@@ -13,7 +13,7 @@ export default function VerifyOtpPage() {
   const email = searchParams.get('email');
 
   const { loading, error, success } = useSelector((state: RootState) => state.auth);
-
+  const registrationData = useSelector((state: RootState) => state.auth.registrationData);
   const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
@@ -41,7 +41,11 @@ export default function VerifyOtpPage() {
     e.preventDefault();
     const otp = otpDigits.join('');
     if (email && otp.length === 6) {
-      dispatch(verifyOtp({ email, otp }));
+      let payload: any = { email, otp };
+      if (registrationData) {
+        payload = { ...payload, ...registrationData };
+      }
+      dispatch(verifyOtp(payload));
     }
   };
 
