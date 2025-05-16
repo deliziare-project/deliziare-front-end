@@ -1,11 +1,15 @@
 import { LayoutDashboard, Users, ChefHat, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import logo from '../../../public/logo/delizaire-logo.png'
 
 export default function Sidebar() {
   return (
     <aside className="h-screen w-20 bg-white text-gray-800 flex flex-col items-center py-6 px-2 shadow-md">
       <div className="mb-10">
-        <span className="text-xl font-bold text-gray-900">A</span> {/* Logo */}
+        <span className="text-xl font-bold text-gray-900">
+        <Image src={logo} alt="Deliziare Logo" width={40} height={40} />
+        </span> 
       </div>
 
       <nav className="flex flex-col gap-8 flex-1 items-center">

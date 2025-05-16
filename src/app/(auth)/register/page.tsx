@@ -1,10 +1,10 @@
-import ChefRegisterPage from '@/components/auth/ChefRegister'
+import RegisterHome from '@/components/auth/RegisterHome'
 import React from 'react'
 
 function page() {
   return (
     <div>
-        <ChefRegisterPage/>
+        <RegisterHome />
     </div>
   )
 }
