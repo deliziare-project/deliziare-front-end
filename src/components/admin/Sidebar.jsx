@@ -1,21 +1,20 @@
-'use client'
+
+'use client';
+
 import { LayoutDashboard, Users, ChefHat, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../../public/logo/delizaire-logo.png'
-import { useRouter } from 'next/navigation';
+
 import { useDispatch } from 'react-redux';
-import { logout } from '@/features/authSlice';
+import { logoutUser } from '@/features/authSlice';
 
 export default function Sidebar() {
-  const router=useRouter();
-  const dispatch = useDispatch();
+  const dispatch=useDispatch()
+  const handleLogout=()=>{
+  dispatch(logoutUser())
+  }
 
-  const handleLogout = () => {
-    
-    dispatch(logout());   
-    router.push('/login');
-  };
   return (
     <aside className="h-screen w-20 bg-white text-gray-800 flex flex-col items-center py-6 px-2 shadow-md">
       <div className="mb-10">
