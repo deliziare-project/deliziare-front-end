@@ -1,9 +1,9 @@
+'use client';
 
-import ChefManagementPage from '@/components/admin/ChefManagementPage/ChefManagementPage'
-import React from 'react'
+import React  from 'react';
+import ChefManagementPage from './ChefManagementPage/ChefManagementPage';
 
-const page = () => {
-  
+
 const initialChef= [
   {
     id: 1,
@@ -53,25 +53,15 @@ const initialChef= [
     specialisations: ['Seafood', 'Caribbean'],
     certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
   },
-   {
-    id: 5,
-    name: 'bob',
-    email: 'bob@example.com',
-    experience: 8,
-    location: { lat: 11.8745, lng: 75.3704 }, 
-    state: 'Kerala',
-    district: 'Malappuram',
-    isBlocked: true,
-    specialisations: ['Seafood', 'Caribbean'],
-    certificate: 'https://fostac.fssai.gov.in/assets/certificate/fostac.jpg',
-  },
 ];
-  return (
-    <div>
-      
-        <ChefManagementPage initialChefs={initialChef} />
-    </div>
-  )
-}
 
-export default page
+const ChefManagementComponents = () => {
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+    <ChefManagementPage initialChefs={initialChef}  />
+    </div>
+  );
+};
+
+export default ChefManagementComponents;
