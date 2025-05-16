@@ -1,9 +1,16 @@
+'use client';
 import { LayoutDashboard, Users, ChefHat, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../../public/logo/delizaire-logo.png'
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '@/features/authSlice';
 
 export default function Sidebar() {
+  const dispatch=useDispatch()
+  const handleLogout=()=>{
+dispatch(logoutUser())
+  }
   return (
     <aside className="h-screen w-20 bg-white text-gray-800 flex flex-col items-center py-6 px-2 shadow-md">
       <div className="mb-10">
@@ -33,7 +40,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="mt-auto mb-4">
-        <div title="Logout" className="hover:bg-red-100 text-red-500 p-3 rounded-md cursor-pointer">
+        <div title="Logout" className="hover:bg-red-100 text-red-500 p-3 rounded-md cursor-pointer" onClick={handleLogout}>
           <LogOut size={24} />
         </div>
       </div>

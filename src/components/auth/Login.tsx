@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { loading, error, success, registrationData } = useAppSelector((state) => state.auth);
+  const { loading, error, success, registrationData } = useAppSelector((state:any) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,18 +21,21 @@ const Login: React.FC = () => {
 
    
     dispatch(loginUser({ email, password }));
-    router.push('/user/home')
+    // router.push('/user/home')
 
 
-    console.log('Logging in with:', { email, password });
+
 
   };
 
   useEffect(() => {
     if (success) {
-      alert('Login successful!');
-      console.log('User data:', registrationData.user);
       
+      if(registrationData.user&&registrationData.user.role=='admin'){
+       router.push('/admin/dashboard')
+      }else if(registrationData.user&&registrationData.user.role=='host'){
+       router.push('/user/home')
+      }
     }
   }, [success, registrationData]);
 
