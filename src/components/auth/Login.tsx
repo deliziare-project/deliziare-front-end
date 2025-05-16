@@ -1,4 +1,4 @@
-'use client'; // Only if you're using app directory in Next.js 13+
+'use client'; 
 
 import React, { useState } from 'react';
 
@@ -8,7 +8,7 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic
+
     console.log('Logging in with:', { email, password });
   };
 
