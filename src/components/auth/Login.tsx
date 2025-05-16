@@ -1,4 +1,6 @@
-'use client';
+
+'use client'; 
+
 
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store'; 
@@ -15,8 +17,13 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+   
     dispatch(loginUser({ email, password }));
     router.push('/user/home')
+
+
+    console.log('Logging in with:', { email, password });
+
   };
 
   useEffect(() => {
