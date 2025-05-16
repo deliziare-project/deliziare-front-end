@@ -1,4 +1,5 @@
 
+
 'use client'; 
 
 
@@ -17,6 +18,7 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
    
     dispatch(loginUser({ email, password }));
     router.push('/user/home')
