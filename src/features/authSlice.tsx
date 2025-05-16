@@ -106,14 +106,10 @@ interface OtpPayload {
   
   export const sendOtpForChef = createAsyncThunk(
     'auth/sendOtpForChef',
-    async (
-      chefData: { name: string; email: string; password: string; phone: number },
-      thunkAPI
-    ) => {
+    async (formData: FormData, thunkAPI) => {
       try {
-        const response = await axiosInstance.post('/users/send-otp', {
-          role: 'chef',
-          ...chefData,
+        const response = await axiosInstance.post('/users/send-otp', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
         return response.data;
       } catch (err: any) {
@@ -165,6 +161,12 @@ const registerSlice = createSlice({
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
+    logout: (state) => {
+        state.loading = false;
+        state.error = null;
+        state.success = false;
+        state.registrationData = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -264,5 +266,5 @@ const registerSlice = createSlice({
   },
 });
 
-export const { resetRegisterState ,setRegistrationData} = registerSlice.actions;
+export const { resetRegisterState ,setRegistrationData,logout} = registerSlice.actions;
 export default registerSlice.reducer;

@@ -38,19 +38,7 @@ const ChefRegister = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const chefData = {
-      name,
-      email,
-      phone,
-      password,
-      experience,
-      specializations,
-      location,
-      // Do not include certificate file here
-    };
-    dispatch(setRegistrationData(chefData));
-    
+  
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -60,7 +48,19 @@ const ChefRegister = () => {
     formData.append('specialize', JSON.stringify(specializations));
     formData.append('locationLat', location.lat.toString());
     formData.append('locationLng', location.lng.toString());
+    formData.append('role', 'chef');
     if (certificate) formData.append('certificate', certificate);
+  
+    // Debugging: Log FormData contents
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+  
+    dispatch(setRegistrationData({
+      name, email, phone, password, experience, 
+      specializations, location
+    }));
+    
     dispatch(sendOtpForChef(formData));
   };
 
@@ -75,6 +75,8 @@ const ChefRegister = () => {
       setSpecialize('');
       setSpecializations([]);
       setCertificate(null);
+
+      
       dispatch(resetRegisterState());
   
       
@@ -110,7 +112,7 @@ const ChefRegister = () => {
           </div>
         ))}
 
-        {/* Specialize In with plus button */}
+        
         <div>
           <label className="block text-gray-700 font-medium mb-1">Specialize In</label>
           <div className="flex items-center space-x-2">
