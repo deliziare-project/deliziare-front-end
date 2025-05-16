@@ -11,7 +11,7 @@ const Page = () => {
   useEffect(() => {
     const fetchChefs = async () => {
       try {
-        const response = await axiosInstance.get('/admin/getchefs');
+        const response = await axiosInstance.get('/admin/getchefs',{withCredentials:true});
         setChefs(response.data);
       } catch (error) {
         console.error('Error fetching chefs:', error);

@@ -7,6 +7,8 @@ interface RegisterState {
   error: string | null;
   success: boolean;
   registrationData?:any;
+ currentUser: any;
+ isAuthenticated: boolean;
 }
 
 const initialState: RegisterState = {
@@ -14,6 +16,8 @@ const initialState: RegisterState = {
   error: null,
   success: false,
   registrationData: null,
+  currentUser: null,
+  isAuthenticated: false,
 };
 
 
@@ -144,13 +148,35 @@ interface LoginPayload {
     async (loginData, thunkAPI) => {
       try {
         const response = await axiosInstance.post('/users/login', loginData);
+        console.log(response.data)
         return response.data;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.error || 'Login failed');
       }
     }
   );
-  
+  export const checkCurrentUser = createAsyncThunk(
+  'auth/checkCurrentUser',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get('/users/me',{withCredentials:true});
+      return response.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
+    }
+  }
+);
+export const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, thunkAPI) => {
+    try {
+      await axiosInstance.post('/users/logout', {}, { withCredentials: true });
+      return true;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Logout failed');
+    }
+  }
+);
 
 const registerSlice = createSlice({
   name: 'auth',
@@ -165,10 +191,32 @@ const registerSlice = createSlice({
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
+     setCurrentUser: (state, action) => {
+    state.currentUser = action.payload;
+    state.isAuthenticated = !!action.payload;
+  },
+   logoutUser: (state) => {
+    state.currentUser = null;
+    state.isAuthenticated = false;
+    },
+
+
   },
   extraReducers: (builder) => {
     builder
-      
+        .addCase(checkCurrentUser.pending, (state) => {
+        state.loading = true;
+        })
+        .addCase(checkCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentUser = action.payload;
+        state.isAuthenticated = true;
+        })
+       .addCase(checkCurrentUser.rejected, (state) => {
+        state.loading = false;
+        state.currentUser = null;
+        state.isAuthenticated = false;
+        })
       .addCase(registerHost.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -259,10 +307,22 @@ const registerSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         state.success = false;
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.currentUser = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
-      
   },
 });
 
 export const { resetRegisterState ,setRegistrationData} = registerSlice.actions;
+
 export default registerSlice.reducer;
