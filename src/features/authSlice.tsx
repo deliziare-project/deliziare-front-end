@@ -6,6 +6,7 @@ interface RegisterState {
   loading: boolean;
   error: string | null;
   success: boolean;
+  otpVerified:boolean;
   registrationData?:any;
  currentUser: any;
  isAuthenticated: boolean;
@@ -15,6 +16,7 @@ const initialState: RegisterState = {
   loading: false,
   error: null,
   success: false,
+  otpVerified:false,
   registrationData: null,
   currentUser: null,
   isAuthenticated: false,
@@ -67,7 +69,16 @@ interface OtpPayload {
     name?: string;
     password?: string;
     phone?: string | number;
+    role?: 'host' | 'chef' | 'deliveryBoy';
+    location?: {
+      lat: number;
+      lng: number;
+    };
+    experience?: string;
+    specialize?: string[];
+    certificate?: string; 
   }
+  
   
   interface VerifiedUser {
     _id: string;
@@ -80,7 +91,11 @@ interface OtpPayload {
     'auth/verifyOtp',
     async (payload, { rejectWithValue }) => {
       try {
-        const res = await axiosInstance.post('/users/verify-otp', payload);
+        console.log('Sending OTP payload:', payload); 
+        const res = await axiosInstance.post('/users/verify-otp', payload, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+          
         return res.data.user;
       } catch (err: any) {
         return rejectWithValue({
@@ -89,6 +104,7 @@ interface OtpPayload {
       }
     }
   );
+  
   
   export const sendOtpForHost = createAsyncThunk(
     'auth/sendOtpForHost',
@@ -261,11 +277,12 @@ const registerSlice = createSlice({
       })
       .addCase(verifyOtp.fulfilled, (state) => {
         state.loading = false;
-        state.success = true;
+        state.otpVerified = true;
       })
       .addCase(verifyOtp.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as { message: string })?.message;
+        state.otpVerified = false;
       })
       .addCase(sendOtpForHost.pending, (state) => {
         state.loading = true;
@@ -282,6 +299,7 @@ const registerSlice = createSlice({
       .addCase(sendOtpForChef.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.otpVerified = false;
       })
       .addCase(sendOtpForChef.fulfilled, (state) => {
         state.loading = false;

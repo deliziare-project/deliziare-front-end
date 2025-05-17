@@ -43,7 +43,7 @@ export default function RegisterPage() {
   useEffect(() => {
     if (success) {
       router.push(`/verifyotp?email=${form.email}&role=host`);
-      dispatch(resetRegisterState());
+      //dispatch(resetRegisterState());
     }
   }, [success]);
 

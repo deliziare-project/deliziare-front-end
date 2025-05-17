@@ -38,7 +38,21 @@ const ChefRegister = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-  
+
+    const chefData = {
+      name,
+      email,
+      phone,
+      password,
+      experience,
+      specializations,
+      location,
+      role: 'chef',
+      
+    };
+    dispatch(setRegistrationData(chefData));
+    
+    
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -50,39 +64,41 @@ const ChefRegister = () => {
     formData.append('locationLng', location.lng.toString());
     formData.append('role', 'chef');
     if (certificate) formData.append('certificate', certificate);
-  
-    // Debugging: Log FormData contents
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-  
-    dispatch(setRegistrationData({
-      name, email, phone, password, experience, 
-      specializations, location
-    }));
-    
     dispatch(sendOtpForChef(formData));
   };
 
-  useEffect(() => {
-    if (success) {
-      alert('Chef registered successfully!');
-      setName('');
-      setEmail('');
-      setPhone('');
-      setPassword('');
-      setExperience('');
-      setSpecialize('');
-      setSpecializations([]);
-      setCertificate(null);
+//   useEffect(() => {
+//     if (success) {
+//     //   alert('Chef registered successfully!');
+//     //   setName('');
+//     //   setEmail('');
+//     //   setPhone('');
+//     //   setPassword('');
+//     //   setExperience('');
+//     //   setSpecialize('');
+//     //   setSpecializations([]);
+//     //   setCertificate(null);
+     
+  
+     
+//       router.push(`/verifyotp?email=${email}&role=chef`);
+//       dispatch(resetRegisterState());
+       
+//     }
+//   }, [success, dispatch, router]);
 
-      
-      dispatch(resetRegisterState());
+
+useEffect(() => {
+    if (success) {
+      router.push(`/verifyotp?email=${encodeURIComponent(email)}&role=chef`);
   
       
-      router.push('/verifyotp');
+      setTimeout(() => {
+        dispatch(resetRegisterState());
+      }, 60000);
     }
-  }, [success, dispatch, router]);
+  }, [success, dispatch, router, email]);
+  
   
 
   const inputStyles =
@@ -112,7 +128,7 @@ const ChefRegister = () => {
           </div>
         ))}
 
-        
+        {/* Specialize In with plus button */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">Specialize In</label>
           <div className="flex items-center space-x-2">

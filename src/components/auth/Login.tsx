@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     dispatch(loginUser({ email, password }));
-    router.push('/user/home');
+    
     console.log('Logging in with:', { email, password });
 
   };
@@ -26,7 +26,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (success) {
 
-      alert('Login successful!');
+      
       console.log('User data:', registrationData.user);
 
       

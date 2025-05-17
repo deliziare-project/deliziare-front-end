@@ -5,7 +5,7 @@ import Image from 'next/image';
 import logo from '../../../public/logo/delizaire-logo.png'
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { logout } from '@/features/authSlice';
+import {  logoutUser } from '@/features/authSlice';
 
 export default function Sidebar() {
   const router=useRouter();
@@ -13,7 +13,7 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     
-    dispatch(logout());   
+    dispatch(logoutUser());   
     router.push('/login');
   };
   return (
