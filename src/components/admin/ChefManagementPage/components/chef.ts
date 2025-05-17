@@ -9,6 +9,7 @@ export type Chef = {
   isBlocked: boolean;
   specialisations: string[];
   certificate: string;
+  userId:number;
 };
 
 export type FilterStatus = 'all' | 'blocked' | 'unblocked';

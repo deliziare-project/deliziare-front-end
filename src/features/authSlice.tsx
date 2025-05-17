@@ -6,7 +6,13 @@ interface RegisterState {
   loading: boolean;
   error: string | null;
   success: boolean;
+
+  emailExists: boolean | null;
+  emailCheckLoading:boolean;
+  emailCheckError: string | null;
+
   otpVerified:boolean;
+
   registrationData?:any;
  currentUser: any;
  isAuthenticated: boolean;
@@ -16,11 +22,27 @@ const initialState: RegisterState = {
   loading: false,
   error: null,
   success: false,
-  otpVerified:false,
-  registrationData: null,
+ emailExists: false,
+  emailCheckLoading: false,
+  emailCheckError: null,
+otpVerified:false,
+ registrationData: null,
   currentUser: null,
   isAuthenticated: false,
 };
+
+export const checkEmailExists = createAsyncThunk(
+  "auth/checkEmailExists",
+  async (email: string, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(`/users/check-email`,{email});
+      return response.data.exists;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Failed to check email");
+    }
+  }
+);
+
 
 
 export const registerHost = createAsyncThunk(
@@ -43,9 +65,12 @@ export const registerChef = createAsyncThunk(
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.error || 'Something went wrong');
-    }
+   } catch (err: any) {
+  if (err.response && err.response.data && err.response.data.error) {
+    return thunkAPI.rejectWithValue(err.response.data.error);
+  }
+  return thunkAPI.rejectWithValue(err.message || 'Something went wrong');
+}
   }
 );
 
@@ -203,8 +228,7 @@ const registerSlice = createSlice({
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
-
-     setCurrentUser: (state, action) => {
+   setCurrentUser: (state, action) => {
     state.currentUser = action.payload;
     state.isAuthenticated = !!action.payload;
   },
@@ -212,10 +236,7 @@ const registerSlice = createSlice({
     state.currentUser = null;
     state.isAuthenticated = false;
     },
-
-
-
-  },
+ },
   extraReducers: (builder) => {
     builder
         .addCase(checkCurrentUser.pending, (state) => {
@@ -284,6 +305,21 @@ const registerSlice = createSlice({
         state.error = (action.payload as { message: string })?.message;
         state.otpVerified = false;
       })
+      .addCase(checkEmailExists.pending, (state) => {
+        state.emailCheckLoading = true;
+        state.emailCheckError = null;
+      })
+      .addCase(checkEmailExists.fulfilled, (state, action) => {
+        state.emailCheckLoading = false;
+        state.emailExists = action.payload;
+      })
+      .addCase(checkEmailExists.rejected, (state, action) => {
+        state.emailCheckLoading = false;
+        state.emailCheckError = action.payload as string;
+      })
+
+
+
       .addCase(sendOtpForHost.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -341,5 +377,6 @@ const registerSlice = createSlice({
 
 
 export const { resetRegisterState ,setRegistrationData} = registerSlice.actions;
+
 
 export default registerSlice.reducer;

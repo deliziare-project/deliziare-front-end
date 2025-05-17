@@ -30,6 +30,8 @@ console.log(currentUser);
      router.push('/admin/dashboard');
     }else if(isAuthenticated&&currentUser.role=='host'){
       router.push('/user/home');
+    }else if(isAuthenticated &&currentUser.role=='chef'){
+      router.push('/chef/home')
     }
     else if(isAuthenticated && currentUser.role == 'chef'){
       router.push('/chef/home')
