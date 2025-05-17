@@ -5,11 +5,17 @@ import Image from 'next/image';
 import logo from '../../../public/logo/delizaire-logo.png'
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '@/features/authSlice';
+import { useRouter } from 'next/navigation'; // correct for App Router
+
 
 export default function Sidebar() {
   const dispatch=useDispatch()
+  const router= useRouter()
   const handleLogout=()=>{
-dispatch(logoutUser())
+
+   dispatch(logoutUser())
+   console.log('logout...')
+   router.push('/login')
   }
   return (
     <aside className="h-screen w-20 bg-white text-gray-800 flex flex-col items-center py-6 px-2 shadow-md">

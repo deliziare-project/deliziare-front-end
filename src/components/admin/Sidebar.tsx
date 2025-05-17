@@ -1,7 +1,18 @@
+'use client'
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '@/features/authSlice';
 import { LayoutDashboard, Users, ChefHat, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // correct for App Router
+
 
 export default function Sidebar() {
+  const dispatch=useDispatch()
+  const router=useRouter()
+  const handleLogout=()=>{
+    dispatch(logoutUser())
+     router.push('/login')
+  }
   return (
     <aside className="h-screen w-20 bg-white text-gray-800 flex flex-col items-center py-6 px-2 shadow-md">
       <div className="mb-10">
@@ -21,7 +32,7 @@ export default function Sidebar() {
           </div>
         </Link>
 
-        <Link href="/admin/chefs">
+        <Link href="/admin/chefmanagement">
           <div title="Chefs" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
             <ChefHat size={24} />
           </div>
@@ -30,7 +41,7 @@ export default function Sidebar() {
 
       <div className="mt-auto mb-4">
         <div title="Logout" className="hover:bg-red-100 text-red-500 p-3 rounded-md cursor-pointer">
-          <LogOut size={24} />
+          <LogOut onClick={handleLogout} size={24} />
         </div>
       </div>
     </aside>

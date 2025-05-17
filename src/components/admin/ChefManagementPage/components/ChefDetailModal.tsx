@@ -8,6 +8,8 @@ interface ChefDetailModalProps {
 }
 
 const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps) => {
+  console.log(chef.specialisations)
+  const sp=JSON.parse(chef.specialisations)
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
       <div 
@@ -70,7 +72,7 @@ const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps)
                   <div>
                     <p className="text-sm text-gray-500">Specialisations</p>
                     <div className="flex flex-wrap gap-2 mt-1">
-                      {chef.specialisations.map((spec, index) => (
+                      {sp.map((spec:string, index:number) => (
                         <span 
                           key={index}
                           className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-sm"
@@ -86,7 +88,7 @@ const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps)
 
             <div className="flex gap-4 mt-8 pt-4 border-t border-gray-100">
               <button
-                onClick={() => onToggleBlock(chef.id)}
+                onClick={() => onToggleBlock(chef.userId)}
                 className={`${
                   chef.isBlocked
                     ? 'bg-green-600 hover:bg-green-700'
@@ -95,12 +97,12 @@ const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps)
               >
                 {chef.isBlocked ? 'Unblock Chef' : 'Block Chef'}
               </button>
-              <button
+              {/* <button
                 onClick={onClose}
                 className="ml-auto text-gray-600 hover:text-gray-800 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
               >
                 Close
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

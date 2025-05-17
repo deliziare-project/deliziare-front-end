@@ -1,4 +1,4 @@
-// hostSlice.ts
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axiosInstance from '@/api/axiosInstance';
 
@@ -23,19 +23,17 @@ const initialState: HostState = {
   error: null,
 };
 
-// Fetch all hosts
 export const fetchHosts = createAsyncThunk("hosts/fetchHosts", async () => {
   const response = await axiosInstance.get("/admin/users");
   return response.data;
 });
 
-// Toggle block/unblock status
 export const toggleBlockStatus = createAsyncThunk(
   "hosts/toggleBlockStatus",
   async (userId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.patch(`/admin/users/${userId}/block`);
-      return response.data; // should return updated user
+      return response.data; 
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Failed to toggle status");
     }

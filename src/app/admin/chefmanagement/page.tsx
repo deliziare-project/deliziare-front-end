@@ -27,7 +27,7 @@ const Page = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div >
       <ChefManagementPage initialChefs={chefs} />
     </div>
   );

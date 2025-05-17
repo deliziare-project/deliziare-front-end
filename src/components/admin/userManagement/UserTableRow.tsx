@@ -1,4 +1,4 @@
-// components/admin/userManagement/UserTableRow.tsx
+
 import { Ellipsis } from "lucide-react";
 
 interface Props {

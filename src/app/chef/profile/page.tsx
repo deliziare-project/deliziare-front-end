@@ -270,4 +270,3 @@ const ChefProfile: React.FC = () => {
   );
 };
 
-export default ChefProfile;

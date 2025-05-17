@@ -45,13 +45,13 @@ const [specialityInput, setSpecialityInput] = useState('');
   e.preventDefault();
 
   console.log('Profile Submitted:', formData);
-  router.push('/chef/profile');
+  router.push('/chef/home');
 };
 
 
   const handleSkip = () => {
     console.log('Skipped profile completion');
-    router.push('/chef/profile');
+    router.push('/chef/home');
   };
 
   if (isProfileCompleted) {
@@ -177,9 +177,9 @@ const [specialityInput, setSpecialityInput] = useState('');
         </div>
 
         {/* Social Links Section */}
-        <fieldset className="border border-gray-300 rounded-md p-4">
+        <fieldset className=" rounded-md p-4">
           <legend className="text-lg font-semibold text-gray-700 mb-4">
-            Social Links
+            Social Links 
           </legend>
 
           <div className="space-y-4">

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect } from 'react';
@@ -11,6 +10,7 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   const { isAuthenticated, currentUser, loading } = useSelector((state:any) => state.auth);
   const router = useRouter();
+   const pathname = usePathname();
 console.log(currentUser);
 
   useEffect(() => {
@@ -20,11 +20,18 @@ console.log(currentUser);
 
   
   useEffect(() => {
-    if (!loading) {   
+    if (!loading) {
+ if (!isAuthenticated && pathname.startsWith('/admin')||pathname.startsWith('/user')) {
+        router.push('/login');
+        return;
+      }
+   
     if(isAuthenticated&&currentUser.role=='admin'){
      router.push('/admin/dashboard');
     }else if(isAuthenticated&&currentUser.role=='host'){
       router.push('/user/home');
+    }else if(isAuthenticated &&currentUser.role=='chef'){
+      router.push('/chef/home')
     }
     }
   }, [isAuthenticated, loading, router]);
