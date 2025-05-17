@@ -116,7 +116,6 @@ const [specialityInput, setSpecialityInput] = useState('');
     </button>
   </div>
 
-  {/* Show selected specialities as tags */}
   <div className="flex flex-wrap gap-2">
     {formData.specialities.map((item, index) => (
       <span

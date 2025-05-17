@@ -6,27 +6,24 @@ interface RegisterState {
   loading: boolean;
   error: string | null;
   success: boolean;
-
   emailExists: boolean | null;
   emailCheckLoading:boolean;
   emailCheckError: string | null;
-
   registrationData?:any;
-
+ currentUser: any;
+ isAuthenticated: boolean;
 }
 
 const initialState: RegisterState = {
   loading: false,
   error: null,
   success: false,
-
   emailExists: false,
   emailCheckLoading: false,
   emailCheckError: null,
-
-
   registrationData: null,
-
+  currentUser: null,
+  isAuthenticated: false,
 };
 
 export const checkEmailExists = createAsyncThunk(
@@ -34,7 +31,7 @@ export const checkEmailExists = createAsyncThunk(
   async (email: string, thunkAPI) => {
     try {
       const response = await axiosInstance.post(`/users/check-email`,{email});
-      return response.data.exists; // true or false
+      return response.data.exists;
     } catch (err) {
       return thunkAPI.rejectWithValue("Failed to check email");
     }
@@ -173,13 +170,35 @@ interface LoginPayload {
     async (loginData, thunkAPI) => {
       try {
         const response = await axiosInstance.post('/users/login', loginData);
+        console.log(response.data)
         return response.data;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.error || 'Login failed');
       }
     }
   );
-  
+  export const checkCurrentUser = createAsyncThunk(
+  'auth/checkCurrentUser',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get('/users/me',{withCredentials:true});
+      return response.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
+    }
+  }
+);
+export const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, thunkAPI) => {
+    try {
+      await axiosInstance.post('/users/logout', {}, { withCredentials: true });
+      return true;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Logout failed');
+    }
+  }
+);
 
 const registerSlice = createSlice({
   name: 'auth',
@@ -194,14 +213,35 @@ const registerSlice = createSlice({
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
+
     clearSuccess: (state) => {
       state.success = false;
+    },
+     setCurrentUser: (state, action) => {
+    state.currentUser = action.payload;
+    state.isAuthenticated = !!action.payload;
+  },
+   logoutUser: (state) => {
+    state.currentUser = null;
+    state.isAuthenticated = false;
     },
 
   },
   extraReducers: (builder) => {
     builder
-      
+        .addCase(checkCurrentUser.pending, (state) => {
+        state.loading = true;
+        })
+        .addCase(checkCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentUser = action.payload;
+        state.isAuthenticated = true;
+        })
+       .addCase(checkCurrentUser.rejected, (state) => {
+        state.loading = false;
+        state.currentUser = null;
+        state.isAuthenticated = false;
+        })
       .addCase(registerHost.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -255,17 +295,17 @@ const registerSlice = createSlice({
         state.error = (action.payload as { message: string })?.message;
       })
       .addCase(checkEmailExists.pending, (state) => {
-  state.emailCheckLoading = true;
-  state.emailCheckError = null;
-})
-.addCase(checkEmailExists.fulfilled, (state, action) => {
-  state.emailCheckLoading = false;
-  state.emailExists = action.payload;
-})
-.addCase(checkEmailExists.rejected, (state, action) => {
-  state.emailCheckLoading = false;
-  state.emailCheckError = action.payload as string;
-})
+        state.emailCheckLoading = true;
+        state.emailCheckError = null;
+      })
+      .addCase(checkEmailExists.fulfilled, (state, action) => {
+        state.emailCheckLoading = false;
+        state.emailExists = action.payload;
+      })
+      .addCase(checkEmailExists.rejected, (state, action) => {
+        state.emailCheckLoading = false;
+        state.emailCheckError = action.payload as string;
+      })
 
 
 
@@ -307,8 +347,19 @@ const registerSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         state.success = false;
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.currentUser = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
-      
   },
 });
 

@@ -38,7 +38,7 @@ const validateField = async (name: string, value: string) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
-    // Clear email exists error on email change
+    
     if (e.target.name === "email") {
       setEmailExists(false);
     }
@@ -87,7 +87,7 @@ const validateField = async (name: string, value: string) => {
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Register as Host</h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
+          
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
             <input
@@ -105,7 +105,7 @@ const validateField = async (name: string, value: string) => {
             )}
           </div>
 
-          {/* Email */}
+          
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -129,7 +129,6 @@ const validateField = async (name: string, value: string) => {
             )}
           </div>
 
-          {/* Phone */}
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
@@ -147,7 +146,7 @@ const validateField = async (name: string, value: string) => {
             )}
           </div>
 
-          {/* Password */}
+          
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
@@ -165,7 +164,7 @@ const validateField = async (name: string, value: string) => {
             )}
           </div>
 
-          {/* Submit Button */}
+         
           <button
             type="submit"
             disabled={loading || emailExists}
@@ -174,7 +173,6 @@ const validateField = async (name: string, value: string) => {
             {loading ? "Registering..." : "Register"}
           </button>
 
-          {/* Global Error Message */}
           {error && (
             <p className="text-sm text-red-600 mt-2 text-center">{error}</p>
           )}

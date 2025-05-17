@@ -55,18 +55,20 @@ const hostSlice = createSlice({
       .addCase(fetchHosts.fulfilled, (state, action: PayloadAction<Host[]>) => {
         state.loading = false;
         state.hosts = action.payload;
+        console.log(state.hosts);
+        
       })
       .addCase(fetchHosts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
      .addCase(toggleBlockStatus.fulfilled, (state, action) => {
-  const updatedUser = action.payload.user;
-  const index = state.hosts.findIndex(user => user._id === updatedUser._id);
-  if (index !== -1) {
-    state.hosts[index] = updatedUser;
-  }
-});
+        const updatedUser = action.payload.user;
+        const index = state.hosts.findIndex(user => user._id === updatedUser._id);
+        if (index !== -1) {
+            state.hosts[index] = updatedUser;
+        }
+        });
 
   }
 });
