@@ -3,10 +3,18 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { registerHost, resetRegisterState ,sendOtpForHost,setRegistrationData,checkEmailExists} from "@/features/authSlice";
-import { useRouter } from 'next/navigation';
 import * as Yup from "yup";
 import { registerValidationSchema } from "../validation/formValidation";
+import {
+  registerHost,
+  resetRegisterState,
+  sendOtpForHost,
+  setRegistrationData,
+  checkEmailExists
+} from "@/features/authSlice";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -66,25 +74,19 @@ const validateField = async (name: string, value: string) => {
    // dispatch(registerHost(hostData));
     dispatch(setRegistrationData(hostData));
     dispatch(sendOtpForHost(hostData));
-    
-    
-  };
-  
+};
 
   useEffect(() => {
     if (success) {
       router.push(`/verifyotp?email=${form.email}&role=host`);
-      dispatch(resetRegisterState());
+    
     }
 
   }, [success]);
-  
-
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Register as Host</h2>
+ return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
+        <h2 className="text-3xl font-bold text-center text-[#213D72] mb-6">Register as Host</h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           
@@ -98,7 +100,7 @@ const validateField = async (name: string, value: string) => {
               onChange={handleChange}
                onBlur={(e) => validateField("name", e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {formErrors.name && (
               <p className="text-sm text-red-600 mt-1">{formErrors.name}</p>
@@ -119,8 +121,9 @@ const validateField = async (name: string, value: string) => {
                 handleEmailBlur();
               }}
               required
+
               className={`mt-1 block w-full px-4 py-2 border ${emailExists ? "border-red-500" : "border-gray-300"} rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500`}
-            />
+  />
             {formErrors.email && (
               <p className="text-sm text-red-600 mt-1">{formErrors.email}</p>
             )}
@@ -139,7 +142,7 @@ const validateField = async (name: string, value: string) => {
               onChange={handleChange}
               onBlur={(e) => validateField("phone", e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {formErrors.phone && (
               <p className="text-sm text-red-600 mt-1">{formErrors.phone}</p>
@@ -157,7 +160,7 @@ const validateField = async (name: string, value: string) => {
               onChange={handleChange}
               onBlur={(e) => validateField("password", e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {formErrors.password && (
               <p className="text-sm text-red-600 mt-1">{formErrors.password}</p>
@@ -168,7 +171,8 @@ const validateField = async (name: string, value: string) => {
           <button
             type="submit"
             disabled={loading || emailExists}
-            className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="w-full bg-[#213D72] text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#1a2f5c] transition-colors disabled:opacity-50"
+
           >
             {loading ? "Registering..." : "Register"}
           </button>
@@ -177,6 +181,13 @@ const validateField = async (name: string, value: string) => {
             <p className="text-sm text-red-600 mt-2 text-center">{error}</p>
           )}
         </form>
+
+        <p className="text-sm text-center text-gray-600 mt-4">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[#213D72] font-medium hover:underline">
+            Sign In
+          </Link>
+        </p>
       </div>
     </div>
   );

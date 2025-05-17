@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { verifyOtp, resetRegisterState } from '@/features/authSlice';
@@ -10,15 +10,26 @@ export default function VerifyOtpPage() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get('email');
 
-  const { loading, error, success } = useSelector((state: RootState) => state.auth);
+  
+  const queryEmail = searchParams.get('email');
   const registrationData = useSelector((state: RootState) => state.auth.registrationData);
+  const email = queryEmail || registrationData?.email || '';
+
+
+  const { loading, error, success,otpVerified } = useSelector((state: RootState) => state.auth);
   const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
+  useEffect(() => {
+    console.log('[VERIFY OTP PAGE] email from URL:', queryEmail);
+    console.log('[VERIFY OTP PAGE] email from registrationData:', registrationData?.email);
+    console.log('[VERIFY OTP PAGE] final resolved email:', email);
+    console.log('[VERIFY OTP PAGE] registrationData:', registrationData);
+  }, [queryEmail, registrationData, email]);
+
   const handleChange = (index: number, value: string) => {
-    if (!/^\d?$/.test(value)) return; 
+    if (!/^\d?$/.test(value)) return;
     const updatedOtp = [...otpDigits];
     updatedOtp[index] = value;
     setOtpDigits(updatedOtp);
@@ -40,22 +51,46 @@ export default function VerifyOtpPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const otp = otpDigits.join('');
-    if (email && otp.length === 6) {
-      let payload: any = { email, otp };
-      if (registrationData) {
-        payload = { ...payload, ...registrationData };
-      }
-      dispatch(verifyOtp(payload));
+    console.log('[VERIFY OTP] OTP digits:', otpDigits);
+    console.log('[VERIFY OTP] Final OTP string:', otp);
+
+    if (!email || otp.length !== 6 || otpDigits.some(d => !/^\d$/.test(d))) {
+      alert('Please enter all 6 numeric digits of the OTP');
+      return;
     }
+
+    const payload: any = {
+      email,
+      otp,
+      name: registrationData?.name,
+      password: registrationData?.password,
+      phone: registrationData?.phone,
+      role: registrationData?.role || 'host',
+    };
+
+    if(registrationData.role === 'chef'){
+        payload['experience']=registrationData.experience;
+        payload['specializations']=registrationData.specializations;
+        payload['location']=registrationData.location;
+    }
+
+    console.log('[VERIFY OTP] Submitting payload:', payload);
+    dispatch(verifyOtp(payload));
   };
 
   useEffect(() => {
-    if (success) {
-      alert('OTP Verified Successfully!');
+    if (otpVerified) {
+      //alert('OTP Verified Successfully!');
       dispatch(resetRegisterState());
       router.push('/login');
     }
-  }, [success, dispatch, router]);
+  }, [otpVerified, dispatch, router]);
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -64,7 +99,7 @@ export default function VerifyOtpPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <p className="text-sm text-gray-600 text-center">
-            Enter the 6-digit OTP sent to <span className="font-semibold">{email}</span>
+            Enter the 6-digit OTP sent to <span className="font-semibold">{email || '[MISSING EMAIL]'}</span>
           </p>
 
           <div className="flex justify-between gap-2">

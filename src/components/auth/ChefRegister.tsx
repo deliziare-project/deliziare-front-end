@@ -47,9 +47,11 @@ const ChefRegister = () => {
       experience,
       specializations,
       location,
-      // Do not include certificate file here
+      role: 'chef',
+      
     };
     dispatch(setRegistrationData(chefData));
+    
     
     const formData = new FormData();
     formData.append('name', name);
@@ -60,27 +62,43 @@ const ChefRegister = () => {
     formData.append('specialize', JSON.stringify(specializations));
     formData.append('locationLat', location.lat.toString());
     formData.append('locationLng', location.lng.toString());
+    formData.append('role', 'chef');
     if (certificate) formData.append('certificate', certificate);
     dispatch(sendOtpForChef(formData));
   };
 
-  useEffect(() => {
+//   useEffect(() => {
+//     if (success) {
+//     //   alert('Chef registered successfully!');
+//     //   setName('');
+//     //   setEmail('');
+//     //   setPhone('');
+//     //   setPassword('');
+//     //   setExperience('');
+//     //   setSpecialize('');
+//     //   setSpecializations([]);
+//     //   setCertificate(null);
+     
+  
+     
+//       router.push(`/verifyotp?email=${email}&role=chef`);
+//       dispatch(resetRegisterState());
+       
+//     }
+//   }, [success, dispatch, router]);
+
+
+useEffect(() => {
     if (success) {
-      alert('Chef registered successfully!');
-      setName('');
-      setEmail('');
-      setPhone('');
-      setPassword('');
-      setExperience('');
-      setSpecialize('');
-      setSpecializations([]);
-      setCertificate(null);
-      dispatch(resetRegisterState());
+      router.push(`/verifyotp?email=${encodeURIComponent(email)}&role=chef`);
   
       
-      router.push('/verifyotp');
+      setTimeout(() => {
+        dispatch(resetRegisterState());
+      }, 60000);
     }
-  }, [success, dispatch, router]);
+  }, [success, dispatch, router, email]);
+  
   
 
   const inputStyles =

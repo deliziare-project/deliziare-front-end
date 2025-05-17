@@ -33,6 +33,9 @@ console.log(currentUser);
     }else if(isAuthenticated &&currentUser.role=='chef'){
       router.push('/chef/home')
     }
+    else if(isAuthenticated && currentUser.role == 'chef'){
+      router.push('/chef/home')
+    }
     }
   }, [isAuthenticated, loading, router]);
 
