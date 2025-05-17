@@ -3,13 +3,17 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { registerHost, resetRegisterState ,sendOtpForHost,setRegistrationData} from "@/features/authSlice";
-import { useRouter } from 'next/navigation';
-
+import {
+  registerHost,
+  resetRegisterState,
+  sendOtpForHost,
+  setRegistrationData,
+} from "@/features/authSlice";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function RegisterPage() {
-    const router = useRouter();
-
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error, success } = useSelector((state: RootState) => state.auth);
 
@@ -34,24 +38,19 @@ export default function RegisterPage() {
     };
     dispatch(setRegistrationData(hostData));
     dispatch(sendOtpForHost(hostData));
-    
-    //localStorage.setItem('pendingHostData', JSON.stringify(hostData));
   };
-  
 
   useEffect(() => {
     if (success) {
       router.push(`/verifyotp?email=${form.email}&role=host`);
-      dispatch(resetRegisterState());
+      //dispatch(resetRegisterState());
     }
   }, [success]);
-  
-  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Register as Host</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
+        <h2 className="text-3xl font-bold text-center text-[#213D72] mb-6">Register as Host</h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -63,7 +62,7 @@ export default function RegisterPage() {
               value={form.name}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
           </div>
 
@@ -76,7 +75,7 @@ export default function RegisterPage() {
               value={form.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
           </div>
 
@@ -89,7 +88,7 @@ export default function RegisterPage() {
               value={form.phone}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
           </div>
 
@@ -102,14 +101,14 @@ export default function RegisterPage() {
               value={form.password}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="w-full bg-[#213D72] text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#1a2f5c] transition-colors disabled:opacity-50"
           >
             {loading ? "Registering..." : "Register"}
           </button>
@@ -118,6 +117,13 @@ export default function RegisterPage() {
             <p className="text-sm text-red-600 mt-2 text-center">{error}</p>
           )}
         </form>
+
+        <p className="text-sm text-center text-gray-600 mt-4">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[#213D72] font-medium hover:underline">
+            Sign In
+          </Link>
+        </p>
       </div>
     </div>
   );

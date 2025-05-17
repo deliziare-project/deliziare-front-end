@@ -53,7 +53,7 @@ export default function ChefLocationPicker({ onLocationChange }: Props) {
   const [mapCenter, setMapCenter] = useState<[number, number]>(fallback);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Get user's current location
+  
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -77,7 +77,7 @@ export default function ChefLocationPicker({ onLocationChange }: Props) {
     }
   }, []);
 
-  // Geocode search query
+  
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
 
@@ -110,7 +110,7 @@ export default function ChefLocationPicker({ onLocationChange }: Props) {
           placeholder="Search a location"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-black"
         />
         <button
           onClick={handleSearch}
