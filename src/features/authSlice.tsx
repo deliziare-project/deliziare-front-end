@@ -191,15 +191,8 @@ const registerSlice = createSlice({
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
-     setCurrentUser: (state, action) => {
-    state.currentUser = action.payload;
-    state.isAuthenticated = !!action.payload;
-  },
-   logoutUser: (state) => {
-    state.currentUser = null;
-    state.isAuthenticated = false;
-    },
-
+   
+ 
 
   },
   extraReducers: (builder) => {
@@ -301,6 +294,8 @@ const registerSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
+        state.currentUser = action.payload.user;
+        state.isAuthenticated = true;
         state.registrationData = action.payload; 
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -315,6 +310,9 @@ const registerSlice = createSlice({
         state.loading = false;
         state.currentUser = null;
         state.isAuthenticated = false;
+        state.error = null;
+        state.success = false;
+        state.registrationData = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;

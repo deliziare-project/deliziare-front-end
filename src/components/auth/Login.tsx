@@ -11,33 +11,30 @@ import { useRouter } from 'next/navigation';
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { loading, error, success, registrationData } = useAppSelector((state:any) => state.auth);
+  const { loading, error, isAuthenticated,currentUser} = useAppSelector((state:any) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-
-   
-    dispatch(loginUser({ email, password }));
-    // router.push('/user/home')
-
-
-
-
-  };
+useEffect(() => {
+    dispatch(resetRegisterState());
+  }, [dispatch]);
 
   useEffect(() => {
-    if (success) {
-      
-      if(registrationData.user&&registrationData.user.role=='admin'){
-       router.push('/admin/dashboard')
-      }else if(registrationData.user&&registrationData.user.role=='host'){
-       router.push('/user/home')
+    if (isAuthenticated) {
+      if (currentUser?.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/user/home');
       }
     }
-  }, [success, registrationData]);
+  }, [isAuthenticated, currentUser]);
+  const handleLogin =async (e: React.FormEvent) => {
+    e.preventDefault();   
+   await dispatch(loginUser({ email, password }));
+   
+  };
+
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

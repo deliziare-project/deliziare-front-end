@@ -1,4 +1,3 @@
-// app/admin/layout.tsx
 import Sidebar from '@/components/user/Sidebar';
 import { ReactNode } from 'react';
 

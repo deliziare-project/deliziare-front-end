@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../../public/logo/delizaire-logo.png'
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '@/features/authSlice';
+import { logoutUser, logoutUserInside } from '@/features/authSlice';
 
 export default function Sidebar() {
   const dispatch=useDispatch()
-  const handleLogout=()=>{
-dispatch(logoutUser())
+  const handleLogout=async()=>{
+  await dispatch(logoutUser())
+
   }
   return (
     <aside className="h-screen w-20 bg-white text-gray-800 flex flex-col items-center py-6 px-2 shadow-md">
