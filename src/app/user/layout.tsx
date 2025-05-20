@@ -1,12 +1,14 @@
 // app/admin/layout.tsx
-import Sidebar from '@/components/user/Sidebar';
+import Navbar from '@/components/user/Navbar';
+// import Sidebar from '@/components/user/Navbar';
 import { ReactNode } from 'react';
 
 export default function UserLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-        <main className="p-4">{children}</main>
+    <div className="min-h-screen bg-white">
+      {/* <Sidebar /> */}
+      <Navbar />
+        <main className=''>{children}</main>
       </div>
    
   );
