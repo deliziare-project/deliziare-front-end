@@ -1,44 +1,49 @@
-"use client"
-import { checkCurrentUser } from "@/features/authSlice";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
+'use client';
+
+import { useEffect } from 'react';
+
+import { usePathname, useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkCurrentUser } from '@/features/authSlice';
+
 
 const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   const { isAuthenticated, currentUser, loading } = useSelector((state:any) => state.auth);
   const router = useRouter();
 
-  const pathname = usePathname();
+   const pathname = usePathname();
+console.log(currentUser);
+
 
   useEffect(() => {
     dispatch(checkCurrentUser());
   }, [dispatch]);
 
   useEffect(() => {
-    if (loading) return;
-    
-    // Protected routes check
-    if (!isAuthenticated && (pathname.startsWith('/admin') || pathname.startsWith('/user'))) {
-      router.push('/login');
-      return;
+
+    if (!loading) {
+ if (!isAuthenticated && pathname.startsWith('/admin')||pathname.startsWith('/user')) {
+        router.push('/login');
+        return;
+      }
+   
+    if(isAuthenticated&&currentUser.role=='admin'){
+     router.push('/admin/dashboard');
+    }else if(isAuthenticated&&currentUser.role=='host'){
+      router.push('/user/home');
+    }else if(isAuthenticated &&currentUser.role=='chef'){
+      router.push('/chef/home')
+    }
+    else if(isAuthenticated && currentUser.role == 'chef'){
+      router.push('/chef/home')
+
     }
 
- 
-    if (isAuthenticated) {
-      if (pathname === '/login') {
-        if (currentUser?.role === 'admin') {
-          router.push('/admin/dashboard');
-        } else {
-          router.push('/user/home');
-        }
-      } else if (currentUser?.role === 'admin' && !pathname.startsWith('/admin')) {
-        router.push('/admin/dashboard');
-      } else if (currentUser?.role !== 'admin' && pathname.startsWith('/admin')) {
-        router.push('/user/home');
-      }
-    }
-  }, [isAuthenticated, loading, currentUser, pathname]);
+  }
+    
+  }, [isAuthenticated, loading,  router]);
 
   if (loading) {
     return <div>Loading...</div>;

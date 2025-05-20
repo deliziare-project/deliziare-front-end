@@ -40,15 +40,18 @@ const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
   const toggleBlockStatus = async(id: number) => {
    
         try {
-          const response = await axiosInstance.patch(`/admin/chefs/${id}/toggle-block`);
+         
+          const response = await axiosInstance.patch(`/admin/chefs/${id}/toggle-block`,{withCredentials:true});
         const updatedStatus = response.data.isBlocked;
+       console.log(chefs);
+       
         setChefs((prev) =>
         prev.map((chef) =>
-        chef.id === id ? { ...chef, isBlocked: updatedStatus } : chef
+        chef.userId === id ? { ...chef, isBlocked: updatedStatus } : chef
         )
         );
         
-       if (selectedChef && selectedChef.id === id) {
+       if (selectedChef && selectedChef.userId === id) {
         setSelectedChef({ ...selectedChef, isBlocked: updatedStatus });
         }
         } catch (error) {
