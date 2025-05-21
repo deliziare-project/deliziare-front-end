@@ -21,7 +21,7 @@ console.log(currentUser);
   
   useEffect(() => {
     if (!loading) {
- if (!isAuthenticated && pathname.startsWith('/admin')||pathname.startsWith('/user')) {
+ if (!isAuthenticated && (pathname.startsWith('/admin')||pathname.startsWith('/user')|| pathname.startsWith('/chef'))) {
         router.push('/login');
         return;
       }
@@ -30,14 +30,16 @@ console.log(currentUser);
      router.push('/admin/dashboard');
     }else if(isAuthenticated&&currentUser.role=='host'){
       router.push('/user/home');
-    }else if(isAuthenticated &&currentUser.role=='chef'){
-      router.push('/chef/home')
     }
     else if(isAuthenticated && currentUser.role == 'chef'){
-      router.push('/chef/home')
+      if (!currentUser.isProfileCompleted) {
+          router.push('/chef/complete-profile');
+        } else {
+          router.push('/chef/home');
+        }
     }
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, loading, router,currentUser]);
 
   if (loading) {
     return <div>Loading...</div>; 

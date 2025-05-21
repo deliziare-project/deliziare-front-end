@@ -353,6 +353,8 @@ const registerSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
+        state.currentUser = action.payload.user;
+        state.isAuthenticated = true;
         state.registrationData = action.payload; 
       })
       .addCase(loginUser.rejected, (state, action) => {

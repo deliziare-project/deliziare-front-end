@@ -1,38 +1,84 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-// Add this additional import at the top
-import { Plus, X } from 'lucide-react'; // optional, for icons if you're using Lucide
+import { useEffect, useState } from 'react';
+import { Plus, X } from 'lucide-react'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLoggedInChef, updateChefProfile } from '@/features/chefSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import TextAreaField from '@/components/chef/completeProfile/TextAreaField';
+import TagInput from '@/components/chef/completeProfile/TagInput';
+import InputField from '@/components/chef/completeProfile/InputField';
+import FormActions from '@/components/chef/completeProfile/FormActions';
 
 type FormDataType = {
+  
   bio: string;
-  specialities: string[];
-  qualifications: string;
-  pastExperience: string;
-  instagram: string;
-  youtube: string;
-  facebook: string;
-  linkedin: string;
+  specialize: string[];              
+  qualifications: string[];          
+  experience: string;                
+  // socialLinks: {
+  //   instagram: string;
+  //   youtube: string;
+  //   facebook: string;
+  //   linkedin: string;
+  // };
+  district:string;
+  isProfileCompleted:boolean;
 };
+
 
 
 const CompleteProfilePage = () => {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  
+  useEffect(() => {
+    dispatch(fetchLoggedInChef());
+  }, [dispatch]);
 
-  const isProfileCompleted = false;
+  const { chef, loading, error } = useSelector((state: RootState) => state.chef);
+ console.log('complete chef data',chef);
+ 
+ 
 const [specialityInput, setSpecialityInput] = useState('');
+const[qualificationInput,setQualificationInput]=useState('')
+ const [formData, setFormData] = useState<FormDataType>(
+  {
+  bio:'',
+  specialize: [],
+  qualifications: [],
+  experience: '',
+  district:'',
+  // socialLinks: {
+  //   instagram: '',
+  //   youtube: '',
+  //   facebook: '',
+  //   linkedin: '',
+  // },
+  isProfileCompleted:false,
+}
+);
 
-  const [formData, setFormData] = useState<FormDataType>({
-    bio: '',
-    specialities: [],
-    qualifications: '',
-    pastExperience: '',
-    instagram: '',
-    youtube: '',
-    facebook: '',
-    linkedin: '',
-  });
+useEffect(() => {
+  if (chef) {
+    setFormData({
+      bio: chef.bio || '',
+      specialize: chef.specialize || [],
+      qualifications: chef.qualifications || [],
+      experience: chef.experience || '',
+      district:chef.district||'',
+      // socialLinks: {
+      //   instagram: chef.socialLinks?.instagram || '',
+      //   youtube: chef.socialLinks?.youtube || '',
+      //   facebook: chef.socialLinks?.facebook || '',
+      //   linkedin: chef.socialLinks?.linkedin || '',
+      // },
+      isProfileCompleted:chef.userId.isProfileCompleted||false
+    });
+  }
+}, [chef]);
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,6 +90,12 @@ const [specialityInput, setSpecialityInput] = useState('');
   const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
 
+  const updatedFormData = {
+    ...formData,
+    isProfileCompleted: true, 
+  };
+
+  dispatch(updateChefProfile(updatedFormData));
   console.log('Profile Submitted:', formData);
   router.push('/chef/home');
 };
@@ -54,174 +106,33 @@ const [specialityInput, setSpecialityInput] = useState('');
     router.push('/chef/home');
   };
 
-  if (isProfileCompleted) {
-    router.push('/chef/profile');
+
+  useEffect(() => {
+  if (chef?.userId?.isProfileCompleted) {
+    router.push('/chef/home');
   }
+}, [chef]);
+
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-8 bg-white shadow rounded-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
-        Complete Your Chef Profile
-      </h1>
+    <div className="max-w-3xl mx-auto mt-12 p-8 bg-white shadow-xl rounded-xl">
+  <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
+    Complete Your Chef Profile
+  </h1>
+<TextAreaField label="Bio" name="bio" value={formData.bio} onChange={handleChange} placeholder="Tell us about yourself" />
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="bio" className="block mb-2 font-semibold text-gray-700">
-            Bio
-          </label>
-          <textarea
-            id="bio"
-            name="bio"
-            value={formData.bio}
-            onChange={handleChange}
-            rows={4}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Tell us about yourself"
-          />
-        </div>
+<TagInput label="Specialities" inputValue={specialityInput} setInputValue={setSpecialityInput} tags={formData.specialize} setTags={(tags) => setFormData({ ...formData, specialize: tags })} placeholder="e.g., Italian, Pastry" buttonLabel="+" />
 
-      <div>
-  <label
-    htmlFor="specialities"
-    className="block mb-2 font-semibold text-gray-700"
-  >
-    Specialities
-  </label>
-  <div className="flex gap-2 mb-2">
-    <input
-      type="text"
-      id="specialities"
-      name="specialities"
-      value={specialityInput}
-      onChange={(e) => setSpecialityInput(e.target.value)}
-      className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      placeholder="e.g., Italian, Pastry"
-    />
-    <button
-      type="button"
-      onClick={() => {
-        const trimmed = specialityInput.trim();
-       if (trimmed && Array.isArray(formData.specialities) && !formData.specialities.includes(trimmed)) {
-  setFormData((prev) => ({
-    ...prev,
-    specialities: [...prev.specialities, trimmed],
-  }));
-  setSpecialityInput('');
-}
+<TagInput label="Qualifications" inputValue={qualificationInput} setInputValue={setQualificationInput} tags={formData.qualifications} setTags={(tags) => setFormData({ ...formData, qualifications: tags })} placeholder="e.g., Culinary Arts Diploma" buttonLabel="Add" tagColor="bg-purple-100 text-purple-800" />
 
-      }}
-      className="px-4 py-2 bg-gray-200  text-gray-600 rounded-md hover:bg-green-700 transition"
-    >
-      <Plus size={20} />
-    </button>
-  </div>
+<InputField label="Years of Experience" name="experience" value={formData.experience} onChange={handleChange} type="number" placeholder="e.g., 5" />
 
-  <div className="flex flex-wrap gap-2">
-    {formData.specialities.map((item, index) => (
-      <span
-        key={index}
-        className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-      >
-        {item}
-        <button
-          type="button"
-          onClick={() =>
-            setFormData((prev) => ({
-              ...prev,
-              specialities: prev.specialities.filter((_, i) => i !== index),
-            }))
-          }
-          className="ml-2 text-blue-500 hover:text-red-600"
-        >
-          <X size={16} />
-        </button>
-      </span>
-    ))}
-  </div>
+<InputField label="District" name="district" value={formData.district} onChange={handleChange} placeholder="e.g., Thrissur" />
+
+<FormActions onSubmit={handleSubmit} onSkip={handleSkip} />
+
 </div>
 
-
-        <div>
-          <label
-            htmlFor="qualifications"
-            className="block mb-2 font-semibold text-gray-700"
-          >
-            Qualifications
-          </label>
-          <input
-            id="qualifications"
-            name="qualifications"
-            value={formData.qualifications}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Your cooking certifications or education"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="pastExperience"
-            className="block mb-2 font-semibold text-gray-700"
-          >
-            Past Experience
-          </label>
-          <textarea
-            id="pastExperience"
-            name="pastExperience"
-            value={formData.pastExperience}
-            onChange={handleChange}
-            rows={4}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Describe your previous roles or jobs"
-          />
-        </div>
-
-        {/* Social Links Section */}
-        <fieldset className=" rounded-md p-4">
-          <legend className="text-lg font-semibold text-gray-700 mb-4">
-            Social Links 
-          </legend>
-
-          <div className="space-y-4">
-            {['instagram', 'youtube', 'facebook', 'linkedin'].map((platform) => (
-              <div key={platform}>
-                <label
-                  htmlFor={platform}
-                  className="block mb-1 font-medium capitalize text-gray-700"
-                >
-                  {platform}
-                </label>
-                <input
-                  type="url"
-                  id={platform}
-                  name={platform}
-                  value={(formData as any)[platform]}
-                  onChange={handleChange}
-                  placeholder={`Enter your ${platform} profile URL`}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            ))}
-          </div>
-        </fieldset>
-
-        <div className="flex space-x-4 mt-6">
-          <button
-            type="submit"
-            className="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
-          >
-            Submit Profile
-          </button>
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="flex-1 py-3 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100 transition"
-          >
-            Skip for now
-          </button>
-        </div>
-      </form>
-    </div>
   );
 };
 
