@@ -237,10 +237,7 @@ const registerSlice = createSlice({
     state.currentUser = action.payload;
     state.isAuthenticated = !!action.payload;
   },
-   logoutUser: (state) => {
-    state.currentUser = null;
-    state.isAuthenticated = false;
-    },
+  
  },
 
   extraReducers: (builder) => {

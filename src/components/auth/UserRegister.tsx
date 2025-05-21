@@ -100,7 +100,7 @@ const validateField = async (name: string, value: string) => {
               onChange={handleChange}
                onBlur={(e) => validateField("name", e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72] text-gray-600"
             />
             {formErrors.name && (
               <p className="text-sm text-red-600 mt-1">{formErrors.name}</p>
@@ -122,7 +122,7 @@ const validateField = async (name: string, value: string) => {
               }}
               required
 
-              className={`mt-1 block w-full px-4 py-2 border ${emailExists ? "border-red-500" : "border-gray-300"} rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500`}
+              className={`mt-1 block w-full px-4 py-2 border text-gray-600 ${emailExists ? "border-red-500" : "border-gray-300"} rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500`}
   />
             {formErrors.email && (
               <p className="text-sm text-red-600 mt-1">{formErrors.email}</p>
@@ -142,7 +142,7 @@ const validateField = async (name: string, value: string) => {
               onChange={handleChange}
               onBlur={(e) => validateField("phone", e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
+              className="mt-1 block w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {formErrors.phone && (
               <p className="text-sm text-red-600 mt-1">{formErrors.phone}</p>
@@ -160,7 +160,7 @@ const validateField = async (name: string, value: string) => {
               onChange={handleChange}
               onBlur={(e) => validateField("password", e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
+              className="mt-1 block w-full text-gray-600 px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {formErrors.password && (
               <p className="text-sm text-red-600 mt-1">{formErrors.password}</p>

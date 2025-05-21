@@ -4,11 +4,12 @@ import { useDispatch } from 'react-redux';
 import { logoutUser } from '@/features/authSlice';
 import { LayoutDashboard, Users, ChefHat, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // correct for App Router
+import { useRouter } from 'next/navigation'; 
+import { AppDispatch } from '@/redux/store';
 
 
 export default function Sidebar() {
-  const dispatch=useDispatch()
+  const dispatch:AppDispatch =useDispatch()
   const router=useRouter()
   const handleLogout=()=>{
     dispatch(logoutUser())

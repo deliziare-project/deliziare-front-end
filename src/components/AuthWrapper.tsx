@@ -6,10 +6,11 @@ import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkCurrentUser } from '@/features/authSlice';
+import { AppDispatch } from '@/redux/store';
 
 
 const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useDispatch();
+  const dispatch :AppDispatch = useDispatch();
   const { isAuthenticated, currentUser, loading } = useSelector((state:any) => state.auth);
   const router = useRouter();
 
@@ -24,7 +25,7 @@ console.log(currentUser);
   useEffect(() => {
 
     if (!loading) {
- if (!isAuthenticated && pathname.startsWith('/admin')||pathname.startsWith('/user')) {
+ if (!isAuthenticated && (pathname.startsWith('/user')||pathname.startsWith('/admin'))) {
         router.push('/login');
         return;
       }
