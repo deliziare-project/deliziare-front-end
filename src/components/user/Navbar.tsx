@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import NavLink from '../shared/NavLink';
 
+import { useRouter } from 'next/navigation';
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+const router=useRouter()
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -33,9 +36,11 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink href="/" icon={<BookOpen size={18} />} label="Home" />
-            <NavLink href="/chef" icon={<ChefHat size={18} />} label="Chef" />
-            <NavLink href="/posts" icon={<BookOpen size={18} />} label="Posts" />
+
+            <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
+            <NavLink href="/user/chef" icon={<ChefHat size={18} />} label="Chef" />
+            <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
+
             
             {/* Icons */}
             <div className="flex items-center space-x-4 ml-4">
@@ -44,14 +49,16 @@ const Navbar: React.FC = () => {
                 <Bell className="h-6 w-6" />
                 <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
               </button>
-              <button className="p-1 rounded-full text-gray-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+
+              <button className="p-1 rounded-full text-gray-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors" onClick={()=>router.push('/user/profile')}>
+
                 <span className="sr-only">View profile</span>
                 <User className="h-6 w-6" />
               </button>
             </div>
           </div>
 
-          {/* Mobile menu button */}
+
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
