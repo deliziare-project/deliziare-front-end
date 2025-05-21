@@ -1,6 +1,6 @@
-
+// app/admin/layout.tsx
 import Navbar from '@/components/user/Navbar';
-
+// import Sidebar from '@/components/user/Navbar';
 import { ReactNode } from 'react';
 
 export default function UserLayout({ children }: { children: ReactNode }) {

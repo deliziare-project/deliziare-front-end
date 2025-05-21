@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Edit,  LogOut } from 'lucide-react';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '@/features/authSlice';
 import { useRouter } from 'next/navigation';
+import EditProfileModal from './EditProfileModal';
 
 const ProfileActions = () => {
    const dispatch:AppDispatch =useDispatch()
     const router=useRouter()
+   const [isModalOpen, setModalOpen] = useState(false);
+
     const handleLogout=()=>{
       dispatch(logoutUser())
        router.push('/login')
@@ -23,6 +26,7 @@ const ProfileActions = () => {
                     text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none 
                     focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
                     transition-all duration-300 ease-in-out"
+           onClick={() => setModalOpen(true)}
         >
           <Edit size={16} className="mr-2" />
           Edit Profile
@@ -41,6 +45,8 @@ const ProfileActions = () => {
           Sign Out
         </button>
       </div>
+            <EditProfileModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+
     </div>
   );
 };

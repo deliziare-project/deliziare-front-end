@@ -214,6 +214,36 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
+interface UserProfileUpdate {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: number;
+  role: string;
+  isBlock: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+
+}
+
+interface UpdateProfileArgs {
+  name: string;
+  phone: number;
+}
+
+export const updateUserProfile = createAsyncThunk<UserProfileUpdate, UpdateProfileArgs>(
+  'user/updateProfile',
+  async ({ name, phone }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.put('/userclient/update-profile', { name, phone });
+      return res.data.user;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to update profile');
+    }
+  }
+);
 
 const registerSlice = createSlice({
   name: 'auth',
@@ -242,6 +272,7 @@ const registerSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
+       
         .addCase(checkCurrentUser.pending, (state) => {
         state.loading = true;
         })
