@@ -1,34 +1,36 @@
 import axiosInstance from '@/api/axiosInstance';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '@/redux/store';
 
 
 interface RegisterState {
   loading: boolean;
   error: string | null;
   success: boolean;
-
   emailExists: boolean | null;
-  emailCheckLoading:boolean;
+  emailCheckLoading: boolean;
   emailCheckError: string | null;
-
-  otpVerified:boolean;
-
-  registrationData?:any;
- currentUser: any;
- isAuthenticated: boolean;
+  otpVerified: boolean;
+  registrationData?: any;
+  currentUser: any;
+  isAuthenticated: boolean;
+  tempToken?: string; 
+  resetPasswordSuccess: boolean; 
 }
 
 const initialState: RegisterState = {
   loading: false,
   error: null,
   success: false,
- emailExists: false,
+  emailExists: false,
   emailCheckLoading: false,
   emailCheckError: null,
-otpVerified:false,
- registrationData: null,
+  otpVerified: false,
+  registrationData: null,
   currentUser: null,
   isAuthenticated: false,
+  tempToken: undefined,
+  resetPasswordSuccess: false,
 };
 
 export const checkEmailExists = createAsyncThunk(
@@ -102,6 +104,9 @@ interface OtpPayload {
     experience?: string;
     specialize?: string[];
     certificate?: string; 
+    vehicleType?:string;
+    IDProof:string;
+    license:string;
   }
   
   
@@ -109,26 +114,70 @@ interface OtpPayload {
     _id: string;
     email: string;
     name: string;
-    // etc.
+   
   }
   
-  export const verifyOtp = createAsyncThunk<VerifiedUser, OtpPayload, { rejectValue: { message: string } }>(
-    'auth/verifyOtp',
-    async (payload, { rejectWithValue }) => {
-      try {
-        console.log('Sending OTP payload:', payload); 
-        const res = await axiosInstance.post('/users/verify-otp', payload, {
-            headers: { 'Content-Type': 'application/json' },
-          });
-          
-        return res.data.user;
-      } catch (err: any) {
-        return rejectWithValue({
-          message: err?.response?.data?.message || err.message || 'OTP verification failed',
+ 
+export const verifyOtp = createAsyncThunk<VerifiedUser, OtpPayload, { rejectValue: { message: string } }>(
+  'auth/verifyOtp',
+  async (payload, { rejectWithValue }) => {
+    try {
+      let res;
+      
+      if (
+        payload.role === 'chef' &&
+        payload.certificate &&
+        typeof payload.certificate !== 'string'
+      ) {
+        const formData = new FormData();
+        formData.append('email', payload.email);
+        formData.append('otp', payload.otp);
+        formData.append('name', payload.name || '');
+        formData.append('password', payload.password || '');
+        formData.append('phone', payload.phone?.toString() || '');
+        formData.append('role', 'chef');
+        formData.append('experience', payload.experience || '');
+        formData.append('specializations', JSON.stringify(payload.specializations || []));
+        if (payload.location) {
+          formData.append('locationLat', payload.location.lat.toString());
+          formData.append('locationLng', payload.location.lng.toString());
+        }
+        formData.append('certificate', payload.certificate); 
+
+        res = await axiosInstance.post('/users/verify-otp', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      } 
+      else if(payload.role === 'deliveryBoy') {
+        const formData = new FormData();
+        formData.append('email', payload.email);
+        formData.append('otp', payload.otp);
+        formData.append('name', payload.name || '');
+        formData.append('password', payload.password || '');
+        formData.append('phone', payload.phone?.toString() || '');
+        formData.append('role', 'deliveryBoy');
+        formData.append('IDProof', payload.IDProof); 
+        formData.append('license', payload.license);
+
+        res = await axiosInstance.post('/users/verify-otp', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
+      else {
+       
+        res = await axiosInstance.post('/users/verify-otp', payload, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      return res.data.user;
+    } catch (err: any) {
+      return rejectWithValue({
+        message: err?.response?.data?.message || err.message || 'OTP verification failed',
+      });
     }
-  );
+  }
+);
+
   
   
   export const sendOtpForHost = createAsyncThunk(
@@ -151,6 +200,21 @@ interface OtpPayload {
   
   export const sendOtpForChef = createAsyncThunk(
     'auth/sendOtpForChef',
+    async (formData: FormData, thunkAPI) => {
+      try {
+        const response = await axiosInstance.post('/users/send-otp', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return response.data;
+      } catch (err: any) {
+        return thunkAPI.rejectWithValue(err.response?.data?.error || 'Failed to send OTP');
+      }
+    }
+  );
+  
+
+  export const sendOtpForDeliveryBoy = createAsyncThunk(
+    'auth/sendOtpForDeliveryBoy',
     async (formData: FormData, thunkAPI) => {
       try {
         const response = await axiosInstance.post('/users/send-otp', formData, {
@@ -245,6 +309,86 @@ export const updateUserProfile = createAsyncThunk<UserProfileUpdate, UpdateProfi
   }
 );
 
+
+
+export const forgotPassword = createAsyncThunk(
+  'auth/forgotPassword',
+  async (email: string, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post('/users/forgot-password', { email });
+      return res.data.message;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || 'Failed to send password reset email'
+      );
+    }
+  }
+);
+
+
+export const verifyPasswordOtp = createAsyncThunk(
+  'auth/verifyPasswordOtp',
+  async (
+    { email, otp }: { email: string; otp: string },
+    thunkAPI
+  ) => {
+    try {
+      const res = await axiosInstance.post('/users/verify-password-otp', { email, otp });
+      return res.data.tempToken as string;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || 'OTP verification failed'
+      );
+    }
+  }
+);
+
+
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (
+    { newPassword }: { newPassword: string },
+    { getState, rejectWithValue }
+  ) => {
+    try {
+      const state = getState() as RootState;
+      const tempToken = state.auth.tempToken;
+
+      if (!tempToken) throw new Error('No temporary token found');
+
+      const res = await axiosInstance.post(
+        '/users/reset-password',
+        { newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${tempToken}`,
+          },
+        }
+      );
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || 'Password reset failed'
+      );
+    }
+  }
+);
+
+export const resendOtp = createAsyncThunk(
+  'auth/resendOtp',
+  async (email: string, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post('/users/resend-otp', { email });
+      return response.data;
+    } catch (err: any) {
+      console.error('Resend OTP error:', err.response?.data);
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to resend OTP');
+    }
+    
+  }
+);
+
+
 const registerSlice = createSlice({
   name: 'auth',
   initialState,
@@ -254,20 +398,30 @@ const registerSlice = createSlice({
       state.error = null;
       state.success = false;
       state.registrationData = null;
+      state.resetPasswordSuccess = false;
     },
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
 
-   
- 
-
+    setCurrentUser: (state, action) => {
+      state.currentUser = action.payload;
+      state.isAuthenticated = !!action.payload;
+    },
+    logoutUser: (state) => {
+      state.currentUser = null;
+      state.isAuthenticated = false;
+    },
+    clearTempToken: (state) => {
+      state.tempToken = undefined;
+    },
 
    setCurrentUser: (state, action) => {
     state.currentUser = action.payload;
     state.isAuthenticated = !!action.payload;
   },
   
+
  },
 
   extraReducers: (builder) => {
@@ -379,6 +533,19 @@ const registerSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(sendOtpForDeliveryBoy.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(sendOtpForDeliveryBoy.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+      })
+      .addCase(sendOtpForDeliveryBoy.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -410,12 +577,73 @@ const registerSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(forgotPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Verify Password OTP
+      .addCase(verifyPasswordOtp.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(verifyPasswordOtp.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tempToken = action.payload;
+      })
+      .addCase(verifyPasswordOtp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Reset Password
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.resetPasswordSuccess = false;
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.resetPasswordSuccess = true;
+        state.tempToken = undefined;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(resendOtp.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resendOtp.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(resendOtp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
 
-export const { resetRegisterState ,setRegistrationData} = registerSlice.actions;
+export const { 
+  resetRegisterState,
+  setRegistrationData,
+  setCurrentUser,
+  
+  clearTempToken,
+} = registerSlice.actions;
+
 
 
 export default registerSlice.reducer;

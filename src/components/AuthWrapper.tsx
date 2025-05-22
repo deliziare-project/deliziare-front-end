@@ -10,7 +10,8 @@ import { AppDispatch } from '@/redux/store';
 
 
 const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
-  const dispatch :AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const { isAuthenticated, currentUser, loading } = useSelector((state:any) => state.auth);
   const router = useRouter();
 
@@ -50,8 +51,10 @@ console.log(currentUser);
   }, [isAuthenticated, loading,  router]);
 
   if (loading) {
+
     return <div>Loading...</div>;
   }
+
 
   return <>{children}</>;
 };

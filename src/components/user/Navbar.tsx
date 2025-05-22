@@ -5,8 +5,6 @@ import { ChefHat, BookOpen, Bell, User, Menu, X } from "lucide-react";
 import NavLink from "../ui/NavLink";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
-
-
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 const router=useRouter()

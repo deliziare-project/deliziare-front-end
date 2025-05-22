@@ -1,134 +1,151 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerChef, resetRegisterState,sendOtpForChef,setRegistrationData } from '../../features/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
+import {
+  sendOtpForChef,
+  setRegistrationData,
+  resetRegisterState,
+} from '../../features/authSlice';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Plus, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { chefRegisterSchema } from '@/validation/ChefValidation';
+import { Controller } from 'react-hook-form';
+import Link from 'next/link';
 
 
-const ChefLocationPicker = dynamic(() => import('@/components/LocationPicker'), {
-  ssr: false,
-});
+const ChefLocationPicker = dynamic(() => import('@/components/LocationPicker'), { ssr: false });
+
+type ChefFormInputs = {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  experience: string;
+  specializations: string[];
+  certificate:File | null;
+};
 
 const ChefRegister = () => {
-    const router = useRouter();
-
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { loading, error, success } = useSelector((state: RootState) => state.auth);
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [experience, setExperience] = useState('');
-  const [specialize, setSpecialize] = useState('');
-  const [specializations, setSpecializations] = useState<string[]>([]);
   const [certificate, setCertificate] = useState<File | null>(null);
   const [location, setLocation] = useState<{ lat: number; lng: number }>({ lat: 0, lng: 0 });
 
+  const {
+    register,
+    handleSubmit,
+    
+    getValues,
+    reset,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<ChefFormInputs>({
+    resolver: yupResolver(chefRegisterSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      experience: '',
+      specializations: [],
+    },
+  });
+  
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'specializations',
+  });
+
+  const [specialize, setSpecialize] = useState('');
+
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-     
-    );
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const chefData = {
-      name,
-      email,
-      phone,
-      password,
-      experience,
-      specializations,
-      location,
-      role: 'chef',
+  navigator.geolocation.getCurrentPosition(
+    (pos) => setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+    (err) => {
+      console.error(err.message);
       
-    };
-    dispatch(setRegistrationData(chefData));
-    
-    
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('password', password);
-    formData.append('experience', experience);
-    formData.append('specialize', JSON.stringify(specializations));
-    formData.append('locationLat', location.lat.toString());
-    formData.append('locationLng', location.lng.toString());
-    formData.append('role', 'chef');
-    if (certificate) formData.append('certificate', certificate);
-    dispatch(sendOtpForChef(formData));
+    }
+  );
+}, []);
+
+
+const onSubmit = (data: ChefFormInputs) => {
+  
+  
+  const chefData = {
+    ...data,
+    location,
+    role: 'chef',
   };
+  dispatch(setRegistrationData(chefData));
 
-//   useEffect(() => {
-//     if (success) {
-//     //   alert('Chef registered successfully!');
-//     //   setName('');
-//     //   setEmail('');
-//     //   setPhone('');
-//     //   setPassword('');
-//     //   setExperience('');
-//     //   setSpecialize('');
-//     //   setSpecializations([]);
-//     //   setCertificate(null);
-     
+  const formData = new FormData();
+  formData.append('name', data.name);
+  formData.append('email', data.email);
+  formData.append('phone', data.phone);
+  formData.append('password', data.password);
+  formData.append('experience', data.experience);
+  formData.append('specialize', JSON.stringify(data.specializations));
+  formData.append('locationLat', location.lat.toString());
+  formData.append('locationLng', location.lng.toString());
+  formData.append('role', 'chef');
   
-     
-//       router.push(`/verifyotp?email=${email}&role=chef`);
-//       dispatch(resetRegisterState());
-       
-//     }
-//   }, [success, dispatch, router]);
+  if (data.certificate) {
+    formData.append('certificate', data.certificate);
+  }
+  dispatch(sendOtpForChef(formData));
+};
 
-
-useEffect(() => {
+  useEffect(() => {
     if (success) {
+      const email = getValues('email');
       router.push(`/verifyotp?email=${encodeURIComponent(email)}&role=chef`);
-  
-      
       setTimeout(() => {
         dispatch(resetRegisterState());
+        reset();
+        setCertificate(null);
       }, 60000);
     }
-  }, [success, dispatch, router, email]);
-  
-  
-
-  const inputStyles =
-    'w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-teal-500 transition';
+  }, [success, dispatch, router, getValues, reset]);
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-white rounded-2xl shadow-xl mt-12">
       <h2 className="text-3xl font-bold mb-8 text-center text-teal-700">Chef Registration</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {[
-          { label: 'Name', value: name, set: setName, type: 'text' },
-          { label: 'Email', value: email, set: setEmail, type: 'email' },
-          { label: 'Phone Number', value: phone, set: setPhone, type: 'tel' },
-          { label: 'Password', value: password, set: setPassword, type: 'password' },
-          { label: 'Experience', value: experience, set: setExperience, type: 'number' },
-        ].map(({ label, value, set, type }) => (
-          <div key={label}>
+          { label: 'Name', name: 'name', type: 'text' },
+          { label: 'Email', name: 'email', type: 'email' },
+          { label: 'Phone Number', name: 'phone', type: 'tel' },
+          { label: 'Password', name: 'password', type: 'password' },
+          { label: 'Experience', name: 'experience', type: 'number' },
+        ].map(({ label, name, type }) => (
+          <div key={name}>
             <label className="block text-gray-700 font-medium mb-1">{label}</label>
             <input
               type={type}
-              value={value}
-              onChange={(e) => set(e.target.value)}
-              required
-              className={inputStyles}
+              {...register(name as keyof ChefFormInputs)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
             />
+            {errors[name as keyof ChefFormInputs] && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors[name as keyof ChefFormInputs]?.message?.toString()}
+              </p>
+            )}
           </div>
         ))}
 
-        {/* Specialize In with plus button */}
+       
         <div>
           <label className="block text-gray-700 font-medium mb-1">Specialize In</label>
           <div className="flex items-center space-x-2">
@@ -137,72 +154,84 @@ useEffect(() => {
               value={specialize}
               onChange={(e) => setSpecialize(e.target.value)}
               placeholder="e.g., Biryani, Desserts"
-              className={`${inputStyles} flex-1`}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
             />
             <button
               type="button"
               onClick={() => {
                 const trimmed = specialize.trim();
-                if (trimmed && !specializations.includes(trimmed)) {
-                  setSpecializations([...specializations, trimmed]);
+                if (trimmed && !watch('specializations').includes(trimmed)) {
+                  append(trimmed);
                   setSpecialize('');
                 }
               }}
-              className="flex items-center justify-center p-2 rounded-lg bg-teal-600 hover:bg-teal-700 transition"
-              aria-label="Add specialization"
+              className="p-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white transition"
             >
-              <Plus className="w-5 h-5 text-white" />
+              <Plus className="w-5 h-5" />
             </button>
           </div>
 
-          {specializations.length > 0 && (
+          {fields.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
-              {specializations.map((item, idx) => (
-                <span
-                  key={idx}
-                  className="flex items-center gap-1 bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm"
+              {fields.map((item, idx) => (
+              <span
+                key={item.id}
+                className="flex items-center gap-1 bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm"
+              >
+                {watch('specializations')[idx]} 
+                <button
+                  type="button"
+                  onClick={() => remove(idx)}
+                  className="hover:text-red-600 focus:outline-none"
                 >
-                  {item}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSpecializations(specializations.filter((_, i) => i !== idx))
-                    }
-                    className="hover:text-red-600 focus:outline-none"
-                    aria-label={`Remove specialization ${item}`}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </span>
-              ))}
+                  <X className="w-4 h-4" />
+                </button>
+              </span>
+            ))}
+
             </div>
+          )}
+
+          {errors.specializations && (
+            <p className="text-sm text-red-600 mt-1">{errors.specializations.message}</p>
           )}
         </div>
 
+        
         <div>
           <label className="block text-gray-700 font-medium mb-1">Pick Location</label>
           <ChefLocationPicker onLocationChange={(lat, lng) => setLocation({ lat, lng })} />
         </div>
 
+       
         <div>
           <label className="block text-gray-700 font-medium mb-1">Upload Certificate</label>
-          <input
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-            onChange={(e) => setCertificate(e.target.files?.[0] || null)}
-            className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:bg-teal-600 hover:file:bg-teal-700 transition"
+          <Controller
+            control={control}
+            name="certificate"
+            defaultValue={null}
+            render={({ field }) => (
+              <input
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  field.onChange(file);   
+                  setCertificate(file);   
+                }}
+                className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:bg-teal-600 hover:file:bg-teal-700 transition"
+              />
+            )}
           />
-          {certificate && (
-            <p className="text-sm text-gray-600 mt-1">
-              Selected file: <strong>{certificate.name}</strong>
-            </p>
+          {errors.certificate && (
+            <p className="text-sm text-red-600 mt-1">{errors.certificate.message}</p>
           )}
+
         </div>
 
         {loading && <p className="text-blue-500 text-sm">Registering...</p>}
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        {success && <p className="text-green-600 text-sm">Chef registered successfully!</p>}
-
+        
         <button
           type="submit"
           disabled={loading}
@@ -211,6 +240,14 @@ useEffect(() => {
           {loading ? 'Submitting...' : 'Register'}
         </button>
       </form>
+      <div className="mt-6 text-center">
+      <p className="text-sm text-center text-gray-600 mt-4">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[#213D72] font-medium hover:underline">
+            Sign In
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
