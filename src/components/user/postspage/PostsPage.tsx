@@ -4,11 +4,29 @@ import { PlusCircle } from 'lucide-react';
 import { Post } from '@/types/post';
 import { fetchPosts } from '@/services/postService';
 import PostsGrid from './PostsGrid';
+import PostModal from '@/components/ui/PostModal';
+import axiosInstance from '@/api/axiosInstance';
+import toast from 'react-hot-toast';
 
 const PostsPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+
+    const handlePostSubmit = async (data: any) => {
+    try {
+      const res = await axiosInstance.post("/posts/create", data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log(res.data);
+
+      toast("Post submitted successfully");
+    } catch (error) {
+      alert("Error creating post");
+    }
+  };
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -32,16 +50,21 @@ const PostsPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Food Donation Posts</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mt-4">Food Donation Posts</h1>
           <p className="text-gray-500 mt-1">
             Browse all available food donation events
           </p>
         </div>
+        <PostModal
+        isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmitPost={handlePostSubmit}
+        />
         <button
           className="bg-white hover:bg-gray-50 text-orange-500 p-2 rounded-full shadow-md transition-colors duration-200 border border-gray-200"
           aria-label="Add new post"
         >
-          <PlusCircle className="h-8 w-8" />
+          <PlusCircle className="h-8 w-8" onClick={() => setIsModalOpen(true)}/>
         </button>
       </div>
 
