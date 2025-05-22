@@ -89,7 +89,7 @@ export default function RegisterPage() {
         <h2 className="text-3xl font-bold text-center text-[#213D72] mb-6">Register as Host</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Name Field */}
+         
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
             <input
@@ -101,7 +101,7 @@ export default function RegisterPage() {
             {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
           </div>
 
-          {/* Email Field */}
+          
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -115,7 +115,7 @@ export default function RegisterPage() {
             {emailExists && <p className="text-sm text-red-600 mt-1">Email already exists. Please use a different one.</p>}
           </div>
 
-          {/* Phone Field */}
+         
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
@@ -127,7 +127,7 @@ export default function RegisterPage() {
             {errors.phone && <p className="text-sm text-red-600 mt-1">{errors.phone.message}</p>}
           </div>
 
-          {/* Password Field */}
+          
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
@@ -139,7 +139,7 @@ export default function RegisterPage() {
             {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
           </div>
 
-          {/* Submit Button */}
+          
           <button
             type="submit"
             disabled={loading || emailExists}
