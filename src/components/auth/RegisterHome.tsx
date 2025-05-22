@@ -28,7 +28,7 @@ function RegisterHome() {
         </button>
 
         <button
-          onClick={() => router.push('/register/delivery')}
+          onClick={() => router.push('/register/deliveryboy')}
           className="w-60 px-6 py-3 bg-[#1a1a1a] hover:bg-[#333] text-white rounded-full transition duration-300 font-medium"
         >
           Delivery Boy

@@ -1,10 +1,10 @@
-import VerifyOtpPage from '@/components/auth/VerifyOtp'
+import ForgotPassword from '@/components/auth/ForgotPassword'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      <VerifyOtpPage/>
+      <ForgotPassword/>
     </div>
   )
 }
