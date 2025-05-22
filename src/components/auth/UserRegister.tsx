@@ -16,7 +16,6 @@ import {
 } from "@/features/authSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
-
 const registerValidationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required").min(2, "Name is too short"),
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -53,7 +52,7 @@ export default function RegisterPage() {
     if (success) {
       router.push(`/verifyotp?email=${emailValue}&role=host`);
     }
-  }, [success]);
+  }, [success, router, emailValue]);
 
   const handleEmailBlur = async () => {
     if (emailValue.trim() !== "") {
@@ -90,20 +89,19 @@ export default function RegisterPage() {
         <h2 className="text-3xl font-bold text-center text-[#213D72] mb-6">Register as Host</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-
-          
+          {/* Name Field */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
             <input
               id="name"
               {...register("name")}
               type="text"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72] text-gray-600"
             />
             {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
           </div>
 
-          
+          {/* Email Field */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -111,38 +109,37 @@ export default function RegisterPage() {
               {...register("email")}
               type="email"
               onBlur={handleEmailBlur}
-              className={`mt-1 block w-full px-4 py-2 border ${
-                errors.email || emailExists ? "border-red-500" : "border-gray-300"
-              } rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500`}
+              className={`mt-1 block w-full px-4 py-2 border text-gray-600 ${emailExists ? "border-red-500" : "border-gray-300"} rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500`}
             />
             {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
+            {emailExists && <p className="text-sm text-red-600 mt-1">Email already exists. Please use a different one.</p>}
           </div>
 
-         
+          {/* Phone Field */}
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
               id="phone"
               {...register("phone")}
               type="tel"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
+              className="mt-1 block w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {errors.phone && <p className="text-sm text-red-600 mt-1">{errors.phone.message}</p>}
           </div>
 
-         
+          {/* Password Field */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
               id="password"
               {...register("password")}
               type="password"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
+              className="mt-1 block w-full text-gray-600 px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#213D72] focus:border-[#213D72]"
             />
             {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
           </div>
 
-         
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading || emailExists}

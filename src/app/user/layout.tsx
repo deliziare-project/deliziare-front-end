@@ -1,12 +1,16 @@
-// app/admin/layout.tsx
-import Sidebar from '@/components/user/Sidebar';
+import Navbar from '@/components/user/Navbar';
 import { ReactNode } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 export default function UserLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-[#fff8f0]">
-      <Sidebar />
-        <main className="p-4">{children}</main>
+
+    <div className="min-h-screen bg-white">
+      {/* <Sidebar /> */}
+      <Navbar />
+       <Toaster position="top-right" />
+        <main className=''>{children}</main>
+
       </div>
    
   );
