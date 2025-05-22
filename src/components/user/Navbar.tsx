@@ -7,6 +7,8 @@ import Image from "next/image";
 
 import { useRouter } from 'next/navigation';
 
+import { useRouter } from 'next/navigation';
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 const router=useRouter()
