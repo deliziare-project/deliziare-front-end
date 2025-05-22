@@ -9,10 +9,11 @@ import Link from 'next/link';
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { loading, error, success, registrationData } = useAppSelector((state:any) => state.auth);
+  const { loading, error, success,registrationData} = useAppSelector((state:any) => state.auth);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +35,14 @@ const Login: React.FC = () => {
        router.push('/admin/dashboard')
       }else if(registrationData.user&&registrationData.user.role=='host'){
        router.push('/user/home')
+
       }
 
     }
   }, [success, registrationData]);
+
+
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-[#fdf7f4] px-4">
