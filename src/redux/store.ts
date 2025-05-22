@@ -5,12 +5,15 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import chefReducer from '../features/chefSlice'
 import hostReducer from '../features/userManagementSlice'
+import userPostReducer from '../features/userPostSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     hosts:hostReducer,
-     chef: chefReducer,
+    chef: chefReducer,
+    userPosts:userPostReducer,
+
   },
 });
 

@@ -32,11 +32,8 @@ console.log(currentUser);
       router.push('/user/home');
     }
     else if(isAuthenticated && currentUser.role == 'chef'){
-      if (!currentUser.isProfileCompleted) {
-          router.push('/chef/complete-profile');
-        } else {
+      
           router.push('/chef/home');
-        }
     }
     }
   }, [isAuthenticated, loading, router,currentUser]);
