@@ -18,6 +18,11 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
    const pathname = usePathname();
 console.log(currentUser);
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> upstream/dev
   useEffect(() => {
     dispatch(checkCurrentUser());
   }, [dispatch]);
