@@ -415,10 +415,13 @@ const registerSlice = createSlice({
     clearTempToken: (state) => {
       state.tempToken = undefined;
     },
-
-   setCurrentUser: (state, action) => {
+  setUser(state, action) {
     state.currentUser = action.payload;
-    state.isAuthenticated = !!action.payload;
+    state.isAuthenticated = true;
+  },
+  clearUser(state) {
+    state.currentUser = null;
+    state.isAuthenticated = false;
   },
   
 
@@ -642,6 +645,8 @@ export const {
   setCurrentUser,
   
   clearTempToken,
+  setUser,
+  clearUser
 } = registerSlice.actions;
 
 
