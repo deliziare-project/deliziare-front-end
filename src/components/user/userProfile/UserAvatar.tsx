@@ -30,7 +30,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     large: 'w-20 h-20 text-xl'
   };
   
-  const classes = `${sizeClasses[size]} bg-indigo-100 text-indigo-800 font-medium 
+  const classes = `${sizeClasses[size]} bg-orange-200 text-orange-800 font-medium 
                    rounded-full flex items-center justify-center transition-all
                    duration-300 ease-in-out hover:bg-indigo-200`;
 
