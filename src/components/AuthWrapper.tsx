@@ -46,8 +46,8 @@ console.log(currentUser);
      }
      
     }
-  }
   
+  }
     
   }, [isAuthenticated, loading,  router,currentUser]);
 
