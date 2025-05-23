@@ -25,21 +25,19 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
-    if (success) {
 
-      
-      console.log('User data:', registrationData.user);
-
-      
-      if(registrationData.user&&registrationData.user.role=='admin'){
-       router.push('/admin/dashboard')
-      }else if(registrationData.user&&registrationData.user.role=='host'){
-       router.push('/user/home')
+    const user = registrationData?.user;
+  
+    if (success && user) {
+      if (user.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else if (user.role === 'host') {
+        router.push('/user/home');
 
       }
-
     }
   }, [success, registrationData]);
+  
 
 
  
@@ -47,7 +45,7 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-[#fdf7f4] px-4">
       <div className="w-full max-w-md bg-white p-10 rounded-2xl shadow-2xl border border-[#f0e6e0]">
-        <h2 className="text-3xl font-bold text-center text-[#B87333] mb-8">Login</h2>
+        <h2 className="text-3xl font-bold text-center text-[#d94f30] mb-8">Login</h2>
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
@@ -72,14 +70,22 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-[#B87333] focus:border-[#B87333] text-black"
             />
+            <div className="flex justify-end mt-1">
+              <Link href="/forgot-password">
+                <span className="text-sm text-[#B87333] hover:underline cursor-pointer font-medium">
+                  Forgot Password?
+                </span>
+              </Link>
+            </div>
           </div>
+
 
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#B87333] text-white py-2 rounded-xl font-semibold hover:bg-[#a05f2a] transition duration-300 disabled:opacity-50"
+            className="w-full bg-[#d94f30] text-white py-2 rounded-xl font-semibold hover:bg-[#a05f2a] transition duration-300 disabled:opacity-50"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
