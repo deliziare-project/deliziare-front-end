@@ -34,13 +34,24 @@ const EditProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(updateUserProfile({
-      name: formData.name,
-      phone: parseInt(formData.phone),
-    }));
-    await dispatch(checkCurrentUser());
-    onClose();
+  
+    try {
+      const resultAction = await dispatch(updateUserProfile({
+        name: formData.name,
+        phone: parseInt(formData.phone),
+      }));
+  
+      if (updateUserProfile.fulfilled.match(resultAction)) {
+        await dispatch(checkCurrentUser());
+        onClose(); 
+      } else {
+        console.error('Update failed:', resultAction);
+      }
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
   };
+  
 
   if (!isOpen) return null;
 
