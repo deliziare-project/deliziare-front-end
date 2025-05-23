@@ -42,6 +42,7 @@ console.log(currentUser);
       router.push('/chef/complete-profile')
      }else if (currentUser.isProfileCompleted){
       router.push('/chef/home')
+      
      }
      
     }

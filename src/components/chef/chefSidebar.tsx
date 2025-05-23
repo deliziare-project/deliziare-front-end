@@ -4,8 +4,10 @@ import {
   LayoutDashboard,
   Utensils,
   CalendarCheck,
+  GitPullRequestDraft,
   LogOut,
 } from 'lucide-react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { logoutUser } from '@/features/authSlice';
@@ -15,6 +17,7 @@ import { useRouter } from 'next/navigation';
 const sidebarItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/chef/home' },
   { label: 'My Posts', icon: Utensils, path: '/chef/post' },
+  { label: 'Bid requests', icon: GitPullRequestDraft, path: '/chef/Bids' },
   { label: 'Orders', icon: CalendarCheck, path: '/chef/orders' },
 ];
 
@@ -46,6 +49,16 @@ function ChefSidebar() {
             <LogOut className="w-5 h-5" />
             <span className="text-sm font-medium">Logout</span>
           </div>
+
+          <div className="mt-24">
+        <Image
+          src="/sidebarChef.png"
+          alt="Chef Image"
+          width={250}
+          height={250}
+          className="mx-auto"
+        />
+      </div>
     </div>
   );
 }

@@ -17,26 +17,41 @@ const MyChefPosts = () => {
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">My Chef Posts</h1>
+    <div className="p-6 min-h-screen bg-gray-50">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">My Chef Posts</h1>
+
       {posts.length === 0 ? (
-        <p>No posts found.</p>
+        <p className="text-center text-gray-500">You haven't created any posts yet.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
-            <div key={post._id} className="bg-white p-4 rounded shadow">
-              <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-              <p className="mb-2 text-sm text-gray-700">{post.description}</p>
-              <div className="flex flex-wrap gap-1 mb-2">
-                {post.tags.map((tag, index) => (
-                  <span key={index} className="text-xs bg-blue-100 px-2 py-1 rounded-full">{tag}</span>
-                ))}
+            <div
+              key={post._id}
+              className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col h-full"
+            >
+              <div className="p-4 flex flex-col gap-2 flex-grow">
+                <h2 className="text-lg font-semibold text-gray-800">{post.title}</h2>
+                <p className="text-sm text-gray-600 line-clamp-3">{post.description}</p>
+
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="flex gap-2 overflow-x-auto">
-                {post.images.map((img, i) => (
-                  <img key={i} src={img.url} alt={img.altText} className="w-24 h-24 object-cover rounded" />
-                ))}
-              </div>
+
+              {post.images[0]?.url && (
+                <img
+                  src={post.images[0].url}
+                  alt={post.images[0]?.altText || 'Chef Post'}
+                  className="w-full h-60 object-cover"
+                />
+              )}
             </div>
           ))}
         </div>
