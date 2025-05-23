@@ -16,8 +16,10 @@ export default function Home() {
           />
         </div>
 
+
         <h1 className="text-5xl sm:text-6xl font-bold mb-4 tracking-tight text-[#213D72]">
           Welcome to <span className="text-[#B87333]">Deliziare</span>
+
         </h1>
         <p className="text-lg sm:text-xl text-gray-600 mb-10">
           Delight in every detail. Plan events, connect chefs, and simplify your celebration — all in one platform.

@@ -20,9 +20,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
       
       <div className="space-y-4">
         <div className="flex items-center group">
-          <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center mr-4 
-                        group-hover:bg-indigo-100 transition-colors duration-300 ease-in-out">
-            <Mail size={18} className="text-indigo-600" />
+          <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-4 
+                        group-hover:bg-orange-200 transition-colors duration-300 ease-in-out">
+            <Mail size={18} className="text-orange-600" />
           </div>
           <div>
             <div className="text-sm text-gray-500">Email</div>
@@ -31,9 +31,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
         </div>
         
         <div className="flex items-center group">
-          <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center mr-4
-                        group-hover:bg-indigo-100 transition-colors duration-300 ease-in-out">
-            <Phone size={18} className="text-indigo-600" />
+          <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-4
+                        group-hover:bg-orange-200 transition-colors duration-300 ease-in-out">
+            <Phone size={18} className="text-orange-600" />
           </div>
           <div>
             <div className="text-sm text-gray-500">Phone</div>
@@ -42,9 +42,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ user }) => {
         </div>
         
         <div className="flex items-center group">
-          <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center mr-4
-                        group-hover:bg-indigo-100 transition-colors duration-300 ease-in-out">
-            <Clock size={18} className="text-indigo-600" />
+          <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-4
+                        group-hover:bg-orange-200 transition-colors duration-300 ease-in-out">
+            <Clock size={18} className="text-orange-600" />
           </div>
           <div>
             <div className="text-sm text-gray-500">Last Updated</div>
