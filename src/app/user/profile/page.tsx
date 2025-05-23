@@ -1,11 +1,10 @@
-'use client'
-import MyChefPosts from '@/components/chef/post/Postview'
+import UserProfile from '@/components/user/userProfile/UserProfile'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      <MyChefPosts/>
+      <UserProfile />
     </div>
   )
 }

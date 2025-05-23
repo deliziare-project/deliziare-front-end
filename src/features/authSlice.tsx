@@ -214,6 +214,36 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
+interface UserProfileUpdate {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: number;
+  role: string;
+  isBlock: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+
+}
+
+interface UpdateProfileArgs {
+  name: string;
+  phone: number;
+}
+
+export const updateUserProfile = createAsyncThunk<UserProfileUpdate, UpdateProfileArgs>(
+  'user/updateProfile',
+  async ({ name, phone }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.put('/userclient/update-profile', { name, phone });
+      return res.data.user;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to update profile');
+    }
+  }
+);
 
 const registerSlice = createSlice({
   name: 'auth',
@@ -228,17 +258,21 @@ const registerSlice = createSlice({
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
     },
+
+   
+ 
+
+
    setCurrentUser: (state, action) => {
     state.currentUser = action.payload;
     state.isAuthenticated = !!action.payload;
   },
-   logoutUser: (state) => {
-    state.currentUser = null;
-    state.isAuthenticated = false;
-    },
+  
  },
+
   extraReducers: (builder) => {
     builder
+       
         .addCase(checkCurrentUser.pending, (state) => {
         state.loading = true;
         })
@@ -369,6 +403,9 @@ const registerSlice = createSlice({
         state.loading = false;
         state.currentUser = null;
         state.isAuthenticated = false;
+        state.error = null;
+        state.success = false;
+        state.registrationData = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;

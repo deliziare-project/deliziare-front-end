@@ -42,7 +42,7 @@ export const fetchLoggedInChef = createAsyncThunk<
     const response = await axiosInstance.get('/chefs/chefData', {
       withCredentials: true,
     });
-    console.log('chef data', response.data);
+   // console.log('chef data', response);
     return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
