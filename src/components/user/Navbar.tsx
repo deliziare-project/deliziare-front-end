@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { ChefHat, BookOpen, Bell, User, Menu, X } from "lucide-react";
 import NavLink from "../ui/NavLink";
 import Image from "next/image";
+
 import { useRouter } from 'next/navigation';
+
+// import { useRouter } from 'next/navigation';
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 const router=useRouter()
@@ -14,7 +18,7 @@ const router=useRouter()
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className=" sticky top-0 z-50 bg-[linear-gradient(to_right,rgba(255,200,150,0.6),rgba(255,255,255,0.6))] backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo and Brand */}
@@ -74,7 +78,7 @@ const router=useRouter()
 
       {/* Mobile Navigation */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 ">
           <NavLink href="/" icon={<BookOpen size={18} />} label="Home" mobile />
           <NavLink
             href="/chef"

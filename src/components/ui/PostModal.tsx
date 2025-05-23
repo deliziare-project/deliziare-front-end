@@ -92,7 +92,6 @@ const PostModal: React.FC<PostModalProps> = ({
             />
           </div>
 
-          {/* Latitude, Longitude, District */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-600">
             <InputBox
               label="District"
