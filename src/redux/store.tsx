@@ -7,6 +7,7 @@ import chefReducer from '../features/chefSlice'
 import hostReducer from '../features/userManagementSlice'
 import userPostReducer from '../features/userPostSlice'
 import chefPostReducer from '../features/chefPostSlice'
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,

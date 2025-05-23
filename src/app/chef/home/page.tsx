@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,13 +10,10 @@ import {
   Loader,
   ChevronRight,
   MapPin,
-  MessageCircle,
-  ThumbsUp,
-  Share2,
-  PlusCircle
+
 } from 'lucide-react';
 
-import axiosInstance from '@/api/axiosInstance';
+
 import { fetchChefDistrictPosts } from '@/features/userPostSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 
