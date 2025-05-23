@@ -41,13 +41,13 @@ export default function TagInput({
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 text-gray-500"
           placeholder={placeholder}
         />
         <button
           type="button"
           onClick={addTag}
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+          className="px-2  text-[#B8755D]  rounded-lg  transition"
         >
           {buttonLabel === 'Add' ? 'Add' : <Plus size={18} />}
         </button>
