@@ -10,14 +10,14 @@ import { AppDispatch } from '@/redux/store';
 
 
 const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
-  const dispatch :AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const { isAuthenticated, currentUser, loading } = useSelector((state:any) => state.auth);
   const router = useRouter();
 
    const pathname = usePathname();
 console.log(currentUser);
 
-console.log(currentUser?.isProfileCompleted)
   useEffect(() => {
     dispatch(checkCurrentUser());
   }, [dispatch]);
@@ -33,8 +33,10 @@ console.log(currentUser?.isProfileCompleted)
     if(isAuthenticated&&currentUser.role=='admin'){
      router.push('/admin/dashboard');
     }else if(isAuthenticated&&currentUser.role=='host'){
-      router.push('/user/home');
-    }
+      if(!pathname.startsWith('/user')){
+        router.push('/user/home');
+      }
+   
     else if(isAuthenticated && currentUser.role == 'chef'){
      if(!currentUser?.isProfileCompleted){
       
@@ -45,14 +47,16 @@ console.log(currentUser?.isProfileCompleted)
      }
      
     }
-
+  }
   }
     
   }, [isAuthenticated, loading,  router,]);
 
   if (loading) {
+
     return <div>Loading...</div>;
   }
+
 
   return <>{children}</>;
 };
