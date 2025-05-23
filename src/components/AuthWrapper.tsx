@@ -18,8 +18,11 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
    const pathname = usePathname();
 console.log(currentUser);
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> upstream/dev
   useEffect(() => {
     dispatch(checkCurrentUser());
   }, [dispatch]);
@@ -27,7 +30,7 @@ console.log(currentUser);
   useEffect(() => {
 
     if (!loading) {
- if (!isAuthenticated && (pathname.startsWith('/user')||pathname.startsWith('/admin'))) {
+ if (!isAuthenticated && (pathname.startsWith('/admin')||pathname.startsWith('/user')|| pathname.startsWith('/chef'))) {
         router.push('/login');
         return;
       }
@@ -38,17 +41,21 @@ console.log(currentUser);
       if(!pathname.startsWith('/user')){
         router.push('/user/home');
       }
-    }else if(isAuthenticated &&currentUser.role=='chef'){
-      router.push('/chef/home')
-    }
+   
     else if(isAuthenticated && currentUser.role == 'chef'){
+     if(!currentUser?.isProfileCompleted){
+      
+      router.push('/chef/complete-profile')
+     }
+      if (currentUser.isProfileCompleted){
       router.push('/chef/home')
-
+     }
+     
     }
-
+  }
   }
     
-  }, [isAuthenticated, loading,  router]);
+  }, [isAuthenticated, loading,  router,]);
 
   if (loading) {
 
