@@ -16,7 +16,7 @@ export default function Home() {
         /> */}
 
         <h1 className="text-5xl sm:text-6xl font-bold mb-4 tracking-tight text-[#1a1a1a]">
-          Welcome to <span className="text-[#B87333]">Deliziare</span>
+          Welcome to <span className="text-[#B8755D]">Deliziare</span>
         </h1>
         <p className="text-lg sm:text-xl text-gray-700 mb-10">
           Delight in every detail. Plan events, connect chefs, and simplify your celebration — all in one platform.
@@ -25,7 +25,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
             href="/register"
-            className="bg-[#B87333] hover:bg-[#a05f2a] text-white font-semibold py-3 px-6 rounded-full transition"
+            className="bg-[#B8755D] hover:bg-[#a05f2a] text-white font-semibold py-3 px-6 rounded-full transition"
           >
             Get Started
           </Link>

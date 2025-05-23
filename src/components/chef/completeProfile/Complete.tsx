@@ -144,10 +144,10 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 
   return (
-    <div className="max-w-3xl mx-auto mt-12 p-8 bg-white shadow-xl rounded-xl">
-  {/* <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
-    Complete Your Chef Profile
-  </h1> */}
+  <div className="max-w-2xl mx-auto  p-7 bg-gray-50 shadow-xl rounded-xl ">
+  <h1 className="text-2xl md:text-2xl font-bold text-center bg-red-200 text-[#B8755D] mb-12 tracking-tight animate-fadeInDown bg-clip-text  ">
+          Complete Your Profile to Proceed
+        </h1>
 <div className="mb-6 flex flex-col items-center">
   {/* <label className="text-gray-700 font-bold mb-2">Profile Image</label> */}
 
@@ -182,15 +182,57 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
 
   <InputField label="Username" name="name" value={formData.name} onChange={handleChange} type="text" placeholder="e.g.,Anand" />
 
-<TextAreaField label="Bio" name="bio" value={formData.bio} onChange={handleChange} placeholder="Tell us about yourself" />
+{/* <TextAreaField label="Bio" name="bio" value={formData.bio} onChange={handleChange} placeholder="Tell us about yourself" /> */}
+<div className="space-y-3">
+      {/* Bio */}
+      <TextAreaField
+        label="Bio"
+        name="bio"
+        value={formData.bio}
+        onChange={handleChange}
+        placeholder="Tell us about yourself"
+      />
 
-<TagInput label="Specialities" inputValue={specialityInput} setInputValue={setSpecialityInput} tags={formData.specialize} setTags={(tags) => setFormData({ ...formData, specialize: tags })} placeholder="e.g., Italian, Pastry" buttonLabel="+" />
 
-<TagInput label="Qualifications" inputValue={qualificationInput} setInputValue={setQualificationInput} tags={formData.qualifications} setTags={(tags) => setFormData({ ...formData, qualifications: tags })} placeholder="e.g., Culinary Arts Diploma" buttonLabel="Add" tagColor="bg-purple-100 text-purple-800" />
 
-<InputField label="Years of Experience" name="experience" value={formData.experience} onChange={handleChange} type="number" placeholder="e.g., 5" />
+  
 
-<AutocompleteInput
+      {/* Specialities */}
+      <TagInput
+        label="Specialities"
+        inputValue={specialityInput}
+        setInputValue={setSpecialityInput}
+        tags={formData.specialize}
+        setTags={(tags) => setFormData({ ...formData, specialize: tags })}
+        placeholder="e.g., Italian, Pastry"
+        buttonLabel="+"
+      />
+
+      {/* Grid for Qualifications + Experience */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <TagInput
+          label="Qualifications"
+          inputValue={qualificationInput}
+          setInputValue={setQualificationInput}
+          tags={formData.qualifications}
+          setTags={(tags) => setFormData({ ...formData, qualifications: tags })}
+          placeholder="e.g., Culinary Arts Diploma"
+          buttonLabel="Add"
+          tagColor="bg-purple-100 text-purple-800"
+        />
+
+        <InputField
+          label="Years of Experience"
+          name="experience"
+          value={formData.experience}
+          onChange={handleChange}
+          type="number"
+          placeholder="e.g., 5"
+        />
+      </div>
+
+
+      <AutocompleteInput
   label="District"
   name="district"
   value={formData.district}
@@ -198,6 +240,10 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   placeholder="e.g., Thrissur"
   suggestions={districts}
 />
+
+
+    </div>
+
 <FormActions onSubmit={handleSubmit} onSkip={handleSkip} />
 
 </div>

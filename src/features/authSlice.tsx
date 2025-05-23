@@ -249,9 +249,11 @@ interface LoginPayload {
     async (loginData, thunkAPI) => {
       try {
         const response = await axiosInstance.post('/users/login', loginData);
-        console.log(response.data)
+        console.log("res",response.data)
         return response.data;
       } catch (err: any) {
+        console.log("error",err);
+        
         return thunkAPI.rejectWithValue(err.response?.data?.error || 'Login failed');
       }
     }

@@ -18,7 +18,7 @@ export default function TextAreaField({ label, name, value, onChange, placeholde
         value={value}
         onChange={onChange}
         rows={5}
-        className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 text-gray-500"
         placeholder={placeholder}
       />
     </div>

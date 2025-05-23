@@ -51,7 +51,7 @@ const ChefPosts = () => {
           <div className="flex items-center mb-4 md:mb-0">
             <ChefHat size={28} className="text-[#C26E4B] mr-3" />
             <h2 className="text-2xl font-['Playfair_Display'] font-bold text-[#74391F]">
-              Culinary Opportunities Dashboard
+              Culinary Opportunities
             </h2>
           </div>
 

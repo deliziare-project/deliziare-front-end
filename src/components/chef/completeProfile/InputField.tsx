@@ -14,12 +14,12 @@ export default function InputField({ label, name, value, onChange, type = "text"
         {label}
       </label>
       <input
-        type={type}
+        type={type} 
         id={name}
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-3 border  border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 text-gray-500"
         placeholder={placeholder}
         min={type === "number" ? 0 : undefined}
       />

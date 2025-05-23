@@ -13,12 +13,12 @@ const ChefBids = () => {
     dispatch(getChefBids());
   }, [dispatch]);
 
-  if (loading) return <div className="p-4 text-center text-gray-600">Loading bids...</div>;
+  if (loading) return <div className="p-4 text-center text-[#B8755D]">Loading bids...</div>;
   if (error) return <div className="p-4 text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">My Bids</h2>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold mb-8 text-center text-[#B8755D]">My Bids</h2>
 
       {bids.length === 0 ? (
         <p className="text-gray-500 text-center">No bids found.</p>
@@ -27,10 +27,10 @@ const ChefBids = () => {
           {bids.map((bid) => (
             <li
               key={bid._id}
-              className="border rounded-xl shadow-md p-6 bg-white hover:shadow-lg transition"
+              className="border border-[#e2d4cf] rounded-xl shadow-md p-6 bg-white hover:shadow-lg transition"
             >
               <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-xl font-semibold text-[#B8755D]">
                   {bid.postId.eventName}
                 </h3>
                 <p className="text-sm text-gray-500">
@@ -40,39 +40,43 @@ const ChefBids = () => {
 
               <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
                 <div>
-                  <strong>Location:</strong> {bid.postId.district}
+                  <span className="font-medium text-[#B8755D]">Location:</span>{' '}
+                  {bid.postId.district}
                 </div>
                 <div>
-                  <strong>Menu:</strong> {bid.postId.menu}
+                  <span className="font-medium text-[#B8755D]">Menu:</span>{' '}
+                  {bid.postId.menu}
                 </div>
                 <div>
-                  <strong>Quantity:</strong> {bid.postId.quantity}
+                  <span className="font-medium text-[#B8755D]">Quantity:</span>{' '}
+                  {bid.postId.quantity}
                 </div>
                 <div>
-                  <strong>Description:</strong> {bid.postId.description}
+                  <span className="font-medium text-[#B8755D]">Description:</span>{' '}
+                  {bid.postId.description}
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-between items-center text-sm font-medium">
+              <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 text-sm font-medium">
                 <div>
                   <span className="text-gray-600">Suggested Amount:</span>{' '}
-                  <span className="text-green-600">₹{bid.bidAmount}</span>
+                  <span className="text-green-600 font-semibold">₹{bid.bidAmount}</span>
                 </div>
                 <div>
                   <span className="text-gray-600">Status:</span>{' '}
                   <span
-                    className={`${
+                    className={`font-semibold capitalize ${
                       bid.status === 'accepted'
                         ? 'text-green-600'
                         : bid.status === 'rejected'
                         ? 'text-red-500'
                         : 'text-yellow-600'
-                    } capitalize`}
+                    }`}
                   >
                     {bid.status}
                   </span>
                 </div>
-                <div className="text-gray-500">
+                <div className="text-gray-500 text-sm">
                   {new Date(bid.createdAt).toLocaleString()}
                 </div>
               </div>
