@@ -61,88 +61,172 @@ const PostDetailsPage = () => {
     userId,
   } = selectedPost;
 
-  return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-[#FCF5F2] rounded-2xl border border-[#F9EBE5] shadow-md">
-      {/* Header */}
-      <div className="flex items-center mb-6">
-        <div className="w-11 h-11 rounded-full bg-[#F2D7CE] text-[#74391F] flex items-center justify-center font-semibold mr-3">
-          {userId?.name?.charAt(0).toUpperCase()}
-        </div>
-        <div>
-          <p className="text-sm text-[#8E472A]">You're viewing a post by</p>
-          <p className="font-medium text-[#74391F]">{userId?.name}</p>
-        </div>
-      </div>
+  // return (
+  //   <div className="max-w-4xl mx-auto mt-10 p-6 bg-[#FCF5F2] rounded-2xl border border-[#F9EBE5] shadow-md">
+  //     {/* Header */}
+  //     <div className="flex items-center mb-6">
+  //       <div className="w-11 h-11 rounded-full bg-[#F2D7CE] text-[#74391F] flex items-center justify-center font-semibold mr-3">
+  //         {userId?.name?.charAt(0).toUpperCase()}
+  //       </div>
+  //       <div>
+  //         <p className="text-sm text-[#8E472A]">You're viewing a post by</p>
+  //         <p className="font-medium text-[#74391F]">{userId?.name}</p>
+  //       </div>
+  //     </div>
 
-      {/* Event Title */}
-      <h2 className="text-2xl font-bold font-['Playfair_Display'] text-[#8E472A] mb-4">
-        {eventName}
-      </h2>
+  //     {/* Event Title */}
+  //     <h2 className="text-2xl font-bold font-['Playfair_Display'] text-[#8E472A] mb-4">
+  //       {eventName}
+  //     </h2>
 
-      {/* Event Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[#5C4639] font-['Nunito_Sans'] mb-6">
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <Calendar className="w-5 h-5 mr-2 text-[#BF9A61]" />
-            <span><strong>Date:</strong> {date}</span>
+  //     {/* Event Info */}
+  //     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[#5C4639] font-['Nunito_Sans'] mb-6">
+  //       <div className="space-y-2">
+  //         <div className="flex items-center">
+  //           <Calendar className="w-5 h-5 mr-2 text-[#BF9A61]" />
+  //           <span><strong>Date:</strong> {date}</span>
+  //         </div>
+  //         <div className="flex items-center">
+  //           <Clock className="w-5 h-5 mr-2 text-[#BF9A61]" />
+  //           <span><strong>Time:</strong> {time}</span>
+  //         </div>
+  //         <div className="flex items-center">
+  //           <MapPin className="w-5 h-5 mr-2 text-[#BF9A61]" />
+  //           <span><strong>District:</strong> {district}</span>
+  //         </div>
+  //       </div>
+
+  //       <div className="space-y-2">
+  //         <div className="flex items-center">
+  //           <Users className="w-5 h-5 mr-2 text-[#BF9A61]" />
+  //           <span><strong>Quantity:</strong> {quantity} people</span>
+  //         </div>
+  //         <div className="flex items-center">
+  //           <UtensilsCrossed className="w-5 h-5 mr-2 text-[#BF9A61]" />
+  //           <span><strong>Menu:</strong> {menu?.join(', ')}</span>
+  //         </div>
+  //       </div>
+  //     </div>
+
+  //     {/* Description */}
+  //     <div className="mb-6">
+  //       <div className="flex items-center mb-2 text-[#74391F] font-semibold">
+  //         <Info className="w-5 h-5 mr-2 text-[#BF9A61]" />
+  //         <span>Description:</span>
+  //       </div>
+  //       <p className="text-[#6B7280] leading-relaxed">
+  //         {description}
+  //       </p>
+  //     </div>
+
+  //     {/* Action Button */}
+  //     <div className="text-right">
+  //       <button
+  //         onClick={() => setShowModal(true)}
+  //         disabled={hasBid}
+  //         className={`px-5 py-2.5 rounded-lg font-medium shadow-sm transition duration-200 ${
+  //           hasBid
+  //             ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+  //             : 'bg-[#C26E4B] hover:bg-[#A85A3A] text-white'
+  //         }`}
+  //       >
+  //         {hasBid ? 'Request Sent' : 'Send Request'}
+  //       </button>
+  //     </div>
+
+  //     {/* Modal */}
+  //     {showModal && (
+  //       <BidModal
+  //         postId={selectedPost._id}
+  //         onClose={() => setShowModal(false)}
+  //       />
+  //     )}
+  //   </div>
+  // );
+
+
+   return (
+        <div className="max-w-4xl mx-auto mt-12 p-8 bg-white rounded-2xl border border-[#F9EBE5] shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn">
+          {/* Header */}
+          <div className="flex items-center mb-8">
+            <div className="w-12 h-12 rounded-full bg-[#F2D7CE] text-[#74391F] flex items-center justify-center font-bold text-xl mr-4">
+              {userId?.name?.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <p className="text-sm text-[#8E472A] font-medium">You're viewing a post by</p>
+              <p className="text-lg font-semibold text-[#74391F]">{userId?.name}</p>
+            </div>
           </div>
-          <div className="flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-[#BF9A61]" />
-            <span><strong>Time:</strong> {time}</span>
+
+          {/* Event Title */}
+          <h2 className="text-3xl font-bold font-['Playfair_Display'] text-[#74391F] mb-6 tracking-tight">
+            {eventName}
+          </h2>
+
+          {/* Event Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#5C4639] font-['Nunito_Sans'] mb-8">
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <Calendar className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-sm font-semibold"><strong>Date:</strong> {date}</span>
+              </div>
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-sm font-semibold"><strong>Time:</strong> {time}</span>
+              </div>
+              <div className="flex items-center">
+                <MapPin className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-sm font-semibold"><strong>District:</strong> {district}</span>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <Users className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-sm font-semibold"><strong>Quantity:</strong> {quantity} people</span>
+              </div>
+              <div className="flex items-center">
+                <UtensilsCrossed className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-sm font-semibold"><strong>Menu:</strong> {menu?.join(', ')}</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center">
-            <MapPin className="w-5 h-5 mr-2 text-[#BF9A61]" />
-            <span><strong>District:</strong> {district}</span>
+
+          {/* Description */}
+          <div className="mb-8">
+            <div className="flex items-center mb-3 text-[#74391F] font-semibold">
+              <Info className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+              <span className="text-base">Description</span>
+            </div>
+            <p className="text-[#6B7280] text-sm leading-relaxed font-medium">
+              {description}
+            </p>
           </div>
+
+          {/* Action Button */}
+          <div className="text-right">
+            <button
+              onClick={() => setShowModal(true)}
+              disabled={hasBid}
+              className={`px-6 py-3 rounded-lg font-semibold text-base shadow-md transition-all duration-300 ${
+                hasBid
+                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  : 'bg-[#C26E4B] hover:bg-[#A85A3A] text-white hover:shadow-lg'
+              }`}
+            >
+              {hasBid ? 'Request Sent' : 'Send Request'}
+            </button>
+          </div>
+
+          {/* Modal */}
+          {showModal && (
+            <BidModal
+              postId={selectedPost._id}
+              onClose={() => setShowModal(false)}
+            />
+          )}
         </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <Users className="w-5 h-5 mr-2 text-[#BF9A61]" />
-            <span><strong>Quantity:</strong> {quantity} people</span>
-          </div>
-          <div className="flex items-center">
-            <UtensilsCrossed className="w-5 h-5 mr-2 text-[#BF9A61]" />
-            <span><strong>Menu:</strong> {menu?.join(', ')}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 text-[#74391F] font-semibold">
-          <Info className="w-5 h-5 mr-2 text-[#BF9A61]" />
-          <span>Description:</span>
-        </div>
-        <p className="text-[#6B7280] leading-relaxed">
-          {description}
-        </p>
-      </div>
-
-      {/* Action Button */}
-      <div className="text-right">
-        <button
-          onClick={() => setShowModal(true)}
-          disabled={hasBid}
-          className={`px-5 py-2.5 rounded-lg font-medium shadow-sm transition duration-200 ${
-            hasBid
-              ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-              : 'bg-[#C26E4B] hover:bg-[#A85A3A] text-white'
-          }`}
-        >
-          {hasBid ? 'Request Sent' : 'Send Request'}
-        </button>
-      </div>
-
-      {/* Modal */}
-      {showModal && (
-        <BidModal
-          postId={selectedPost._id}
-          onClose={() => setShowModal(false)}
-        />
-      )}
-    </div>
-  );
+      );
 };
 
 export default PostDetailsPage;

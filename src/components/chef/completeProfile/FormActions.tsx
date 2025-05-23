@@ -9,7 +9,7 @@ export default function FormActions({ onSubmit, onSkip }: Props) {
       <button
         type="submit"
         onClick={onSubmit}
-        className="w-full sm:w-1/2 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
+        className="w-full sm:w-1/2 py-3 bg-[#B8755D] text-white font-semibold rounded-md  transition"
       >
         Submit Profile
       </button>
