@@ -18,7 +18,7 @@ export default function FormActions({ onSubmit, onSkip }: Props) {
         onClick={onSkip}
         className="w-full sm:w-1/2 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition"
       >
-        Skip for now
+        Skip 
       </button>
     </div>
   );

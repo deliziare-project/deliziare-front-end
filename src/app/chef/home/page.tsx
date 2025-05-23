@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,13 +10,10 @@ import {
   Loader,
   ChevronRight,
   MapPin,
-  MessageCircle,
-  ThumbsUp,
-  Share2,
-  PlusCircle
+
 } from 'lucide-react';
 
-import axiosInstance from '@/api/axiosInstance';
+
 import { fetchChefDistrictPosts } from '@/features/userPostSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 
@@ -54,7 +51,7 @@ const ChefPosts = () => {
           <div className="flex items-center mb-4 md:mb-0">
             <ChefHat size={28} className="text-[#C26E4B] mr-3" />
             <h2 className="text-2xl font-['Playfair_Display'] font-bold text-[#74391F]">
-              Culinary Opportunities Dashboard
+              Culinary Opportunities
             </h2>
           </div>
 

@@ -7,6 +7,9 @@ import chefReducer from '../features/chefSlice'
 import hostReducer from '../features/userManagementSlice'
 import userPostReducer from '../features/userPostSlice'
 import chefPostReducer from '../features/chefPostSlice'
+import bidReducer from '../features/bidSlice'
+import profileImageReducer from '../features/profileImageSlice'
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -14,7 +17,8 @@ export const store = configureStore({
     chef: chefReducer,
     userPosts:userPostReducer,
     chefPost:chefPostReducer,
-    
+    chefBids:bidReducer,
+    profileImage:profileImageReducer,
   },
 });
 

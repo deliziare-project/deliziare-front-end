@@ -22,7 +22,7 @@ const initialState: BidState = {
   error: null,
 };
 
-// Create a bid
+
 export const createBid = createAsyncThunk(
   'chefBids/createBid',
   async (data: { postId: string; bidAmount: number }, thunkAPI) => {
@@ -36,12 +36,14 @@ export const createBid = createAsyncThunk(
 );
 
 
-export const getBidsByPost = createAsyncThunk(
+export const getChefBids = createAsyncThunk(
   'chefBids/getBidsByPost',
   async (_, thunkAPI) => {
     try {
       const res = await axiosInstance.get(`/bids/getBid`);
+      console.log('bid data',res.data)
       return res.data;
+      
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch bids');
     }
@@ -65,14 +67,14 @@ const chefBidSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(getBidsByPost.pending, (state) => {
+      .addCase(getChefBids.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getBidsByPost.fulfilled, (state, action) => {
+      .addCase(getChefBids.fulfilled, (state, action) => {
         state.loading = false;
         state.bids = action.payload;
       })
-      .addCase(getBidsByPost.rejected, (state, action) => {
+      .addCase(getChefBids.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
