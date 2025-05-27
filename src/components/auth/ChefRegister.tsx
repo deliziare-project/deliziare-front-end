@@ -11,6 +11,7 @@ import {
   setRegistrationData,
   resetRegisterState,
   checkEmailExists,
+  setCurrentUser,
 } from '../../features/authSlice';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -18,8 +19,12 @@ import { Plus, X } from 'lucide-react';
 import { chefRegisterSchema } from '@/validation/ChefValidation';
 import Link from 'next/link';
 import { useDebounce } from '@/hooks/useDebounce';
+import { GoogleLogin } from '@react-oauth/google';
+import axiosInstance from '@/api/axiosInstance';
 
-const ChefLocationPicker = dynamic(() => import('@/components/LocationPicker'), { ssr: false });
+const ChefLocationPicker = dynamic(() => import('@/components/LocationPicker'), {
+  ssr: false,
+})
 
 type ChefFormInputs = {
   name: string;
@@ -238,6 +243,31 @@ const ChefRegister = () => {
           {loading ? 'Submitting...' : 'Register'}
         </button>
       </form>
+
+      <div className="mt-6 flex justify-center">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                const res = await axiosInstance.post('/users/google', {
+                  credential: credentialResponse.credential,
+                  role: 'chef',
+                });
+                
+                if (res?.data?.status === true) {
+                  dispatch(setCurrentUser(res.data.data));
+                  router.push('/user/home');
+                }
+              } catch (err) {
+                console.error('Google login error', err);
+              }
+            }}
+            onError={() => console.log('Login Failed')}
+            useOneTap
+            width="250" 
+            text="continue_with"
+          />
+        </div>
+
 
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
