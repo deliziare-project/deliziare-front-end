@@ -65,7 +65,6 @@ const HostViewChefPosts = () => {
     );
   };
 
-  
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 1;
    
