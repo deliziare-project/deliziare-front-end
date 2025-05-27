@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { logoutUser } from '@/features/authSlice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/chef/home' },
@@ -86,7 +87,7 @@ const handleLogout = () => {
             <Icon className="w-5 h-5 text-[#B8755D]"/>
             <span  className="text-sm font-medium">{label}</span>
           </div>
-        </a>
+        </Link>
       ))}
        <div
        onClick={handleLogout}

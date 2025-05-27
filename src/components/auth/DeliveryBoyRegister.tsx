@@ -6,11 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { deliveryBoySchema } from '@/validation/DeliveryBoyValidation';
 import { Upload } from 'lucide-react';
 
-import { registerDeliveryBoy, sendOtpForDeliveryBoy,resetRegisterState,setRegistrationData } from '@/features/authSlice';
+import { registerDeliveryBoy, sendOtpForDeliveryBoy,resetRegisterState,setRegistrationData, setCurrentUser } from '@/features/authSlice';
 import { useDispatch,useSelector } from 'react-redux';
 import { AppDispatch,RootState } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { GoogleLogin } from '@react-oauth/google';
+import axiosInstance from '@/api/axiosInstance';
 
 
 
@@ -214,6 +216,31 @@ const DeliveryBoyRegister = () => {
           Register
         </button>
       </form>
+
+      <div className="mt-6 flex justify-center">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                const res = await axiosInstance.post('/users/google', {
+                  credential: credentialResponse.credential,
+                  role: 'deliveryBoy',
+                });
+                
+                if (res?.data?.status === true) {
+                  dispatch(setCurrentUser(res.data.data));
+                  router.push('/deliveryboy/home');
+                }
+              } catch (err) {
+                console.error('Google login error', err);
+              }
+            }}
+            onError={() => console.log('Login Failed')}
+            useOneTap
+            width="250" 
+            text="continue_with"
+          />
+        </div>
+
 
       <div className="mt-6 text-center">
       <p className="text-sm text-center text-gray-600 mt-4">

@@ -39,7 +39,7 @@ const router=useRouter()
           <div className="hidden md:flex items-center space-x-8">
 
             <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
-            <NavLink href="/user/chef" icon={<ChefHat size={18} />} label="Chef" />
+            <NavLink href="/user/chefs" icon={<ChefHat size={18} />} label="Chef" />
             <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
 
             

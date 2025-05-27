@@ -8,14 +8,6 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-
-// export const googleAuth = (code: string) => {
-//   return axiosInstance.get(`/users/google?code=${code}`, {
-//     withCredentials: true,
-//   });
-// };
-
-
 let isRefreshing = false;
 let failedQueue: {
   resolve: (value?: unknown) => void;
@@ -57,7 +49,7 @@ axiosInstance.interceptors.response.use(
         processQueue(null);
         isRefreshing = false;
 
-        await new Promise((resolve) => setTimeout(resolve, 100)); 
+        //await new Promise((resolve) => setTimeout(resolve, 100)); 
 
         return axiosInstance(originalRequest);
       } catch (refreshError: any) {
