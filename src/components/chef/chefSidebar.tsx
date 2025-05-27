@@ -1,12 +1,13 @@
 
 "use client"
-import React from 'react';
+import React ,{useState} from 'react';
 import {
   LayoutDashboard,
   Utensils,
   CalendarCheck,
   GitPullRequestDraft,
   LogOut,
+  CalendarSearch,
 } from 'lucide-react';
 
 import Image from 'next/image';
@@ -20,6 +21,7 @@ const sidebarItems = [
   { label: 'My Posts', icon: Utensils, path: '/chef/post' },
   { label: 'Bid requests', icon: GitPullRequestDraft, path: '/chef/Bids' },
   { label: 'Orders', icon: CalendarCheck, path: '/chef/orders' },
+  {label:'Track work',icon:CalendarSearch,path:'/chef/calender'}
 ];
 
 function ChefSidebar() {
@@ -86,7 +88,7 @@ const handleLogout = () => {
             <Icon className="w-5 h-5 text-[#B8755D]"/>
             <span  className="text-sm font-medium">{label}</span>
           </div>
-        </a>
+        </Link>
       ))}
        <div
        onClick={handleLogout}

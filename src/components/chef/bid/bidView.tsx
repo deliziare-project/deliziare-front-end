@@ -1,30 +1,54 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { getChefBids } from '@/features/bidSlice';
 
+const TABS = ['pending', 'accepted', 'rejected'];
+
 const ChefBids = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { bids, loading, error } = useSelector((state: RootState) => state.chefBids);
+  const [activeTab, setActiveTab] = useState('pending');
 
   useEffect(() => {
     dispatch(getChefBids());
   }, [dispatch]);
 
-  if (loading) return <div className="p-4 text-center text-[#B8755D]">Loading bids...</div>;
-  if (error) return <div className="p-4 text-center text-red-500">Error: {error}</div>;
+  const filteredBids = bids.filter((bid) => bid.status === activeTab);
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold mb-8 text-center text-[#B8755D]">My Bids</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center text-[#B8755D]">My Bids</h2>
 
-      {bids.length === 0 ? (
-        <p className="text-gray-500 text-center">No bids found.</p>
+      {/* Tabs */}
+      <div className="flex justify-center gap-4 mb-8">
+        {TABS.map((tab) => (
+          <button
+            key={tab}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition ${
+              activeTab === tab
+                ? 'bg-[#B8755D] text-white'
+                : 'bg-[#f0e6e2] text-[#B8755D] hover:bg-[#e5d4ce]'
+            }`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      {loading ? (
+        <div className="text-center text-[#B8755D]">Loading bids...</div>
+      ) : error ? (
+        <div className="text-center text-red-500">Error: {error}</div>
+      ) : filteredBids.length === 0 ? (
+        <p className="text-gray-500 text-center">No {activeTab} bids found.</p>
       ) : (
         <ul className="space-y-6">
-          {bids.map((bid) => (
+          {filteredBids.map((bid) => (
             <li
               key={bid._id}
               className="border border-[#e2d4cf] rounded-xl shadow-md p-6 bg-white hover:shadow-lg transition"

@@ -245,61 +245,6 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     </div>
 
 
-  <div className="space-y-3">
-      {/* Bio */}
-      <TextAreaField
-        label="Bio"
-        name="bio"
-        value={formData.bio}
-        onChange={handleChange}
-        placeholder="Tell us about yourself"
-      />
-
-      {/* Specialities */}
-      <TagInput
-        label="Specialities"
-        inputValue={specialityInput}
-        setInputValue={setSpecialityInput}
-        tags={formData.specialize}
-        setTags={(tags) => setFormData({ ...formData, specialize: tags })}
-        placeholder="e.g., Italian, Pastry"
-        buttonLabel="+"
-      />
-
-      {/* Grid for Qualifications + Experience */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TagInput
-          label="Qualifications"
-          inputValue={qualificationInput}
-          setInputValue={setQualificationInput}
-          tags={formData.qualifications}
-          setTags={(tags) => setFormData({ ...formData, qualifications: tags })}
-          placeholder="e.g., Culinary Arts Diploma"
-          buttonLabel="Add"
-          tagColor="bg-purple-100 text-purple-800"
-        />
-
-        <InputField
-          label="Years of Experience"
-          name="experience"
-          value={formData.experience}
-          onChange={handleChange}
-          type="number"
-          placeholder="e.g., 5"
-        />
-      </div>
-
-      {/* District */}
-      <InputField
-        label="District"
-        name="district"
-        value={formData.district}
-        onChange={handleChange}
-        placeholder="e.g., Thrissur"
-      />
-
-      {/* Submit / Skip Buttons */}
-    </div>
 <FormActions onSubmit={handleSubmit} onSkip={handleSkip} />
 
 </div>
