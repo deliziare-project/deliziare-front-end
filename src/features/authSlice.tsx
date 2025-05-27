@@ -12,10 +12,19 @@ interface RegisterState {
   emailCheckError: string | null;
   otpVerified: boolean;
   registrationData?: any;
-  currentUser: any;
+  currentUser: {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    isGoogleUser: boolean;
+    hasPassword: boolean; 
+    profileImage?: string;
+  } | null;
   isAuthenticated: boolean;
   tempToken?: string; 
   resetPasswordSuccess: boolean; 
+
 }
 
 const initialState: RegisterState = {
@@ -437,7 +446,10 @@ const registerSlice = createSlice({
         })
         .addCase(checkCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentUser = action.payload;
+        state.currentUser = {
+          ...action.payload,
+          hasPassword: action.payload.hasPassword 
+        };
         state.isAuthenticated = true;
         })
        .addCase(checkCurrentUser.rejected, (state) => {
@@ -559,7 +571,10 @@ const registerSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.currentUser = action.payload.user;
+        state.currentUser = {
+          ...action.payload.user,
+          hasPassword: action.payload.user.hasPassword 
+        };
         state.isAuthenticated = true;
         state.registrationData = action.payload; 
       })

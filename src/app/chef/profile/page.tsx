@@ -7,11 +7,14 @@ import { RootState, AppDispatch } from '@/redux/store';
 import { fetchLoggedInChef } from '@/features/chefSlice';
 import { fetchChefPosts } from '@/features/chefPostSlice';
 import { UserCircle, FileText } from 'lucide-react';
+import SetPasswordModal from '@/components/user/userProfile/SetPasswordModal';
 
 const ChefProfile: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
+  const [isSetPasswordOpen, setSetPasswordOpen] = useState(false);
+
 
   const { posts, loading: postsLoading, error: postsError } = useSelector((state: RootState) => state.chefPost);
   const { chef, loading, error } = useSelector((state: RootState) => state.chef);
@@ -65,6 +68,15 @@ const ChefProfile: React.FC = () => {
 >
   Edit Profile
 </button>
+{currentUser?.isGoogleUser && !currentUser?.hasPassword && (
+  <button
+    onClick={() => setSetPasswordOpen(true)}
+    className="text-sm px-4 py-2 bg-[#4b5563] text-white rounded-lg hover:bg-[#374151] transition"
+  >
+    Set Password
+  </button>
+)}
+
       </div>
 
       <div className="flex space-x-4 border-b border-gray-200 mb-6">
@@ -173,6 +185,8 @@ const ChefProfile: React.FC = () => {
           )}
         </div>
       )}
+      <SetPasswordModal isOpen={isSetPasswordOpen} onClose={() => setSetPasswordOpen(false)} />
+
     </div>
   );
 };
