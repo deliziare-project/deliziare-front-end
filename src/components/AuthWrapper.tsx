@@ -16,7 +16,7 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
    const pathname = usePathname();
-console.log(currentUser);
+//console.log(currentUser);
 
   useEffect(() => {
     dispatch(checkCurrentUser());
@@ -30,24 +30,20 @@ console.log(currentUser);
         return;
       }
    
-    if(isAuthenticated&&currentUser.role=='admin'){
-     router.push('/admin/dashboard');
-    }else if(isAuthenticated&&currentUser.role=='host'){
-      if(!pathname.startsWith('/user')){
-        router.push('/user/home');
+      if (isAuthenticated && currentUser?.role === 'chef') {
+      if (!currentUser.isProfileCompleted) {
+        if (!pathname.startsWith('/chef/complete-profile')) {
+          router.push('/chef/complete-profile');
+          return;
+        }
+      } else {
+        if (!pathname.startsWith('/chef/home')) {
+          router.push('/chef/home');
+          return;
+        }
+      }
       }
     }
-    else if(isAuthenticated && currentUser.role == 'chef'){
-     if(!currentUser?.isProfileCompleted){
-      router.push('/chef/complete-profile')
-     }else if (currentUser.isProfileCompleted){
-      router.push('/chef/home')
-      
-     }
-     
-    }
-  
-  }
     
   }, [isAuthenticated, loading,  router,currentUser]);
 
