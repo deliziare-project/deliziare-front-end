@@ -12,6 +12,8 @@ import InputField from '@/components/chef/completeProfile/InputField';
 import FormActions from '@/components/chef/completeProfile/FormActions';
 import AutocompleteInput from './Autocomplete';
 import { uploadProfileImage } from '@/features/profileImageSlice';
+import { setCertificateUrl, uploadCertificate } from '@/features/fileUploadSlice';
+import Image from 'next/image';
 
 type FormDataType = {
   name:string,
@@ -57,10 +59,24 @@ const CompleteProfilePage = ({ isModal = false }: { isModal?: boolean }) => {
   }, [dispatch]);
 
   const { chef, loading, error } = useSelector((state: RootState) => state.chef);
- console.log('complete chef data',chef);
- 
+//  console.log('complete chef data',chef);
+ const { uploading: certUploading, error: certError, certificateUrl } = useSelector(
+  (state: RootState) => state.Certificate
+);
+
+  const [fileName, setFileName] = useState("");
+  
+const handleCertificateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+     setFileName(file.name);
+    dispatch(uploadCertificate(file));
+  }
+};
+
  
 const [specialityInput, setSpecialityInput] = useState('');
+const [isModalOpen,setIsModalOpen]=useState(false)
 const[qualificationInput,setQualificationInput]=useState('')
  const [formData, setFormData] = useState<FormDataType>(
   {
@@ -97,6 +113,11 @@ useEffect(() => {
       // },
       isProfileCompleted:chef.userId?.isProfileCompleted||false
     });
+     if (chef?.certificate) {
+      console.log("Chef certificate URL:", chef?.certificate);
+
+      dispatch(setCertificateUrl(chef?.certificate));
+    }
   }
 }, [chef]);
 
@@ -143,6 +164,8 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
 }, [chef,isModal]);
 
 
+const finalCertificateUrl = certificateUrl || chef?.certificate;
+
   return (
   <div className="max-w-2xl mx-auto  p-7 bg-gray-50 shadow-xl rounded-xl ">
   <h1 className="text-2xl md:text-2xl font-bold text-center bg-red-200 text-[#B8755D] mb-12 tracking-tight animate-fadeInDown bg-clip-text  ">
@@ -158,7 +181,9 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange={handleImageUpload}
       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
     />
-    <img
+    <Image
+     width={100}
+     height={100}
       src={
         imageUrl ||
         chef?.userId?.profileImage ||
@@ -240,12 +265,82 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   placeholder="e.g., Thrissur"
   suggestions={districts}
 />
+<div className="mb-6">
+  <label className="block text-sm font-medium text-gray-700 mb-1">Upload Certificate</label>
+
+  {/* Custom Upload Button */}
+  <button
+    type="button"
+    onClick={() => document.getElementById('certificateInput')?.click()}
+    className="px-4 py-2 bg-rose-100 text-rose-700 rounded-full text-sm font-semibold hover:bg-rose-200 transition"
+  >
+    Upload Certificate
+  </button>
+
+ 
+  <input
+    id="certificateInput"
+    type="file"
+    accept="image/*,application/pdf"
+    onChange={handleCertificateUpload}
+   className='hidden'
+  />
+    {fileName && (
+       <span className="font-medium">{fileName}</span>
+      )}
+
+  {/* Show Uploading/Error messages */}
+  {certUploading && <p className="text-blue-500 text-sm mt-1">Uploading...</p>}
+  {certError && <p className="text-red-500 text-sm mt-1">{certError}</p>}
+
+ {finalCertificateUrl && (
+  <div className="mt-3">
+    <button
+      type="button"
+      onClick={() => setIsModalOpen(true)}
+      className="text-blue-600 underline text-sm"
+    >
+      View Uploaded Certificate
+    </button>
+  </div>
+)}
+
+</div>
+</div>
 
 
+<FormActions onSubmit={handleSubmit} onSkip={handleSkip} isProfileCompleted={chef?.userId?.isProfileCompleted} />
+
+{/* Certificate Preview Modal */}
+{isModalOpen && finalCertificateUrl && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center">
+    <div className="relative bg-white p-4 rounded-lg shadow-xl max-w-xl w-full">
+      <button
+        onClick={() => setIsModalOpen(false)}
+        className="absolute top-2 right-2 text-gray-600 hover:text-black"
+      >
+        <X className="w-5 h-5" />
+      </button>
+      <h3 className="text-lg font-semibold mb-4 text-center">Certificate Preview</h3>
+
+      {finalCertificateUrl.match(/\.(jpeg|jpg|png|gif|png)$/i) ? (
+        <img
+          src={finalCertificateUrl}
+          alt="Uploaded Certificate"
+          className="w-full h-auto rounded-lg object-contain"
+        />
+      ) : finalCertificateUrl.match(/\.pdf$/i) ? (
+        <iframe
+          src={finalCertificateUrl}
+          title="Certificate PDF"
+          className="w-full h-[500px] rounded-lg"
+        ></iframe>
+      ) : (
+        <p className="text-center text-gray-500">Unsupported file format</p>
+      )}
     </div>
-
-
-<FormActions onSubmit={handleSubmit} onSkip={handleSkip} />
+  </div>
+)}
 
 </div>
 

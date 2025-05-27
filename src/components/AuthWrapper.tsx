@@ -16,7 +16,7 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
    const pathname = usePathname();
-console.log(currentUser);
+//console.log(currentUser);
 
   useEffect(() => {
     dispatch(checkCurrentUser());

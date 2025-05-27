@@ -113,3 +113,17 @@ body {
 .animate-fadeInDown {
   animation: fadeInDown 0.6s ease-out forwards;
 }
+
+
+body {
+  color: #1a202c; /* dark gray text */
+  background-color: white; /* or your light background */
+}
+
+/* Optional: override any dark mode forced by browser */
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #1a202c !important;
+    background-color: white !important;
+  }
+}

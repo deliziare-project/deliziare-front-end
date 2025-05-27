@@ -18,7 +18,7 @@ const MyChefPosts = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">My Chef Posts</h1>
+      <h1 className="text-2xl font-bold">My Posts</h1>
       {posts.length === 0 ? (
         <p>No posts found.</p>
       ) : (

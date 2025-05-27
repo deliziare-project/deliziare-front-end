@@ -19,6 +19,7 @@ import SearchBar from '@/components/shared/SearchBar';
 const ChefPosts = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading } = useSelector((state: RootState) => state.userPosts);
+  console.log(posts)
   const router = useRouter();
 
   const [currentPage, setCurrentPage] = useState(1);

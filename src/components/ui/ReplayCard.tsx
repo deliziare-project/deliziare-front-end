@@ -12,6 +12,7 @@ const handleClickAccept=async(value:any)=>{
 
 try {
     await axiosInstance.patch('/bids/accept-bid',{bidId:value._id,postId:value.postId})
+    //getCurrentUser()
 } catch (error) {
     console.log(error)
 }

@@ -21,7 +21,7 @@ const sidebarItems = [
   { label: 'My Posts', icon: Utensils, path: '/chef/post' },
   { label: 'Bid requests', icon: GitPullRequestDraft, path: '/chef/Bids' },
   { label: 'Orders', icon: CalendarCheck, path: '/chef/orders' },
-  {label:'Track work',icon:CalendarSearch,path:'/chef/calender'}
+  {label:'Track work',icon:CalendarSearch,path:'/chef/certificate'}
 ];
 
 function ChefSidebar() {
