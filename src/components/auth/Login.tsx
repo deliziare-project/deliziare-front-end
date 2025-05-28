@@ -28,6 +28,8 @@ const Login: React.FC = () => {
         router.push('/admin/dashboard');
       } else if (user.role === 'host') {
         router.push('/user/home');
+      } else if(user.role==='deliveryBoy'){
+        router.push('/deliveryBoy/welcome')
       }
     }
   }, [success, registrationData]);
