@@ -159,7 +159,11 @@ export default function RegisterPage() {
           <GoogleLogin
             onSuccess={async (credentialResponse) => {
               try {
-                const res = await axiosInstance.post('/users/google', credentialResponse);
+                const res = await axiosInstance.post('/users/google', {
+                  credential: credentialResponse.credential,
+                  role: 'host',
+                });
+                
                 if (res?.data?.status === true) {
                   dispatch(setCurrentUser(res.data.data));
                   router.push('/user/home');

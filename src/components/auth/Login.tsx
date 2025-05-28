@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store'; 
-import { loginUser,setCurrentUser } from '../../features/authSlice';
+import { checkCurrentUser, loginUser,setCurrentUser } from '../../features/authSlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -19,6 +19,7 @@ const Login: React.FC = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
+     dispatch(checkCurrentUser());
   };
 
   useEffect(() => {

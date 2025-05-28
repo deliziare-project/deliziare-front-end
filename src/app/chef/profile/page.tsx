@@ -18,8 +18,19 @@ const ChefProfile: React.FC = () => {
   const { currentUser } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    dispatch(fetchLoggedInChef());
-  }, [dispatch]);
+    const loadChefProfile = async () => {
+      try {
+        await dispatch(fetchLoggedInChef());
+      } catch (error) {
+        console.error('Error loading chef profile:', error);
+        // Redirect to complete profile if no chef profile exists
+        if (error.message.includes('not found') && currentUser?.role === 'chef') {
+          router.push('/chef/complete-profile');
+        }
+      }
+    };
+    loadChefProfile();
+  }, [dispatch, currentUser, router]);
 
   useEffect(() => {
     if (activeTab === 'posts') {

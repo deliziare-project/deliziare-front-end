@@ -39,7 +39,7 @@ const router=useRouter()
           <div className="hidden md:flex items-center space-x-8">
 
             <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
-            <NavLink href="/user/chef" icon={<ChefHat size={18} />} label="Chef" />
+            <NavLink href="/user/chefs" icon={<ChefHat size={18} />} label="Chef" />
             <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
 
             
@@ -79,15 +79,15 @@ const router=useRouter()
       {/* Mobile Navigation */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 ">
-          <NavLink href="/" icon={<BookOpen size={18} />} label="Home" mobile />
+          <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" mobile />
           <NavLink
-            href="/chef"
+            href="/user/chefs"
             icon={<ChefHat size={18} />}
             label="Chef"
             mobile
           />
           <NavLink
-            href="/posts"
+            href="/user/posts"
             icon={<BookOpen size={18} />}
             label="Posts"
             mobile
