@@ -48,6 +48,7 @@ interface VerifyPaymentResponse {
 interface PaymentState {
   loading: boolean;
   payment: Payment | null;
+  payments: Payment[];
   razorpayOrder: RazorpayOrder | null;
   success: boolean;
   error: string | null;
@@ -101,10 +102,28 @@ export const verifyPayment = createAsyncThunk<
   }
 );
 
+
+export const fetchAllPayments = createAsyncThunk<
+  Payment[], 
+  void,
+  { rejectValue: string }
+>('admin/payment/fetchAll', async (_, thunkAPI) => {
+  try {
+    const response = await axiosInstance.get<Payment[]>('/payment/getpayment');
+    return response.data;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || 'Failed to fetch payments'
+    );
+  }
+});
+
+
 const initialState: PaymentState = {
   loading: false,
   payment: null,
   razorpayOrder: null,
+   payments: [],
   success: false,
   error: null,
 };
@@ -150,7 +169,20 @@ const paymentSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Failed to verify payment';
         state.success = false;
-      });
+      })
+      .addCase(fetchAllPayments.pending, (state) => {
+  state.loading = true;
+  state.error = null;
+})
+.addCase(fetchAllPayments.fulfilled, (state, action: PayloadAction<Payment[]>) => {
+  state.loading = false;
+  state.payments = action.payload;
+})
+.addCase(fetchAllPayments.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload || 'Failed to fetch payments';
+});
+
   },
 });
 

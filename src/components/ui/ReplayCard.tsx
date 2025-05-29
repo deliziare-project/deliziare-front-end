@@ -15,12 +15,13 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
   console.log(replay)
 
   const handleClickAccept = async (value: Replay) => {
+    router.push(`/payment?bidId=${value._id}`); 
     try {
       await axiosInstance.patch('/bids/accept-bid', {
         bidId: value._id,
         postId: value.postId,
       });
-      router.push(`/payment?bidId=${value._id}`); 
+      
     } catch (error) {
       console.error('Error accepting bid:', error);
     }

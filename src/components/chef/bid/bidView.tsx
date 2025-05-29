@@ -9,14 +9,16 @@ const TABS = ['pending', 'accepted', 'rejected'];
 
 const ChefBids = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { bids, loading, error } = useSelector((state: RootState) => state.chefBids);
+  const { bids=[], loading, error } = useSelector((state: RootState) => state.chefBids);
   const [activeTab, setActiveTab] = useState('pending');
 
   useEffect(() => {
     dispatch(getChefBids());
   }, [dispatch]);
 
-  const filteredBids = bids.filter((bid) => bid.status === activeTab);
+const filteredBids = Array.isArray(bids)
+  ? bids.filter((bid) => bid.status === activeTab)
+  : [];
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
@@ -55,53 +57,53 @@ const ChefBids = () => {
             >
               <div className="mb-4">
                 <h3 className="text-xl font-semibold text-[#B8755D]">
-                  {bid.postId.eventName}
+                  {bid?.postId?.eventName}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {bid.postId.date} at {bid.postId.time} • {bid.postId.district}
+                  {bid?.postId?.date} at {bid?.postId?.time} • {bid?.postId?.district}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
                 <div>
                   <span className="font-medium text-[#B8755D]">Location:</span>{' '}
-                  {bid.postId.district}
+                  {bid?.postId?.district}
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Menu:</span>{' '}
-                  {bid.postId.menu}
+                  {bid?.postId?.menu}
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Quantity:</span>{' '}
-                  {bid.postId.quantity}
+                  {bid?.postId?.quantity}
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Description:</span>{' '}
-                  {bid.postId.description}
+                  {bid.postId?.description}
                 </div>
               </div>
 
               <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 text-sm font-medium">
                 <div>
                   <span className="text-gray-600">Suggested Amount:</span>{' '}
-                  <span className="text-green-600 font-semibold">₹{bid.bidAmount}</span>
+                  <span className="text-green-600 font-semibold">₹{bid?.bidAmount}</span>
                 </div>
                 <div>
                   <span className="text-gray-600">Status:</span>{' '}
                   <span
                     className={`font-semibold capitalize ${
-                      bid.status === 'accepted'
+                      bid?.status === 'accepted'
                         ? 'text-green-600'
-                        : bid.status === 'rejected'
+                        : bid?.status === 'rejected'
                         ? 'text-red-500'
                         : 'text-yellow-600'
                     }`}
                   >
-                    {bid.status}
+                    {bid?.status}
                   </span>
                 </div>
                 <div className="text-gray-500 text-sm">
-                  {new Date(bid.createdAt).toLocaleString()}
+                  {new Date(bid?.createdAt).toLocaleString()}
                 </div>
               </div>
             </li>
