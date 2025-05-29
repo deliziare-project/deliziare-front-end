@@ -23,6 +23,7 @@ const initialState: deliveryBoyState = {
   error: null,
 };
 
+
 export const fetchDeliveryBoy = createAsyncThunk("deliveryBoy/fetchDeliveryBoy", async () => {
   const response = await axiosInstance.get("/admin/deliveryBoy");
   return response.data;
@@ -39,6 +40,8 @@ export const toggleBlockStatus = createAsyncThunk(
     }
   }
 );
+
+
 
 const hostSlice = createSlice({
   name: "deliveryBoy",

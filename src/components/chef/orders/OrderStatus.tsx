@@ -23,6 +23,7 @@ const OrderStatus = () => {
 
   const completedBids = bids.filter((bid) => bid.status === 'completed');
 
+  console.log('completed bids',completedBids)
   const handleComplete = (bidId: string) => {
     dispatch(updateBidStatus({ id: bidId, status: 'completed' }));
   };
@@ -33,7 +34,6 @@ const OrderStatus = () => {
     <div className="p-6 max-w-5xl mx-auto">
       <h2 className="text-3xl font-bold mb-6 text-center text-[#B8755D]">My Orders</h2>
 
-      {/* Tabs */}
       <div className="flex justify-center gap-6 mb-6">
         <button
           className={`px-4 py-2 rounded-full ${activeTab === 'pending' ? 'bg-[#B8755D] text-white' : 'bg-gray-200 text-gray-700'}`}
