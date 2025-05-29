@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Chef, FilterStatus } from './components/chef';
 import Header from './components/Header';
 import Filters from './components/Filters';
@@ -10,6 +10,7 @@ import ChefDetailModal from './components/ChefDetailModal';
 import CertificateModal from './components/CertificateModal';
 import EmptyState from './components/EmptyState';
 import axiosInstance from '@/api/axiosInstance';
+import Pagination from '../userManagement/pagination';
 
 const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
   const [chefs, setChefs] = useState<Chef[]>(initialChefs);
@@ -61,6 +62,21 @@ const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
 
   };
 
+
+  const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 5; 
+
+
+const paginatedChefs = useMemo(() => {
+  const start = (currentPage - 1) * itemsPerPage;
+  return filteredChefs.slice(start, start + itemsPerPage);
+}, [filteredChefs, currentPage]);
+
+useEffect(() => {
+  setCurrentPage(1);
+}, [searchTerm, filterDistrict, filterBlocked]);
+
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -86,7 +102,7 @@ const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
           <EmptyState />
         ) : (
           <ChefsTable 
-            chefs={filteredChefs}
+            chefs={paginatedChefs}
             onSelectChef={setSelectedChef}
             onViewCertificate={setCertificateImage}
           />
@@ -107,6 +123,18 @@ const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
           onClose={() => setCertificateImage(null)}
         />
       )}
+
+      
+   <div className='p-3'>
+       {filteredChefs.length > itemsPerPage && (
+  <Pagination
+    currentPage={currentPage}
+    totalPages={Math.ceil(filteredChefs.length / itemsPerPage)}
+    onPageChange={setCurrentPage}
+  />
+)}
+
+   </div>
     </div>
   );
 };

@@ -10,7 +10,8 @@ import chefPostReducer from '../features/chefPostSlice'
 import bidReducer from '../features/bidSlice'
 import profileImageReducer from '../features/profileImageSlice'
 import fileUploadReducer from '../features/fileUploadSlice'
-import { Certificate } from 'crypto';
+import adminReducer from '../features/adminSlice'
+import paymentReducer from '../features/paymentSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,8 @@ export const store = configureStore({
     chefBids:bidReducer,
     profileImage:profileImageReducer,
     Certificate:fileUploadReducer,
+    admin:adminReducer,
+    payment:paymentReducer,
   },
 });
 
