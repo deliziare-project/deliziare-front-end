@@ -11,7 +11,7 @@ export interface Post {
   quantity: number;
   menu: string[];
   description: string;
-  userId: { name: string; email: string };
+  userId: { name: string; email: string ,profileImage:string};
   createdAt:string;
 }
 

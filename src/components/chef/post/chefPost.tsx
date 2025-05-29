@@ -6,6 +6,8 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import type { RootState, AppDispatch } from '@/redux/store';
 import { createChefPost, resetPostState } from '@/features/chefPostSlice';
 import toast from 'react-hot-toast';
+import { Router } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type FormValues = {
   title: string;
@@ -19,9 +21,12 @@ const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const ChefPostForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const router=useRouter()
   const { loading, success, error } = useAppSelector((state) => state.chefPost);
 const [tags, setTags] = useState<string[]>([]);
 const [inputTag, setInputTag] = useState('');
+const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+
  const {
   register,
   handleSubmit,
@@ -40,6 +45,7 @@ const [inputTag, setInputTag] = useState('');
     });
 
     dispatch(createChefPost(formData));
+    
   };
 
   useEffect(() => {
@@ -47,8 +53,9 @@ const [inputTag, setInputTag] = useState('');
       toast.success('Post created successfully!');
       reset();
       dispatch(resetPostState());
+      router.push('/chef/post')
     }
-  }, [success, dispatch, reset]);
+  }, [success, dispatch, reset,router]);
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
@@ -132,10 +139,19 @@ const [inputTag, setInputTag] = useState('');
       accept="image/*"
       {...register('images', {
         required: 'Please upload an image',
+        onChange: (e) => setSelectedFiles(e.target.files),
       })}
       className="hidden"
     />
   </label>
+  {selectedFiles && (
+  <ul className="mt-2 text-sm text-gray-700 list-disc list-inside">
+    {Array.from(selectedFiles).map((file, idx) => (
+      <li key={idx}>{file.name}</li>
+    ))}
+  </ul>
+)}
+
 
   {errors.images && (
     <p className="text-sm text-red-500 mt-1">{errors.images.message}</p>

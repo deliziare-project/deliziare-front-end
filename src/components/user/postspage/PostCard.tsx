@@ -152,6 +152,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold">
                   {bidCount}
                 </span>
+                
               </div>
             )}
           </div>
