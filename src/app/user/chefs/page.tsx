@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/api/axiosInstance';
 import { Bookmark, MoreHorizontal} from 'lucide-react';
+import { Skeleton } from '@/components/loaders/Skeleton';
 
 interface ChefPost {
   _id: string;
@@ -64,7 +65,13 @@ const HostViewChefPosts = () => {
     );
   };
 
-  if (loading) return <div className="flex justify-center items-center h-screen">Loading posts...</div>;
+  if (loading) 
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <Skeleton />
+      </div>
+    );
+  
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
   if (posts.length === 0) return <div className="text-center py-8">No posts found</div>;
 

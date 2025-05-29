@@ -15,6 +15,7 @@ import { logoutUser } from '@/features/authSlice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import socket from '@/socket';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/chef/home' },
@@ -32,7 +33,13 @@ function ChefSidebar() {
   //   router.push("/login");
   // };
 
-  const performLogout = () => {
+  
+const performLogout = () => {
+  if (socket.connected) {
+    socket.disconnect();
+    console.log("Socket disconnected on logout");
+  }
+
   dispatch(logoutUser());
   router.push("/login");
 };
