@@ -10,12 +10,14 @@ export default function ChefLayout({ children }: { children: ReactNode }) {
         <ChefSidebar />
       </div>
 
+      {/* Main Content Area */}
       <div className="flex-1 ml-64 min-h-screen bg-gray-50">
-      
+        {/* Navbar */}
         <div className="sticky top-0 ">
           <ChefNavbar />
         </div>
 
+        {/* Page Content */}
         <main className="p-6">
           {children}
         </main>

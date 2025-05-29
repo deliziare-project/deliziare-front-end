@@ -87,7 +87,7 @@ const chefSlice = createSlice({
       .addCase(fetchLoggedInChef.fulfilled, (state, action) => {
         state.loading = false;
         state.chef = action.payload;
-        console.log('Fetched chef:', action.payload);
+        // console.log('Fetched chef:', action.payload);
       })
       .addCase(fetchLoggedInChef.rejected, (state, action) => {
         state.loading = false;

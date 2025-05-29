@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/api/axiosInstance';
 import { Bookmark, MoreHorizontal} from 'lucide-react';
+
 import { Skeleton } from '@/components/loaders/Skeleton';
+
+import Pagination from '@/components/admin/userManagement/pagination';
+
 
 interface ChefPost {
   _id: string;
@@ -17,7 +21,7 @@ interface ChefPost {
   chefId?: {
     name: string;
     username?: string;
-    profilePic?: string;
+    profileImage?: string;
     district?: string;
     _id: string;
   };
@@ -65,6 +69,7 @@ const HostViewChefPosts = () => {
     );
   };
 
+
   if (loading) 
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -72,19 +77,33 @@ const HostViewChefPosts = () => {
       </div>
     );
   
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 4;
+   
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+
+  if (loading) return <div className="flex justify-center items-center h-screen">Loading posts...</div>;
+
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
   if (posts.length === 0) return <div className="text-center py-8">No posts found</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 pb-20 grid grid-cols-1 md:grid-cols-2 gap-6">
-      {posts.map((post) => (
+  <div className="min-h-screen flex flex-col max-w-6xl mx-auto px-4 py-8">
+    {/* Post Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+      {currentPosts.map((post) => (
         <div key={post._id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
           {/* Post Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
                 <img
-                  src={post.chefId?.profilePic || '/default-profile.png'}
+                  src={post.chefId?.profileImage || '/default-profile.png'}
                   alt={post.chefId?.name}
                   className="w-full h-full object-cover"
                 />
@@ -94,7 +113,7 @@ const HostViewChefPosts = () => {
                 <p className="text-gray-500 text-xs">{post.chefId?.district}</p>
               </div>
             </div>
-            <MoreHorizontal className="text-gray-500" size={20} />
+            {/* <MoreHorizontal className="text-gray-500" size={20} /> */}
           </div>
 
           {/* Post Image */}
@@ -134,19 +153,31 @@ const HostViewChefPosts = () => {
           </div>
 
           {/* Post Actions */}
-            <div className="flex justify-end items-center px-4 pb-4">
+          <div className="flex justify-end items-center px-4 pb-4">
             <button onClick={() => toggleSavePost(post._id)}>
-                <Bookmark
+              <Bookmark
                 className={savedPosts.includes(post._id) ? 'text-black fill-current' : 'text-gray-600'}
                 size={20}
-                />
+              />
             </button>
-            </div>
-
+          </div>
         </div>
       ))}
     </div>
-  );
+
+    {/* Pagination */}
+    {totalPages > 1 && (
+      <div className="mt-10 flex justify-center">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+    )}
+  </div>
+);
+
 };
 
 export default HostViewChefPosts;

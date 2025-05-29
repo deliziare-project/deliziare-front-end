@@ -1,11 +1,11 @@
-import OrderStatus from '@/components/chef/orders/OrderStatus'
+import WalletInfo from '@/components/chef/wallet/walletList'
 import React from 'react'
 
 function page() {
   return (
     <div>
      
-      <OrderStatus/>
+      <WalletInfo/>
     </div>
   )
 }

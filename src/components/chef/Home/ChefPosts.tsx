@@ -45,36 +45,7 @@ const ChefPosts = () => {
               <p className="text-gray-600">There are no culinary events in your district at the moment.</p>
             </div>
           ) : (
-            // <div className="space-y-4">
-            //   {posts.map((post) => (
-            //     <div
-            //       key={post._id}
-            //       onClick={() => handleDetails(post._id)}
-            //       className="bg-white rounded-lg shadow-md p-6 mb-4 border-l-4 border-primary-500 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
-            //     >
-            //       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            //         <div className="flex-1">
-            //           <h3 className="text-xl font-serif font-semibold text-primary-700 mb-2">
-            //             {post.eventName}
-            //           </h3>
-            //           <div className="flex flex-col sm:flex-row sm:space-x-6">
-            //             <div className="flex items-center text-gray-600 mb-2 sm:mb-0">
-            //               <Calendar size={18} className="mr-2 text-secondary-500" />
-            //               <span>{post.date}</span>
-            //             </div>
-            //             <div className="flex items-center text-gray-600">
-            //               <Clock size={18} className="mr-2 text-secondary-500" />
-            //               <span>{post.time}</span>
-            //             </div>
-            //           </div>
-            //         </div>
-            //         <div className="mt-4 md:mt-0">
-            //           <ChevronRight size={24} className="text-primary-400" />
-            //         </div>
-            //       </div>
-            //     </div>
-            //   ))}
-            // </div>
+            
 
             <div className="space-y-6 max-w-4xl mx-auto">
           {posts.map((post, idx) => (
