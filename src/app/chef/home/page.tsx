@@ -16,12 +16,12 @@ import {
 
 import { fetchChefDistrictPosts } from '@/features/userPostSlice';
 import { AppDispatch, RootState } from '@/redux/store';
-<<<<<<< HEAD
+
 import AuthWrapper from '@/components/AuthWrapper';
-=======
+
 import SearchBar from '@/components/shared/SearchBar';
 import Pagination from '@/components/admin/userManagement/pagination';
->>>>>>> upstream/dev
+
 
 const ChefPosts = () => {
   const dispatch = useDispatch<AppDispatch>();

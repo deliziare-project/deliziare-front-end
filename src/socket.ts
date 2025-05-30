@@ -14,6 +14,7 @@ export interface NotificationType {
 
 interface ServerToClientEvents {
   new_notification: (notification: NotificationType) => void;
+  
 }
 
 interface ClientToServerEvents {

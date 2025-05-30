@@ -27,3 +27,21 @@ export default function AuthInitializer() {
 
   return null;
 }
+
+
+// 'use client';
+
+// import { useEffect } from 'react';
+// import { useDispatch } from 'react-redux';
+// import { checkCurrentUser } from '@/features/authSlice';
+// import { AppDispatch } from '@/redux/store';
+
+// export default function AuthInitializer() {
+//   const dispatch = useDispatch<AppDispatch>();
+
+//   useEffect(() => {
+//     dispatch(checkCurrentUser());
+//   }, [dispatch]);
+
+//   return null;
+// }

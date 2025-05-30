@@ -19,10 +19,17 @@ const ProfileActions = () => {
   const user = useAppSelector((state) => state.auth.currentUser);
 
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    router.push('/login');
+  const handleLogout = async () => {
+    const resultAction = await dispatch(logoutUser());
+  
+    if (logoutUser.fulfilled.match(resultAction)) {
+      router.push('/login');
+    } else {
+      console.error('Logout failed:', resultAction.payload);
+      // Optionally show a toast or alert here
+    }
   };
+  
 
   return (
     <div className="px-6 py-6">

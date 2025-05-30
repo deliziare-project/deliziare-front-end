@@ -61,7 +61,9 @@ const PostDetailsPage = () => {
     userId,
   } = selectedPost;
 
-
+  const handleBidSent = () => {
+    setHasBid(true);
+  };
 
    return (
         <div className="max-w-4xl mx-auto mt-12 p-8 bg-white rounded-2xl border border-[#F9EBE5] shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn">
@@ -159,6 +161,7 @@ const PostDetailsPage = () => {
             <BidModal
               postId={selectedPost._id}
               onClose={() => setShowModal(false)}
+              onBidSent={handleBidSent}
             />
           )}
         </div>

@@ -8,6 +8,7 @@ import { fetchLoggedInChef } from '@/features/chefSlice';
 import { fetchChefPosts } from '@/features/chefPostSlice';
 import { UserCircle, FileText } from 'lucide-react';
 import SetPasswordModal from '@/components/user/userProfile/SetPasswordModal';
+import AuthWrapper from '@/components/AuthWrapper';
 
 const ChefProfile: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,6 +47,7 @@ const ChefProfile: React.FC = () => {
   if (!chef) return <div className="text-center mt-6 text-gray-500">No chef data available.</div>;
 
   return (
+   
     <div className="max-w-5xl mx-auto px-4 py-8 bg-white shadow-xl rounded-2xl">
       {/* Profile Header */}
       <div className="flex items-center justify-between gap-4 mb-8">
@@ -70,7 +72,6 @@ const ChefProfile: React.FC = () => {
           </div>
         </div>
       <button
-<<<<<<< HEAD
   onClick={() => router.push('/chef/complete-profile')}
   className="text-sm px-4 py-2 bg-[#B8755D] text-white rounded-lg hover:bg-[#a0624f] transition"
 >
@@ -85,13 +86,6 @@ const ChefProfile: React.FC = () => {
   </button>
 )}
 
-=======
-          onClick={() => router.push('/chef/complete-profile')}
-          className="text-sm px-4 py-2 bg-[#B8755D] text-white rounded-lg hover:bg-[#a0624f] transition"
-        >
-          Edit Profile
-        </button>
->>>>>>> upstream/dev
       </div>
 
       <div className="flex space-x-4 border-b border-gray-200 mb-6">
@@ -203,6 +197,7 @@ const ChefProfile: React.FC = () => {
       <SetPasswordModal isOpen={isSetPasswordOpen} onClose={() => setSetPasswordOpen(false)} />
 
     </div>
+    
   );
 };
 

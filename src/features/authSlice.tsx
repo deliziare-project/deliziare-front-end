@@ -272,17 +272,31 @@ interface LoginPayload {
   );
   
   
-  export const checkCurrentUser = createAsyncThunk(
+//   export const checkCurrentUser = createAsyncThunk(
+//   'auth/checkCurrentUser',
+//   async (_, thunkAPI) => {
+//     try {
+//       const response = await axiosInstance.get('/users/me',{withCredentials:true});
+//       return response.data;
+//     } catch (err: any) {
+//       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
+//     }
+//   }
+// );
+
+export const checkCurrentUser = createAsyncThunk(
   'auth/checkCurrentUser',
   async (_, thunkAPI) => {
     try {
-      const response = await axiosInstance.get('/users/me',{withCredentials:true});
+      const response = await axiosInstance.get('/users/me');
       return response.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
+    } catch (error) {
+      // Don't throw unless absolutely sure token refresh failed
+      return thunkAPI.rejectWithValue('Session invalid');
     }
   }
 );
+
 export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
   async (_, thunkAPI) => {

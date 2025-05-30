@@ -5,6 +5,8 @@ import EditPostModal from '@/components/ui/EditPostModal';
 import axiosInstance from '@/api/axiosInstance';
 import { editPostIs } from '@/services/postService';
 import ReplayModal from '@/components/ui/ReplayModal';
+import socket from '@/socket';
+import { markBidsAsRead } from '@/features/bidSlice';
 
 interface PostCardProps {
   post: Post;
@@ -16,24 +18,83 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const [editedPost, setEditedPost] = useState(post);
   const [replays, setReplays] = useState([]);
   const [showBidCount, setShowBidCount] = useState(true);
+  const [hasUnreadBids, setHasUnreadBids] = useState(
+    () => replays.some(bid => !bid.readByUser)
+  );
+  const [refreshKey, setRefreshKey] = useState(0);
+  
 
   const bidCount = replays.length;
 
-  useEffect(() => {
-    const fetchReplays = async () => {
-      try {
-        const res = await axiosInstance.get('/bids/get-post-replay', {
-          params: { postId: editedPost._id },
-        });
-        setReplays(res.data);
-      } catch (error) {
-        console.error('Error fetching replays:', error);
-      }
-    };
 
+  const fetchReplays = async () => {
+    try {
+      const res = await axiosInstance.get('/bids/get-post-replay', {
+        params: { postId: editedPost._id },
+      });
+      console.log('Fetched replays:', res.data);
+      const replayData = res.data;
+      setReplays(replayData);
+  
+      const hasUnread = replayData.some(bid => !bid.readByUser);
+      setHasUnreadBids(hasUnread);
+      if (hasUnread) setShowBidCount(true);
+  
+      setRefreshKey(prev => prev + 1); // force rerender
+    } catch (error) {
+      console.error('Error fetching replays:', error);
+    }
+  };
+  
+
+  useEffect(() => {
     fetchReplays();
   }, [editedPost._id]);
 
+  useEffect(() => {
+    const handleNewNotification = ({ type, postId }) => {
+      if (type === 'new_bid' && postId === editedPost._id) {
+        // Optimistically show bid count immediately
+        setShowBidCount(true);
+        setHasUnreadBids(true);
+  
+        // Optionally: add a subtle animation
+        const postElement = document.getElementById(`post-${postId}`);
+        if (postElement) {
+          postElement.classList.add('animate-pulse');
+          setTimeout(() => {
+            postElement.classList.remove('animate-pulse');
+          }, 500); // remove after animation duration
+        }
+  
+        // Re-fetch replays for accurate data
+        fetchReplays();
+  
+        // Optional: play a sound
+        // const audio = new Audio('/sounds/new-bid.mp3');
+        // audio.play();
+      }
+    };
+  
+    socket?.on('new_notification', handleNewNotification);
+  
+    return () => {
+      socket?.off('new_notification', handleNewNotification);
+    };
+  }, [editedPost._id, socket]);
+  
+  
+  
+  
+  
+  useEffect(() => {
+    setHasUnreadBids(replays.some(bid => !bid.readByUser));
+    // If new bids came, show the badge
+    if (replays.some(bid => !bid.readByUser)) {
+      setShowBidCount(true);
+    }
+  }, [replays]);
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -49,7 +110,18 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   };
 
   const handleCloseModal = () => setIsModalOpen(false);
-  const handleCloseReplayModal = () => setIsReplayModalOpen(false);
+  const handleCloseReplayModal = async () => {
+    setIsReplayModalOpen(false);
+    try {
+      await markBidsAsRead(editedPost._id);
+      setReplays(prev => prev.map(bid => ({ ...bid, readByUser: true })));
+      setHasUnreadBids(false);
+      setShowBidCount(false);
+    } catch (err) {
+      console.error('Failed to mark bids as read:', err);
+    }
+  };
+  
 
   const handlePostEdit = async (updatedPost: Post) => {
     const res = await editPostIs(updatedPost);
@@ -140,7 +212,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <div className="mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500 flex justify-between items-center">
             <span>Posted on: {formatDate(editedPost.createdAt)}</span>
 
-            {bidCount > 0 && showBidCount && (
+            {bidCount > 0 && showBidCount && hasUnreadBids && (
               <div
                 onClick={(e) => {
                   e.stopPropagation();
@@ -152,9 +224,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold">
                   {bidCount}
                 </span>
-                
               </div>
             )}
+
           </div>
         </div>
       </div>

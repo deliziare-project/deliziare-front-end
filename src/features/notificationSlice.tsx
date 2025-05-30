@@ -49,11 +49,15 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     addNotification: (state, action: PayloadAction<NotificationType>) => {
-      state.notifications.unshift({
-        ...action.payload,
-        isRead: action.payload.isRead ?? false,
-      });
-    },
+      const exists = state.notifications.some(n => n._id === action.payload._id);
+      if (!exists) {
+        state.notifications.unshift({
+          ...action.payload,
+          isRead: action.payload.isRead ?? false,
+        });
+      }
+    }
+    
     
   },
   extraReducers: (builder) => {

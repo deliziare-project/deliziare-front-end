@@ -164,6 +164,20 @@ export default function VerifyOtpPage() {
     inputRefs.current[0]?.focus();
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('Text').trim();
+    if (!/^\d{6}$/.test(pasted)) return; // Optional: enforce exactly 6 digits
+  
+    const digits = pasted.split('').slice(0, 6);
+    setOtpDigits(digits);
+  
+    // Focus the last filled input
+    const nextIndex = digits.length < 6 ? digits.length : 5;
+    inputRefs.current[nextIndex]?.focus();
+  };
+  
+
   useEffect(() => {
     if (otpVerified) {
       dispatch(resetRegisterState());
@@ -184,16 +198,18 @@ export default function VerifyOtpPage() {
           <div className="flex justify-center gap-3">
             {otpDigits.map((digit, index) => (
               <input
-                key={index}
-                type="text"
-                inputMode="numeric"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                ref={(el) => { inputRefs.current[index] = el!; }}
-                className="w-12 h-12 text-center text-lg border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#B87333] focus:border-[#B87333] text-black"
-              />
+              key={index}
+              type="text"
+              inputMode="numeric"
+              maxLength={1}
+              value={digit}
+              onChange={(e) => handleChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              onPaste={handlePaste}
+              ref={(el) => { inputRefs.current[index] = el!; }}
+              className="w-12 h-12 text-center text-lg border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#B87333] focus:border-[#B87333] text-black"
+            />
+            
             ))}
           </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkCurrentUser } from '@/features/authSlice';
@@ -17,25 +17,53 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
+    
     if (routeType === 'private') {
-      dispatch(checkCurrentUser());
+      dispatch(checkCurrentUser()).finally(() => {
+        setReady(true);
+      });
+    } else {
+      
+      setReady(true);
     }
   }, [dispatch, routeType]);
-  
+
+  // useEffect(() => {
+  //   if (!ready || loading) return; 
+
+  //   if (routeType === 'private') {
+  //     if (!isAuthenticated) {
+  //       router.push('/login');
+  //     }
+  //   } else if (routeType === 'public') {
+  //     if (isAuthenticated) {
+  //       if (currentUser?.role === 'admin' && pathname !== '/admin/dashboard') {
+  //         router.push('/admin/dashboard');
+  //       } else if (currentUser?.role === 'host' && !pathname.startsWith('/user')) {
+  //         router.push('/user/home');
+  //       } else if (currentUser?.role === 'chef') {
+  //         if (!currentUser?.isProfileCompleted && pathname !== '/chef/complete-profile') {
+  //           router.push('/chef/complete-profile');
+  //         } else if (currentUser.isProfileCompleted && pathname !== '/chef/home') {
+  //           router.push('/chef/home');
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [ready, loading, isAuthenticated, router, currentUser, pathname, routeType]);
+
 
   useEffect(() => {
-    if (loading) return;
-
+    if (!ready || loading) return;
+  
     if (routeType === 'private') {
-      // Private route: redirect to login if not authenticated
       if (!isAuthenticated) {
         router.push('/login');
-        return;
-      }
-    } else if (routeType === 'public') {
-      // Public route: redirect to dashboard/home if authenticated
-      if (isAuthenticated) {
+      } else {
+       
         if (currentUser?.role === 'admin' && pathname !== '/admin/dashboard') {
           router.push('/admin/dashboard');
         } else if (currentUser?.role === 'host' && !pathname.startsWith('/user')) {
@@ -43,16 +71,33 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
         } else if (currentUser?.role === 'chef') {
           if (!currentUser?.isProfileCompleted && pathname !== '/chef/complete-profile') {
             router.push('/chef/complete-profile');
-          } else if (currentUser.isProfileCompleted && pathname !== '/chef/home') {
+          } else if (
+            currentUser.isProfileCompleted &&
+            !pathname.startsWith('/chef')
+          ) {
             router.push('/chef/home');
           }
         }
-        return;
+        
+        
+      }
+    } else if (routeType === 'public') {
+      if (isAuthenticated) {
+        
+        if (currentUser?.role === 'admin') {
+          router.push('/admin/dashboard');
+        } else if (currentUser?.role === 'host') {
+          router.push('/user/home');
+        } else if (currentUser?.role === 'chef') {
+          router.push('/chef/home');
+        }
       }
     }
-  }, [isAuthenticated, loading, router, currentUser, pathname, routeType]);
+  }, [ready, loading, isAuthenticated, router, currentUser, pathname, routeType]);
+  
 
-  if (loading) {
+ 
+  if (!ready || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div
@@ -64,17 +109,20 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
     );
   }
   
-
-  // Only render children if user is authorized to view routeType
+  
+  if (routeType === 'public' && isAuthenticated) {
+    return null;
+  }
+  
   if (
     (routeType === 'private' && isAuthenticated) ||
     (routeType === 'public' && !isAuthenticated)
   ) {
     return <>{children}</>;
   }
-
-  // Optionally, return null or loader while redirecting
+  
   return null;
+  
 };
 
 export default AuthWrapper;
