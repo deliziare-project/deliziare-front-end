@@ -1,13 +1,22 @@
 'use client'; 
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileHeader from './ProfileHeader';
 import ProfileDetails from './ProfileDetails';
 import ProfileActions from './ProfileActions';
+import { checkCurrentUser } from '@/features/authSlice';
 
 function UserProfile() {
   const { currentUser } = useSelector((state: any) => state.auth);
-
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if (!currentUser) {
+      dispatch(checkCurrentUser());
+    }
+  }, [currentUser, dispatch]);
+  console.log("user:",currentUser);
+  
   if (!currentUser) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">

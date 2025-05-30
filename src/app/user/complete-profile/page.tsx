@@ -7,6 +7,7 @@ import { Plus, X } from 'lucide-react'; // optional, for icons if you're using L
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLoggedInChef, updateChefProfile } from '@/features/chefSlice';
 import { RootState } from '@/redux/store';
+import AuthWrapper from '@/components/AuthWrapper';
 
 type FormDataType = {
   
@@ -100,6 +101,7 @@ useEffect(() => {
   }
 
   return (
+    <AuthWrapper routeType='private'>
     <div className="max-w-3xl mx-auto mt-12 p-8 bg-white shadow-xl rounded-xl">
   <h1 className="text-4xl font-bold text-center text-[#2E1D13] mb-10">
     Complete Your Chef Profile
@@ -255,7 +257,7 @@ useEffect(() => {
     </div>
   </form>
 </div>
-
+</AuthWrapper>
   );
 };
 

@@ -16,8 +16,12 @@ import {
 
 import { fetchChefDistrictPosts } from '@/features/userPostSlice';
 import { AppDispatch, RootState } from '@/redux/store';
+
+import AuthWrapper from '@/components/AuthWrapper';
+
 import SearchBar from '@/components/shared/SearchBar';
 import Pagination from '@/components/admin/userManagement/pagination';
+
 
 const ChefPosts = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -63,6 +67,7 @@ const ChefPosts = () => {
   }
 
   return (
+    <AuthWrapper routeType='private'>
     <div className="min-h-screen bg-[#FAF8F7]">
       <div className="max-w-6xl mx-auto p-4 pt-8">
        
@@ -204,6 +209,7 @@ const ChefPosts = () => {
               </div>
             )}
     </div>
+    </AuthWrapper>
   );
 };
 

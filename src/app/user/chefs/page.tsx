@@ -3,9 +3,15 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/api/axiosInstance';
 import { Bookmark, MoreHorizontal} from 'lucide-react';
+
 // import Pagination from '@/components/admin/userManagement/pagination';
 import toast from 'react-hot-toast';
+
+import { Skeleton } from '@/components/loaders/Skeleton';
+
 import Pagination from '@/components/admin/userManagement/pagination';
+import AuthWrapper from '@/components/AuthWrapper';
+
 
 
 interface ChefPost {
@@ -34,6 +40,8 @@ const HostViewChefPosts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 4;
 
   useEffect(() => {
     const fetchChefPosts = async () => {
@@ -88,8 +96,16 @@ const HostViewChefPosts = () => {
 };
 
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 4;
+
+  if (loading) 
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <Skeleton />
+      </div>
+    );
+  
+
+  
    
   const totalPages = Math.ceil(posts.length / postsPerPage);
   const indexOfLastPost = currentPage * postsPerPage;
@@ -98,10 +114,12 @@ const HostViewChefPosts = () => {
 
 
   if (loading) return <div className="flex justify-center items-center h-screen">Loading posts...</div>;
+
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
   if (posts.length === 0) return <div className="text-center py-8">No posts found</div>;
 
   return (
+    <AuthWrapper routeType='private'>
   <div className="min-h-screen flex flex-col max-w-6xl mx-auto px-4 py-8">
     {/* Post Grid */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
@@ -185,6 +203,7 @@ const HostViewChefPosts = () => {
       </div>
     )}
   </div>
+  </AuthWrapper>
 );
 
 };

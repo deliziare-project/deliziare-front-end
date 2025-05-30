@@ -10,6 +10,7 @@ const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRotated, setIsRotated] = useState(false);
   const [chefs, setChefs] = useState<Chef[]>([]);
+  const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handlePostSubmit = async (data: any) => {

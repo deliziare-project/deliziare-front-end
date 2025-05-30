@@ -5,19 +5,36 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { createBid } from '@/features/bidSlice';
 
-const BidModal = ({ postId, onClose }: { postId: string; onClose: () => void }) => {
+type BidModalProps = {
+  postId: string;
+  onClose: () => void;
+  onBidSent: () => void;  // new prop
+};
+
+const BidModal: React.FC<BidModalProps> = ({ postId, onClose, onBidSent }) => {
   const [bidAmount, setBidAmount] = useState('');
-  const [description,setDescription]=useState('')
+  const [description, setDescription] = useState('');
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async () => {
     if (!bidAmount) return alert('Enter a valid amount');
-    await dispatch(createBid({ postId, bidAmount: Number(bidAmount) ,description}));
-    onClose();
+
+    try {
+      await dispatch(createBid({ postId, bidAmount: Number(bidAmount), description })).unwrap();
+      
+     
+      onBidSent();
+
+    
+      onClose();
+    } catch (error) {
+      alert('Failed to send bid. Please try again.');
+      console.error(error);
+    }
   };
 
   return (
-    <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50 backdrop-blur">
+    <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50 backdrop-blur">
       <div className="bg-white p-6 rounded shadow-lg w-96">
         <h2 className="text-xl font-bold mb-4 text-[#B8755D]">Place Your Amount</h2>
         <input
@@ -28,11 +45,11 @@ const BidModal = ({ postId, onClose }: { postId: string; onClose: () => void }) 
           placeholder="Enter amount"
         />
         <input
-          type="string"
+          type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="border w-full p-2 mb-4 text-gray-500"
-          placeholder="add a description(optional)"
+          placeholder="Add a description (optional)"
         />
         
         <div className="flex justify-end gap-2">
