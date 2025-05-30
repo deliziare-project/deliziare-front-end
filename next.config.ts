@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 import withPWA from 'next-pwa';
-
+const isDeliveryBoyRoute = (process.env.PWA_SCOPE === 'delivery');
 const nextConfig: NextConfig = {
    reactStrictMode: true,
   /* config options here */
