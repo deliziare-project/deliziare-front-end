@@ -1,27 +1,16 @@
 import ChefNavbar from '@/components/chef/chefNavbar';
 import ChefSidebar from '@/components/chef/chefSidebar';
+import Navbar from '@/components/user/Navbar';
 import { ReactNode } from 'react';
 
 export default function ChefLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex">
-      {/* Sidebar */}
-      <div className="w-64 fixed top-0 left-0 h-screen z-50">
-        <ChefSidebar />
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 ml-64 min-h-screen bg-gray-50">
-        {/* Navbar */}
-        <div className="sticky top-0 ">
-          <ChefNavbar />
-        </div>
-
-        {/* Page Content */}
+    <div className="min-h-screen bg-white">
+      <Navbar/>
         <main className="p-6">
           {children}
         </main>
       </div>
-    </div>
+    
   );
 }
