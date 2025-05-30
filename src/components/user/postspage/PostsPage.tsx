@@ -50,10 +50,10 @@ const PostsPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 mt-4">Food Donation Posts</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-800 mt-4">My Posts</h1>
+          {/* <p className="text-gray-500 mt-1">
             Browse all available food donation events
-          </p>
+          </p> */}
         </div>
         <PostModal
         isOpen={isModalOpen}

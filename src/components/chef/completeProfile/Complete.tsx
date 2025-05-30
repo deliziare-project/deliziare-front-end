@@ -175,27 +175,32 @@ const finalCertificateUrl = certificateUrl || chef?.certificate;
   {/* <label className="text-gray-700 font-bold mb-2">Profile Image</label> */}
 
   <div className="relative group">
-    <input
-      type="file"
-      accept="image/*"
-      onChange={handleImageUpload}
-      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-    />
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageUpload}
+    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+  />
+
+  {imageUrl || chef?.userId?.profileImage ? (
     <Image
-     width={100}
-     height={100}
-      src={
-        imageUrl ||
-        chef?.userId?.profileImage ||
-        '/default-profile.png' // fallback image
-      }
+      width={100}
+      height={100}
+      src={imageUrl || chef?.userId?.profileImage}
       alt="Profile"
       className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 shadow-md transition-transform duration-300 group-hover:scale-105"
     />
-    <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0">
-      <p className="text-white text-sm"><CameraIcon/></p>
+  ) : (
+    <div className="w-32 h-32 flex items-center justify-center rounded-full bg-[#F9EBE5] text-[#B8755D] text-4xl font-bold border border-[#F9EBE5] shadow-md">
+      {chef?.userId?.name?.charAt(0)?.toUpperCase() || 'U'}
     </div>
+  )}
+
+  <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0">
+    <p className="text-white text-sm"><CameraIcon /></p>
   </div>
+</div>
+
 
   {uploading && (
     <p className="text-sm text-blue-500 mt-2">Uploading...</p>

@@ -73,7 +73,7 @@ const certificateSlice = createSlice({
   },
 });
 
-// In certificateSlice.ts
+
 export const setCertificateUrl = (url: string) => ({
   type: 'certificate/setCertificateUrl',
   payload: url,

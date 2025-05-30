@@ -46,13 +46,20 @@ const ChefProfile: React.FC = () => {
     <div className="max-w-5xl mx-auto px-4 py-8 bg-white shadow-xl rounded-2xl">
       {/* Profile Header */}
       <div className="flex items-center justify-between gap-4 mb-8">
-        <div className="flex items-center gap-5">
-          <img
-            src={currentUser?.profileImage || '/default-avatar.png'}
-            alt="avatar"
-            className="w-24 h-24 rounded-full border-4 border-blue-100 shadow-md object-cover"
-          />
-          <div>
+      <div className="flex items-center gap-5">
+            {currentUser?.profileImage ? (
+              <img
+                src={currentUser.profileImage}
+                alt="avatar"
+                className="w-24 h-24 rounded-full border-4 border-blue-100 shadow-md object-cover"
+              />
+            ) : (
+              <div className="w-24 h-24 flex items-center justify-center rounded-full bg-[#F9EBE5] text-[#B8755D] text-4xl font-bold border border-[#F9EBE5] shadow-md">
+                {currentUser?.name?.charAt(0)?.toUpperCase() || 'U'}
+              </div>
+            )}
+
+            <div>
             <h1 className="text-3xl font-bold text-gray-800">{chef.userId?.name}</h1>
             <p className="text-gray-500">{chef.userId?.email}</p>
             <p className="text-gray-500">{chef.userId?.phone}</p>
@@ -60,32 +67,32 @@ const ChefProfile: React.FC = () => {
           </div>
         </div>
       <button
-  onClick={() => router.push('/chef/complete-profile')}
-  className="text-sm px-4 py-2 bg-[#B8755D] text-white rounded-lg hover:bg-[#a0624f] transition"
->
-  Edit Profile
-</button>
+          onClick={() => router.push('/chef/complete-profile')}
+          className="text-sm px-4 py-2 bg-[#B8755D] text-white rounded-lg hover:bg-[#a0624f] transition"
+        >
+          Edit Profile
+        </button>
       </div>
 
       <div className="flex space-x-4 border-b border-gray-200 mb-6">
-  {[
-    { id: 'overview', label: 'Overview', icon: <UserCircle className="w-4 h-4 mr-1" /> },
-    { id: 'posts', label: 'Posts', icon: <FileText className="w-4 h-4 mr-1" /> },
-  ].map((tab) => (
-    <button
-      key={tab.id}
-      onClick={() => setActiveTab(tab.id as 'overview' | 'posts')}
-      className={`flex items-center px-4 py-2 font-medium text-sm rounded-t-md transition ${
-        activeTab === tab.id
-          ? 'border-b-2 border-[#B8755D] text-[#B8755D] bg-[#FDF4F1]'
-          : 'text-gray-500 hover:text-[#B8755D]'
-      }`}
-    >
-      {tab.icon}
-      {tab.label}
-    </button>
-  ))}
-</div>
+        {[
+          { id: 'overview', label: 'Overview', icon: <UserCircle className="w-4 h-4 mr-1" /> },
+          { id: 'posts', label: 'Posts', icon: <FileText className="w-4 h-4 mr-1" /> },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as 'overview' | 'posts')}
+            className={`flex items-center px-4 py-2 font-medium text-sm rounded-t-md transition ${
+              activeTab === tab.id
+                ? 'border-b-2 border-[#B8755D] text-[#B8755D] bg-[#FDF4F1]'
+                : 'text-gray-500 hover:text-[#B8755D]'
+            }`}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
 
       {/* Overview Tab */}

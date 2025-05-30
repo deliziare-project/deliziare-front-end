@@ -6,6 +6,7 @@ export interface Bid {
   postId: string;
   chefId: string;
   bidAmount: number;
+  description:string;
   status: 'pending' | 'accepted' | 'rejected';
   createdAt: string;
 }
@@ -25,7 +26,7 @@ const initialState: BidState = {
 
 export const createBid = createAsyncThunk(
   'chefBids/createBid',
-  async (data: { postId: string; bidAmount: number }, thunkAPI) => {
+  async (data: { postId: string; bidAmount: number,description:string }, thunkAPI) => {
     try {
       const res = await axiosInstance.post('/bids/createBid', data);
       return res.data;
@@ -47,6 +48,14 @@ export const getChefBids = createAsyncThunk(
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch bids');
     }
+  }
+);
+
+export const updateBidStatus = createAsyncThunk(
+  'bids/updateStatus',
+  async ({ id, status }: { id: string; status: string }) => {
+    const response = await axiosInstance.patch(`/bids/${id}/status`, { status });
+    return response.data;
   }
 );
 
@@ -77,7 +86,14 @@ const chefBidSlice = createSlice({
       .addCase(getChefBids.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(updateBidStatus.fulfilled, (state, action) => {
+      const updatedBid = action.payload;
+      const index = state.bids.findIndex((bid) => bid._id === updatedBid._id);
+      if (index !== -1) {
+        state.bids[index] = updatedBid;
+      }
+    });
   },
 });
 

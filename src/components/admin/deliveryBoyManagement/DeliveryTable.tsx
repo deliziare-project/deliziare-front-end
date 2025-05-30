@@ -9,7 +9,7 @@ interface Props {
   handleBlockToggle: (id: string) => void;
 }
 
-const UserTableRow = ({ user, openDropdownId, toggleDropdown, handleBlockToggle }: Props) => {
+const DeliveryTable = ({ user, openDropdownId, toggleDropdown, handleBlockToggle }: Props) => {
   const hasImage = Boolean(user.profileImage);
 
   return (
@@ -55,7 +55,7 @@ const UserTableRow = ({ user, openDropdownId, toggleDropdown, handleBlockToggle 
                   className="px-4 py-2 hover:bg-[#fef3e5] cursor-pointer"
                   onClick={() => alert(`Viewing profile of ${user.name}`)}
                 >
-                  View Post
+                  View Profile
                 </li>
               </ul>
             </div>
@@ -66,4 +66,4 @@ const UserTableRow = ({ user, openDropdownId, toggleDropdown, handleBlockToggle 
   );
 };
 
-export default UserTableRow;
+export default DeliveryTable;

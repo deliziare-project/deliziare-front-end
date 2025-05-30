@@ -89,7 +89,7 @@ const HostViewChefPosts = () => {
 
 
     const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 1;
+    const postsPerPage = 4;
    
   const totalPages = Math.ceil(posts.length / postsPerPage);
   const indexOfLastPost = currentPage * postsPerPage;
@@ -122,7 +122,7 @@ const HostViewChefPosts = () => {
                 <p className="text-gray-500 text-xs">{post.chefId?.district}</p>
               </div>
             </div>
-            <MoreHorizontal className="text-gray-500" size={20} />
+            {/* <MoreHorizontal className="text-gray-500" size={20} /> */}
           </div>
 
           {/* Post Image */}
