@@ -28,9 +28,11 @@ export const createBid = createAsyncThunk(
   'chefBids/createBid',
   async (data: { postId: string; bidAmount: number,description:string }, thunkAPI) => {
     try {
+      console.log('Sending bid data:', data);
       const res = await axiosInstance.post('/bids/createBid', data);
       return res.data;
     } catch (err: any) {
+      console.error('Bid creation error:', err.response);
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to place bid');
     }
   }
@@ -58,6 +60,10 @@ export const updateBidStatus = createAsyncThunk(
     return response.data;
   }
 );
+
+export const markBidsAsRead = async (postId: string) => {
+  return await axiosInstance.patch('/bids/mark-read', { postId });
+};
 
 const chefBidSlice = createSlice({
   name: 'chefBids',
