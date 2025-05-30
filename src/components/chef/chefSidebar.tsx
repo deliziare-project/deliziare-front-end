@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { logoutUser } from '@/features/authSlice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+// import { useState } from 'react';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/chef/home' },

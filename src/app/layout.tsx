@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import AuthWrapper from "@/components/AuthWrapper";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Head from "next/head";
 
 
 
@@ -30,6 +31,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="apple-touch-icon" href="/icons/16.png" />
+        <meta name="msapplication-TileImage" content="/windows/LargeTile.scale-100.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
