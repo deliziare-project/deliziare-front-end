@@ -4,12 +4,16 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@/api/axiosInstance';
 import { Bookmark, MoreHorizontal} from 'lucide-react';
 
+// import Pagination from '@/components/admin/userManagement/pagination';
+import toast from 'react-hot-toast';
+
 import { Skeleton } from '@/components/loaders/Skeleton';
 
 import Pagination from '@/components/admin/userManagement/pagination';
 import Link from 'next/link';
 
 import AuthWrapper from '@/components/AuthWrapper';
+
 
 
 interface ChefPost {
@@ -66,13 +70,33 @@ const HostViewChefPosts = () => {
     }).format(date);
   };
 
-  const toggleSavePost = (postId: string) => {
-    setSavedPosts(prev =>
-      prev.includes(postId)
-        ? prev.filter(id => id !== postId)
-        : [...prev, postId]
-    );
-  };
+  // const toggleSavePost = (postId: string) => {
+  //   setSavedPosts(prev =>
+  //     prev.includes(postId)
+  //       ? prev.filter(id => id !== postId)
+  //       : [...prev, postId]
+  //   );
+  // };
+  const toggleSavePost = async (postId: string) => {
+  try {
+    const alreadySaved = savedPosts.includes(postId);
+    console.log('alread',alreadySaved);
+    
+
+    // If already saved, optionally implement an unsave endpoint
+    if (!alreadySaved) {
+      await axiosInstance.post(`userclient/savedPost/${postId}`); // Call the backend to save the post
+      setSavedPosts(prev => [...prev, postId]);
+    } else {
+      // Optionally add un-save logic here
+      setSavedPosts(prev => prev.filter(id => id !== postId));
+      toast.success('Saved to favorites!');
+    }
+  } catch (error) {
+    console.error('Failed to save post:', error);
+  }
+};
+
 
 
   if (loading) 

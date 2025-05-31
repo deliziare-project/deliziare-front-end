@@ -4,6 +4,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --coral-red: #D56150;
+  --deep-red-orange: #CA341C;
 }
 
 @theme inline {
@@ -59,19 +61,6 @@ body {
 .animate-zoomIn {
   animation: zoomIn 0.3s ease-out;
 }
-
-/* @keyframes rotateImage {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.rotate-animation {
-  animation: rotateImage 0.6s ease-in-out forwards;
-} */
 
 @keyframes continuousRotate {
   from {
