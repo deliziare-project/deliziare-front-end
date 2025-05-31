@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -83,19 +84,25 @@ const CompleteProfilePage = ({ isModal = false }: { isModal?: boolean }) => {
   const [fileName, setFileName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<FormDataType>({
-    resolver: yupResolver(profileSchema),
-    mode: 'onChange', 
-    defaultValues: {
-      name: '',
-      bio: '',
-      specialize: [],
-      qualifications: [],
-      experience: '',
-      district: '',
-      isProfileCompleted: false,
-    }
-  });
+const { 
+  control, 
+  handleSubmit, 
+  setValue, 
+  getValues, // Add this
+  formState: { errors, isValid } 
+} = useForm<FormDataType>({
+  resolver: yupResolver(profileSchema),
+  mode: 'onChange',
+  defaultValues: {
+    name: '',
+    bio: '',
+    specialize: [],
+    qualifications: [],
+    experience: '',
+    district: '',
+    isProfileCompleted: false,
+  }
+});
 
   const { chef } = useSelector((state: RootState) => state.chef);
   const { uploading: certUploading, error: certError, certificateUrl } = useSelector(
@@ -145,11 +152,24 @@ const onSubmit = async (data: FormDataType) => {
       dispatch(uploadCertificate(file));
     }
   };
+const [isSkipping, setIsSkipping] = useState(false);
 
-  const handleSkip = () => {
-    console.log('Skipped profile completion');
+const handleSkip = async () => {
+  setIsSkipping(true);
+  try {
+    const formValues = getValues();
+    await dispatch(updateChefProfile({
+      ...formValues,
+      isProfileCompleted: true
+    }));
     router.push('/chef/home');
-  };
+  } catch (error) {
+    console.log('skipping error', error);
+  } finally {
+    setIsSkipping(false);
+  }
+};
+
 
   const { uploading, imageUrl, error } = useSelector((state: RootState) => state.profileImage);
 
@@ -280,8 +300,9 @@ const onSubmit = async (data: FormDataType) => {
                 error={errors.experience?.message}
                 type="number"
                 placeholder="e.g., 5"
-                min="0"
-                max="50"
+                onChange={(e) => field.onChange(e.target.value)}
+                
+                max={50}
               />
             )}
           />
@@ -292,9 +313,9 @@ const onSubmit = async (data: FormDataType) => {
           control={control}
           render={({ field }) => (
             <AutocompleteInput
-              label="District"
+              label="District (mandatory)"
               {...field}
-              error={errors.district?.message}
+              error={errors?.district?.message}
               placeholder="e.g., Thrissur"
               suggestions={districts}
             />
@@ -338,12 +359,14 @@ const onSubmit = async (data: FormDataType) => {
           )}
         </div>
 
-        <FormActions
-          onSkip={handleSkip}
-          isProfileCompleted={chef?.userId?.isProfileCompleted||false}
-          isSubmitting={isSubmitting}
-        />
-
+      <FormActions
+      onSubmit={handleSubmit(onSubmit)}
+        onSkip={handleSkip}
+        isProfileCompleted={chef?.userId?.isProfileCompleted || false}
+        isSubmitting={isSubmitting}
+        isSkipping={isSkipping}
+        isValid={isValid}
+      />
         </form>
 
  

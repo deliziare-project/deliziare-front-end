@@ -11,6 +11,7 @@ type Props = {
 const ChefProfileview = ({ chefId }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const { chefProfile, loading, error } = useSelector((state: RootState) => state.profile);
+  // console.log('chf data',chefProfile)
 
   useEffect(() => {
     if (chefId) dispatch(fetchChefProfileById(chefId));
