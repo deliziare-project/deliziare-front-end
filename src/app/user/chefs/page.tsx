@@ -6,7 +6,7 @@ import { Bookmark, MoreHorizontal} from 'lucide-react';
 
 import { Skeleton } from '@/components/loaders/Skeleton';
 
-import Pagination from '@/components/admin/userManagement/pagination';
+import Pagination from '@/components/admin/userManagement/Pagination';
 import AuthWrapper from '@/components/AuthWrapper';
 
 

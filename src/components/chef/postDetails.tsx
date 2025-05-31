@@ -16,6 +16,7 @@ import { AppDispatch, RootState } from '@/redux/store';
 import { fetchPostDetails } from '@/features/userPostSlice';
 import BidModal from './bid/BidModal';
 import axiosInstance from '@/api/axiosInstance';
+import { Bid } from '@/features/bidSlice';
 
 const PostDetailsPage = () => {
   const { id } = useParams();
@@ -36,7 +37,8 @@ const PostDetailsPage = () => {
     const fetchBids = async () => {
       try {
         const res = await axiosInstance.get('/bids/getBid');
-        const found = res.data.some((bid) => String(bid?.postId?._id) === String(id));
+        const found = res.data.some((bid: Bid) => String(bid?.postId?._id) === String(id));
+
         setHasBid(found);
       } catch (err) {
         console.error('Error fetching bids:', err);

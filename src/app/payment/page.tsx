@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import PaymentForm from '@/components/payment/paymentForm';
 
 function PaymentPage() {
@@ -10,16 +10,15 @@ function PaymentPage() {
     script.async = true;
     document.body.appendChild(script);
 
-    // Clean up when component unmounts
     return () => {
       document.body.removeChild(script);
     };
   }, []);
 
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <PaymentForm />
-    </div>
+    </Suspense>
   );
 }
 

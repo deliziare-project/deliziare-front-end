@@ -28,7 +28,7 @@ export default function HeroSection() {
         <Button
           asChild
           size="sm"
-          className="bg-white text-black font-semibold px-4 py-2 rounded-full hover:bg-gray-200"
+          className="bg-orange-600 text-black font-semibold px-4 py-2 rounded-full hover:bg-gray-200"
         >
           <Link href="/register">Sign Up</Link>
         </Button>
@@ -36,7 +36,7 @@ export default function HeroSection() {
           asChild
           variant="outline"
           size="sm"
-          className="bg-transparent text-white border-white hover:bg-white/10 font-semibold px-4 py-2 rounded-full"
+          className="bg-transparent text-white hover:bg-orange-700 font-semibold px-4 py-2 rounded-full"
         >
           <Link href="/login">Sign In</Link>
         </Button>

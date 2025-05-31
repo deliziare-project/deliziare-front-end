@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { CameraIcon, Plus, X } from 'lucide-react'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLoggedInChef, updateChefProfile } from '@/features/chefSlice';
+import { ChefProfile, fetchLoggedInChef, updateChefProfile } from '@/features/chefSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import TextAreaField from '@/components/chef/completeProfile/TextAreaField';
 import TagInput from '@/components/chef/completeProfile/TagInput';
@@ -130,17 +130,29 @@ useEffect(() => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-
-  const updatedFormData = {
-    ...formData,
-    isProfileCompleted: true, 
+    e.preventDefault();
+  
+    if (!chef) {
+      console.error("Chef profile not loaded yet.");
+      return;
+    }
+  
+    const updatedProfile: ChefProfile = {
+      userId: chef.userId, 
+      isProfileCompleted: true,
+      certificate: finalCertificateUrl || '',
+      bio: formData.bio,
+      specialize: formData.specialize,
+      qualifications: formData.qualifications,
+      experience: formData.experience,
+      district: formData.district,
+    };
+  
+    dispatch(updateChefProfile(updatedProfile));
+    router.push('/chef/home');
   };
-
-  dispatch(updateChefProfile(updatedFormData));
-  console.log('Profile Submitted:', formData);
-  router.push('/chef/home');
-};
+  
+  
 
 
   const handleSkip = () => {
@@ -182,19 +194,21 @@ const finalCertificateUrl = certificateUrl || chef?.certificate;
     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
   />
 
-  {imageUrl || chef?.userId?.profileImage ? (
-    <Image
-      width={100}
-      height={100}
-      src={imageUrl || chef?.userId?.profileImage}
-      alt="Profile"
-      className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 shadow-md transition-transform duration-300 group-hover:scale-105"
-    />
-  ) : (
-    <div className="w-32 h-32 flex items-center justify-center rounded-full bg-[#F9EBE5] text-[#B8755D] text-4xl font-bold border border-[#F9EBE5] shadow-md">
-      {chef?.userId?.name?.charAt(0)?.toUpperCase() || 'U'}
-    </div>
-  )}
+{(imageUrl || chef?.userId?.profileImage) ? (
+  <Image
+    width={100}
+    height={100}
+    src={imageUrl || chef?.userId?.profileImage!} // non-null assertion because of condition
+    alt="Profile"
+    className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 shadow-md transition-transform duration-300 group-hover:scale-105"
+  />
+) : (
+  <div className="w-32 h-32 flex items-center justify-center rounded-full bg-[#F9EBE5] text-[#B8755D] text-4xl font-bold border border-[#F9EBE5] shadow-md">
+    {chef?.userId?.name?.charAt(0)?.toUpperCase() || 'U'}
+  </div>
+)}
+
+
 
   <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0">
     <p className="text-white text-sm"><CameraIcon /></p>
@@ -314,7 +328,11 @@ const finalCertificateUrl = certificateUrl || chef?.certificate;
 </div>
 
 
-<FormActions onSubmit={handleSubmit} onSkip={handleSkip} isProfileCompleted={chef?.userId?.isProfileCompleted} />
+<FormActions
+  onSubmit={handleSubmit}
+  onSkip={handleSkip}
+  isProfileCompleted={chef?.userId?.isProfileCompleted || false}
+/>
 
 {/* Certificate Preview Modal */}
 {isModalOpen && finalCertificateUrl && (

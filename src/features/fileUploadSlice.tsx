@@ -2,13 +2,13 @@ import axiosInstance from "@/api/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface ProfileImageState {
-  loading: boolean;
+  uploading: boolean;
   certificateUrl: string | null;
   error: string | null;
 }
 
 const initialState: ProfileImageState = {
-  loading: false,
+  uploading: false,
   certificateUrl: null,
   error: null,
 };
@@ -55,18 +55,18 @@ const certificateSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(uploadCertificate.pending, (state) => {
-        state.loading = true;
+        state.uploading = true;
         state.certificateUrl=null;
         state.error = null;
        
       })
       .addCase(uploadCertificate.fulfilled, (state, action) => {
-        state.loading = false;
+        state.uploading = false;
         state.certificateUrl=action.payload;
     
       })
       .addCase(uploadCertificate.rejected, (state, action) => {
-        state.loading = false;
+        state.uploading = false;
         state.error=action.payload || "upload failed";
         
       });

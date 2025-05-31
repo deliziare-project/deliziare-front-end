@@ -1,19 +1,19 @@
 type Props = {
-  onSubmit: () => void;
+  onSubmit: (e: React.FormEvent) => void;
   onSkip: () => void;
   isProfileCompleted: boolean;
 };
 
 export default function FormActions({ onSubmit, onSkip, isProfileCompleted }: Props) {
   return (
-    <div
+    <form
+      onSubmit={onSubmit}
       className={`flex pt-4 gap-4 ${
         isProfileCompleted ? "justify-center" : "flex-col sm:flex-row"
       }`}
     >
       <button
         type="submit"
-        onClick={onSubmit}
         className={`py-3 bg-[#B8755D] text-white font-semibold rounded-md transition ${
           isProfileCompleted ? "w-full sm:w-1/3" : "w-full sm:w-1/2"
         }`}
@@ -30,6 +30,6 @@ export default function FormActions({ onSubmit, onSkip, isProfileCompleted }: Pr
           Skip
         </button>
       )}
-    </div>
+    </form>
   );
 }

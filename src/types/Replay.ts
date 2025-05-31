@@ -8,5 +8,19 @@ export interface Replay {
     email: string;
     phone?: string;
   };
+  chefProfile?: {
+    location?: {
+      lat: number;
+      lng: number;
+    };
+  };
+  postId?: {
+    location?: {
+      lat: number;
+      lng: number;
+    };
+  };
   createdAt?: string;
+  description?: string;
+  readByUser: boolean;
 }

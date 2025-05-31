@@ -16,15 +16,26 @@ import axiosInstance from '@/api/axiosInstance';
 
 
 
+// type DeliveryBoyFormData = {
+//   name: string;
+//   email: string;
+//   phone: string;
+//   password: string;
+//   vehicleType: 'two' | 'three' | 'four' ;
+//   IDProof: FileList;
+//   license: FileList;
+// };
+
 type DeliveryBoyFormData = {
   name: string;
   email: string;
   phone: string;
   password: string;
-  vehicleType: 'two' | 'three' | 'four' | '';
-  IDProof: FileList;
-  license: FileList;
+  vehicleType: 'two' | 'three' | 'four';
+  IDProof: any; 
+  license: any;
 };
+
 
 const DeliveryBoyRegister = () => {
   const {
@@ -41,6 +52,14 @@ const DeliveryBoyRegister = () => {
     IDProof: '',
     license: '',
   });
+
+  function getErrorMessage(error: any) {
+    if (!error) return null;
+    if (typeof error === 'string') return error;
+    if ('message' in error) return error.message;
+    return null;
+  }
+  
   
   const router = useRouter();
   const [formPreview, setFormPreview] = useState<any>(null);
@@ -147,7 +166,7 @@ const DeliveryBoyRegister = () => {
             {...register('vehicleType')}
             className="w-full border border-gray-300 text-gray-800 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
-            <option value="">Select Vehicle Type</option>
+            {/* <option value="">Select Vehicle Type</option> */}
             <option value="two">Two-wheeler</option>
             <option value="three">Three-wheeler</option>
             <option value="four">Four-wheeler</option>
@@ -180,7 +199,10 @@ const DeliveryBoyRegister = () => {
                 )}
 
           </div>
-          {errors.IDProof && <p className="text-red-500 text-sm mt-1">{errors.IDProof.message}</p>}
+          {getErrorMessage(errors.IDProof) && (
+            <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors.IDProof)}</p>
+          )}
+
         </div>
 
         <div>
@@ -206,7 +228,10 @@ const DeliveryBoyRegister = () => {
             )}
 
           </div>
-          {errors.license && <p className="text-red-500 text-sm mt-1">{errors.license.message}</p>}
+          {getErrorMessage(errors.license) && (
+            <p className="text-red-500 text-sm mt-1">{getErrorMessage(errors.license)}</p>
+          )}
+
         </div>
 
         <button

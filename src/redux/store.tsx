@@ -1,7 +1,7 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/authSlice';
-import { useDispatch } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import chefReducer from '../features/chefSlice'
 import hostReducer from '../features/userManagementSlice'

@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Replay } from '@/types/Replay';
@@ -105,19 +106,23 @@ const router=useRouter()
       <form onSubmit={handleCreatePayment} className="space-y-4">
        {/* Only show this if bidId is not passed */}
 
-           {bid && (
-          <PaymentSummary
-            bidAmount={Number(bid.bidAmount)}
-            chefLocation={{
-              lat: bid.chefProfile?.location?.lat,
-              lng: bid.chefProfile?.location?.lng,
-            }}
-            eventLocation={{
-              lat: bid.postId?.location?.lat,
-              lng: bid.postId?.location?.lng,
-            }}
-          />
-        )}
+       {bid?.chefProfile?.location?.lat !== undefined &&
+          bid?.chefProfile?.location?.lng !== undefined &&
+          bid?.postId?.location?.lat !== undefined &&
+          bid?.postId?.location?.lng !== undefined && (
+            <PaymentSummary
+              bidAmount={Number(bid.bidAmount)}
+              chefLocation={{
+                lat: bid.chefProfile.location.lat,
+                lng: bid.chefProfile.location.lng,
+              }}
+              eventLocation={{
+                lat: bid.postId.location.lat,
+                lng: bid.postId.location.lng,
+              }}
+            />
+          )}
+
 {!bidIdFromQuery && (
   <div>
     <label htmlFor="bidId" className="block mb-1 font-medium">

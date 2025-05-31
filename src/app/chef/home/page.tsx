@@ -20,7 +20,7 @@ import { AppDispatch, RootState } from '@/redux/store';
 import AuthWrapper from '@/components/AuthWrapper';
 
 import SearchBar from '@/components/shared/SearchBar';
-import Pagination from '@/components/admin/userManagement/pagination';
+import Pagination from '@/components/admin/userManagement/Pagination';
 
 
 const ChefPosts = () => {

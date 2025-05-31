@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { RootState } from "@/redux/store"; 
-import Pagination from "@/components/admin/userManagement/pagination";
+import { AppDispatch, RootState } from "@/redux/store"; 
+import Pagination from "@/components/admin/userManagement/Pagination";
 import SearchAndFilter from "@/components/admin/userManagement/SearchandFilter";
 import UserTableRow from "@/components/admin/userManagement/UserTableRow";
 import UserOverviewCard from "@/components/admin/userManagement/userOverview";
@@ -13,7 +13,7 @@ import { fetchDeliveryBoy, toggleBlockStatus } from "@/features/adminSlice";
 const USERS_PER_PAGE = 5;
 
 function UserManagement() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { deliveryBoy, loading, error } = useSelector(
     (state: RootState) => state.admin

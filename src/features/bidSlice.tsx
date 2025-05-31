@@ -3,13 +3,23 @@ import axiosInstance from '@/api/axiosInstance';
 
 export interface Bid {
   _id: string;
-  postId: string;
+  postId: {
+    _id:string;
+    eventName: string;
+    date: string;
+    time: string;
+    district: string;
+    menu: string;
+    quantity: number;
+    description: string;
+  };
   chefId: string;
   bidAmount: number;
-  description:string;
-  status: 'pending' | 'accepted' | 'rejected';
+  description: string;
+  status: 'pending' | 'accepted' | 'rejected'|'completed';
   createdAt: string;
 }
+
 
 interface BidState {
   bids: Bid[];
@@ -26,14 +36,23 @@ const initialState: BidState = {
 
 export const createBid = createAsyncThunk(
   'chefBids/createBid',
-  async (data: { postId: string; bidAmount: number,description:string }, thunkAPI) => {
+  async (data: { postId: string; bidAmount: number, description: string }, thunkAPI) => {
     try {
-      console.log('Sending bid data:', data);
+      console.log('Sending bid:', data);
       const res = await axiosInstance.post('/bids/createBid', data);
+      console.log('Response:', res.data);
       return res.data;
     } catch (err: any) {
-      console.error('Bid creation error:', err.response);
-      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to place bid');
+      console.error('Full error response:', {
+        status: err.response?.status,
+        data: err.response?.data,
+        headers: err.response?.headers
+      });
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || 
+        err.message || 
+        'Failed to place bid'
+      );
     }
   }
 );

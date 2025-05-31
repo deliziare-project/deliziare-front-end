@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { checkCurrentUser } from '@/features/authSlice';
 import axiosInstance from '@/api/axiosInstance';
+import { AppDispatch } from '@/redux/store';
 
 export default function AuthInitializer() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const init = async () => {

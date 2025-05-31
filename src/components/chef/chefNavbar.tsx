@@ -5,7 +5,7 @@ import { Bell, CircleUser, CirclePlus } from 'lucide-react';
 import Link from 'next/link';
 import socket from '@/socket';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { AppDispatch, RootState } from '@/redux/store';
 import {
   addNotification,
   fetchNotifications,
@@ -13,7 +13,7 @@ import {
 } from '@/features/notificationSlice';
 
 function ChefNavbar() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

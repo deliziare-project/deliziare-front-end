@@ -2,18 +2,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchHosts, toggleBlockStatus } from "@/features/userManagementSlice";
-import { RootState } from "@/redux/store"; 
+import { AppDispatch, RootState } from "@/redux/store"; 
 import Pagination from "@/components/admin/userManagement/Pagination";
 import SearchAndFilter from "@/components/admin/userManagement/SearchandFilter";
 import UserTableRow from "@/components/admin/userManagement/UserTableRow";
 import UserOverviewCard from "@/components/admin/userManagement/userOverview";
 import UserMobileCard from "@/components/admin/userManagement/UserMobileview";
-import { Skeleton } from "../chefmanagement/page";
+import { Skeleton } from "@/components/loaders/Skeleton";
 
 const USERS_PER_PAGE = 5;
 
 function UserManagement() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { hosts, loading, error } = useSelector(
     (state: RootState) => state.hosts
