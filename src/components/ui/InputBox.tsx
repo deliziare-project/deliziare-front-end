@@ -63,6 +63,7 @@ const InputBox: React.FC<InputBoxProps> = ({
         placeholder={placeholder}
         required={required}
         {...register(name, registerOptions)}
+         min={new Date().toISOString().split('T')[0]}
         className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
       />
     </div>

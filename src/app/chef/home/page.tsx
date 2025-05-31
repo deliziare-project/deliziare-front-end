@@ -26,7 +26,7 @@ import Pagination from '@/components/admin/userManagement/pagination';
 const ChefPosts = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading, error } = useSelector((state: RootState) => state.userPosts);
-// console.log(posts);
+console.log(posts);
 
   const router = useRouter();
 

@@ -111,6 +111,7 @@ const PostModal: React.FC<PostModalProps> = ({
               label="Date"
               name="date"
               register={register}
+              
               type="date"
               required
             />
