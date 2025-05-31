@@ -100,10 +100,16 @@ const router=useRouter()
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded shadow-md">
+     <button
+      onClick={() => router.back()}
+      className="mb-4 text-sm text-[#B8755D]  flex items-center"
+    >
+      ← Back
+    </button>
+
       <h2 className="text-xl font-semibold mb-4">Proceed Payment </h2>
 
       <form onSubmit={handleCreatePayment} className="space-y-4">
-       {/* Only show this if bidId is not passed */}
 
            {bid && (
           <PaymentSummary
@@ -118,21 +124,21 @@ const router=useRouter()
             }}
           />
         )}
-{!bidIdFromQuery && (
-  <div>
-    <label htmlFor="bidId" className="block mb-1 font-medium">
-      Bid ID
-    </label>
-    <input
-      type="text"
-      id="bidId"
-      value={bidId}
-      onChange={(e) => setBidId(e.target.value)}
-      className="w-full border px-3 py-2 rounded"
-      required
-    />
-  </div>
-)}
+        {!bidIdFromQuery && (
+          <div>
+            <label htmlFor="bidId" className="block mb-1 font-medium">
+              Bid ID
+            </label>
+            <input
+              type="text"
+              id="bidId"
+              value={bidId}
+              onChange={(e) => setBidId(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+              required
+            />
+          </div>
+        )}
 
 
         <div>
@@ -160,12 +166,12 @@ const router=useRouter()
       </form>
 
       {error && <p className="mt-4 text-red-600">Error: {error}</p>}
-
+{/* 
       {success && payment && (
         <p className="mt-4 text-green-600">
           Payment successful! Payment ID: {payment.razorpayPaymentId}
         </p>
-      )}
+      )} */}
     </div>
   );
 };

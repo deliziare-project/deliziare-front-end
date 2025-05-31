@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import { formatRelativeTime } from '../../utils/dateUtils';
 import { Replay } from '@/types/Replay';
 import StatusBadge from './StatusBadge';
 import axiosInstance from '@/api/axiosInstance';
 import { useRouter } from 'next/navigation'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { getAllPay } from '@/features/paymentSlice';
 
 interface ReplayCardProps {
   replay: Replay;
+ 
 }
 
 const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
   const router = useRouter();
-  console.log(replay)
+  const dispatch = useDispatch<AppDispatch>();
+  const { pay } = useSelector((state: RootState) => state.payment);
+
+  useEffect(() => {
+    dispatch(getAllPay());
+  }, [dispatch]);
 
   const handleClickAccept = async (value: Replay) => {
-    router.push(`/payment?bidId=${value._id}`); 
     try {
       await axiosInstance.patch('/bids/accept-bid', {
         bidId: value._id,
@@ -26,7 +34,25 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
       console.error('Error accepting bid:', error);
     }
   };
-console.log('replay of bid',replay)
+
+  const handlePayment = () => {
+    router.push(`/payment?bidId=${replay._id}`); 
+  };
+
+  // console.log('pay',pay)
+  // console.log(pay[0]?.bid);
+  //  console.log(pay[0]?.bid?.bidId);
+  //   console.log(replay._id);
+  
+  
+  const bidPayment = pay?.find(
+    (payment) => payment?.bid?.bidId._id == replay._id
+  );
+
+  // console.log(bidPayment)
+  const isPaymentPending = bidPayment?.status === 'pending';
+  const isPaymentSuccess = bidPayment?.status === 'success';
+
   return (
     <div className="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow replay-card">
       <div className="flex justify-between items-start mb-3">
@@ -68,6 +94,22 @@ console.log('replay of bid',replay)
           >
             {replay.status}
           </p>
+        )}
+
+        {isPaymentSuccess ? (
+          <button
+            className="px-4 py-2 mt-2 bg-gray-300 text-gray-700 rounded-lg cursor-not-allowed"
+            disabled
+          >
+            Paid
+          </button>
+        ) : (replay.status === 'accepted' || isPaymentPending) && (
+          <button
+            className="px-4 py-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            onClick={handlePayment}
+          >
+            Pay
+          </button>
         )}
       </div>
     </div>

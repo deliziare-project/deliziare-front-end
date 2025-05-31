@@ -13,17 +13,17 @@ const AdminPaymentList = () => {
   }, [dispatch]);
 
   return (
-    <div className="p-6 bg-white h-screen dark:bg-gray-900 rounded-2xl shadow-lg overflow-x-auto">
-      <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">All Payments</h2>
+    <div className="p-6 bg-white h-screen  rounded-2xl shadow-lg overflow-x-auto">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">All Payments</h2>
 
       {loading ? (
-        <p className="text-gray-700 dark:text-gray-300">Loading payments...</p>
+        <p className="text-gray-700 ">Loading payments...</p>
       ) : error ? (
         <p className="text-red-600 font-medium">Error: {error}</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 shadow-md dark:divide-gray-700 text-sm">
-            <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wider">
+          <table className="min-w-full divide-y divide-gray-200 shadow-md  text-sm">
+            <thead className="bg-gray-100  text-gray-700  uppercase text-xs tracking-wider">
               <tr>
                 <th className="px-6 py-3 text-left">Paid User</th>
                 <th className="px-6 py-3 text-left">Payment Method</th>
@@ -35,15 +35,15 @@ const AdminPaymentList = () => {
                 <th className="px-6 py-3 text-left">Date</th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
+            <tbody className="bg-white divide-y divide-gray-100 ">
               {payments.map((payment) => (
-                <tr key={payment._id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-200">
+                <tr key={payment._id} className="hover:bg-gray-50  transition duration-200">
                   <td className="px-6 py-4 whitespace-nowrap">{payment.user?.name}</td>
                   <td className="px-6 py-4 capitalize">{payment.paymentMethod}</td>
                   <td className="px-6 py-4">₹{payment.bid?.amount}</td>
                   <td className="px-6 py-4">₹{payment.gst}</td>
                   <td className="px-6 py-4">₹{payment.deliveryCharge}</td>
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">₹{payment.total}</td>
+                  <td className="px-6 py-4 font-semibold text-gray-900">₹{payment.total}</td>
                   <td className={`px-6 py-4 font-medium ${payment.razorpayPaymentStatus === 'captured' ? 'text-green-600' : 'text-yellow-500'}`}>
                     {payment.razorpayPaymentStatus}
                   </td>

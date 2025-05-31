@@ -13,7 +13,7 @@ import fileUploadReducer from '../features/fileUploadSlice'
 import adminReducer from '../features/adminSlice'
 import paymentReducer from '../features/paymentSlice'
 import walletReducer from '../features/walletSlice'
-
+import profileReducer from '../features/profileSlice'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -27,6 +27,7 @@ export const store = configureStore({
     admin:adminReducer,
     payment:paymentReducer,
     wallet:walletReducer,
+    profile:profileReducer,
   },
 });
 
