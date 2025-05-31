@@ -129,14 +129,28 @@ const onSubmit = async (data: FormDataType) => {
   console.log('Form data before submission:', data); 
   setIsSubmitting(true);
   try {
+    // Determine if we're completing the profile for the first time
+    const isFirstCompletion = !chef?.userId?.isProfileCompleted;
+    
     const updatedFormData = {
       ...data,
-      isProfileCompleted: true,
+      isProfileCompleted: true, // Always mark as completed when submitting
     };
+    
     console.log('Dispatching update...'); 
     await dispatch(updateChefProfile(updatedFormData)).unwrap();
     console.log('Profile update successful'); 
-    router.push('/chef/home');
+    
+
+    if (isModal) {
+     
+    } else if (isFirstCompletion) {
+     
+      router.push('/chef/profile');
+    } else {
+      
+      router.push('/chef/profile');
+    }
   } catch (error) {
     console.error('Submission failed:', error);
   } finally {
