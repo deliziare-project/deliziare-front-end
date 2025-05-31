@@ -9,6 +9,9 @@ import userPostReducer from '../features/userPostSlice'
 import chefPostReducer from '../features/chefPostSlice'
 import bidReducer from '../features/bidSlice'
 import profileImageReducer from '../features/profileImageSlice'
+
+import notificationReducer from '../features/notificationSlice'
+
 import fileUploadReducer from '../features/fileUploadSlice'
 import adminReducer from '../features/adminSlice'
 import paymentReducer from '../features/paymentSlice'
@@ -23,6 +26,9 @@ export const store = configureStore({
     chefPost:chefPostReducer,
     chefBids:bidReducer,
     profileImage:profileImageReducer,
+
+    notifications:notificationReducer,
+
     Certificate:fileUploadReducer,
     admin:adminReducer,
     payment:paymentReducer,

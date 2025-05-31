@@ -7,11 +7,15 @@ import { RootState, AppDispatch } from '@/redux/store';
 import { fetchLoggedInChef } from '@/features/chefSlice';
 import { fetchChefPosts } from '@/features/chefPostSlice';
 import { UserCircle, FileText } from 'lucide-react';
+import SetPasswordModal from '@/components/user/userProfile/SetPasswordModal';
+import AuthWrapper from '@/components/AuthWrapper';
 
 const ChefProfile: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
+  const [isSetPasswordOpen, setSetPasswordOpen] = useState(false);
+
 
   const { posts, loading: postsLoading, error: postsError } = useSelector((state: RootState) => state.chefPost);
   const { chef, loading, error } = useSelector((state: RootState) => state.chef);
@@ -43,6 +47,7 @@ const ChefProfile: React.FC = () => {
   if (!chef) return <div className="text-center mt-6 text-gray-500">No chef data available.</div>;
 
   return (
+   
     <div className="max-w-5xl mx-auto px-4 py-8 bg-white shadow-xl rounded-2xl">
       {/* Profile Header */}
       <div className="flex items-center justify-between gap-4 mb-8">
@@ -67,11 +72,20 @@ const ChefProfile: React.FC = () => {
           </div>
         </div>
       <button
-          onClick={() => router.push('/chef/complete-profile')}
-          className="text-sm px-4 py-2 bg-[#B8755D] text-white rounded-lg hover:bg-[#a0624f] transition"
-        >
-          Edit Profile
-        </button>
+  onClick={() => router.push('/chef/complete-profile')}
+  className="text-sm px-4 py-2 bg-[#B8755D] text-white rounded-lg hover:bg-[#a0624f] transition"
+>
+  Edit Profile
+</button>
+{currentUser?.isGoogleUser && !currentUser?.hasPassword && (
+  <button
+    onClick={() => setSetPasswordOpen(true)}
+    className="text-sm px-4 py-2 bg-[#4b5563] text-white rounded-lg hover:bg-[#374151] transition"
+  >
+    Set Password
+  </button>
+)}
+
       </div>
 
       <div className="flex space-x-4 border-b border-gray-200 mb-6">
@@ -180,7 +194,10 @@ const ChefProfile: React.FC = () => {
           )}
         </div>
       )}
+      <SetPasswordModal isOpen={isSetPasswordOpen} onClose={() => setSetPasswordOpen(false)} />
+
     </div>
+    
   );
 };
 
