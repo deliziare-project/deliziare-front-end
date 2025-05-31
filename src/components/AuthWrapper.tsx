@@ -90,7 +90,10 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
           router.push('/user/home');
         } else if (currentUser?.role === 'chef') {
           router.push('/chef/home');
+        } else if (currentUser?.role==='deliveryBoy'){
+          router.push('/deliveryBoy/welcome')
         }
+
       }
     }
   }, [ready, loading, isAuthenticated, router, currentUser, pathname, routeType]);
