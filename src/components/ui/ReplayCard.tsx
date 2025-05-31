@@ -105,7 +105,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
           </button>
         ) : (replay.status === 'accepted' || isPaymentPending) && (
           <button
-            className="px-4 py-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="px-4 py-2 mt-2 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-lg transition-colors"
             onClick={handlePayment}
           >
             Pay
