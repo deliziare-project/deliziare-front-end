@@ -10,6 +10,8 @@ import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/loaders/Skeleton';
 
 import Pagination from '@/components/admin/userManagement/pagination';
+import Link from 'next/link';
+
 import AuthWrapper from '@/components/AuthWrapper';
 
 
@@ -128,12 +130,15 @@ const HostViewChefPosts = () => {
           {/* Post Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
+              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">              
+              <Link href={`/profiles/chefProfile/${post.chefId?._id}`} className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 block">
                 <img
                   src={post.chefId?.profileImage || '/default-profile.png'}
                   alt={post.chefId?.name}
                   className="w-full h-full object-cover"
                 />
+              </Link>
+
               </div>
               <div>
                 <p className="font-semibold text-sm">{post.chefId?.username || post.chefId?.name}</p>

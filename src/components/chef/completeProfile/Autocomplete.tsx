@@ -7,9 +7,10 @@ interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   suggestions: string[];
+  error?:string;
 }
 
-const AutocompleteInput = ({ label, name, value, onChange, placeholder, suggestions }: Props) => {
+const AutocompleteInput = ({ label, name, value, onChange, placeholder, suggestions,error }: Props) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const filteredSuggestions = suggestions.filter((item) =>
@@ -26,6 +27,7 @@ const AutocompleteInput = ({ label, name, value, onChange, placeholder, suggesti
         name={name}
         type="text"
         value={value}
+        
         onChange={(e) => {
           onChange(e);
           setShowSuggestions(true);
