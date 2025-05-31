@@ -24,9 +24,7 @@ const Welcome: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#ff4d00] to-[#ff8c66] text-white text-center px-6 py-8">
-      {/* Main heading with refined typography and animation */}
-     
-
+      {/* Image */}
       <div className="relative w-64 h-64 md:w-80 md:h-80 transform hover:scale-105 transition-transform duration-300">
         <Image
           src="/authImages/deliveryWelcome.png"
@@ -36,17 +34,22 @@ const Welcome: React.FC = () => {
           priority
         />
       </div>
-       <h1 className="text-4xl md:text-5xl font-extrabold mb-8 tracking-tight animate-fadeIn drop-shadow-lg font-serif">
+
+      {/* Title */}
+      <h1 className="text-4xl md:text-5xl font-extrabold mb-8 tracking-tight animate-fadeIn drop-shadow-lg font-serif">
         Deliziare
       </h1>
 
-      <div className=" font-medium mb-8 tracking-wider">
-        Loading
-        <span className="dot-1">.</span>
-        <span className="dot-2">.</span>
-        <span className="dot-3">.</span>
-      </div>
+      {/* Loader (only animated dots) */}
+      {!showButton && (
+        <div className="flex gap-1 mb-8">
+          <span className="dot-1 text-3xl">•</span>
+          <span className="dot-2 text-3xl">•</span>
+          <span className="dot-3 text-3xl">•</span>
+        </div>
+      )}
 
+      {/* Button */}
       {showButton && (
         <button
           className="bg-white text-[#ff4d00] px-8 py-2 rounded-sm font-semibold text-lg md:text-xl shadow-xl hover:bg-blue-50 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"

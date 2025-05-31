@@ -1,7 +1,8 @@
 {
   "name": "Delivery App",
   "short_name": "Deliziare",
-  "start_url": "/api/deliveryBoy",
+  "start_url": "/deliveryBoy",
+  "scope": "/deliveryBoy",
   "display": "standalone",
   "theme_color": "#317EFB",
   "background_color": "#ffffff",
@@ -12,8 +13,23 @@
       "type": "image/png"
     },
     {
-      "src": "/icons/android/android-chrome-72-72.png",
+      "src": "/icons/android/android-launchericon-72-72.png",
       "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/android/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/android/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/android/android-launchericon-512-512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
