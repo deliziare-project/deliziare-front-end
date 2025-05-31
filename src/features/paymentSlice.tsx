@@ -29,6 +29,26 @@ interface Payment {
   
 }
 
+interface Pay {
+  _id: string;
+  user: string;
+  bid: {
+    bidId: string;
+    amount: number;
+  };
+  gst: number;
+  deliveryCharge: number;
+  paymentMethod: string;
+  total: number;
+  razorpayOrderId: string;
+  status: string;
+  razorpayPaymentStatus: string;
+  razorpayPaymentId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
 interface RazorpayOrder {
   id: string;
   entity: string;
@@ -57,6 +77,7 @@ interface PaymentState {
   loading: boolean;
   payment: Payment | null;
   payments: Payment[];
+  pay:Pay[];
   razorpayOrder: RazorpayOrder | null;
   success: boolean;
   error: string | null;
@@ -127,11 +148,27 @@ export const fetchAllPayments = createAsyncThunk<
 });
 
 
+export const getAllPay = createAsyncThunk<
+  Pay[], 
+  void,
+  { rejectValue: string }
+>('user/payment/getAll', async (_, thunkAPI) => {
+  try {
+    const response = await axiosInstance.get<Pay[]>('/payment/fetchPayment');
+    return response.data;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || 'Failed to fetch payments'
+    );
+  }
+});
+
 const initialState: PaymentState = {
   loading: false,
   payment: null,
   razorpayOrder: null,
    payments: [],
+   pay:[],
   success: false,
   error: null,
 };
@@ -189,7 +226,11 @@ const paymentSlice = createSlice({
 .addCase(fetchAllPayments.rejected, (state, action) => {
   state.loading = false;
   state.error = action.payload || 'Failed to fetch payments';
-});
+})
+.addCase(getAllPay.fulfilled, (state, action: PayloadAction<Pay[]>) => {
+  state.loading = false;
+  state.pay = action.payload;
+})
 
   },
 });

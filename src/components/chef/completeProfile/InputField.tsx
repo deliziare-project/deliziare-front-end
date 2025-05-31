@@ -1,40 +1,57 @@
-type Props = {
+'use client'
+
+import { useState } from "react";
+
+interface InputFieldProps {
   label: string;
   name: string;
-  value: string | number;
+  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
+  type: string;
   placeholder?: string;
-  error?:string;
-};
+  error?: string; 
+  max?: number;
+}
 
-export default function InputField({
-  label,
-  name,
-  value,
-  onChange,
-  type = "text",
-  placeholder,
-  error,
-}: Props) {
+const InputField = ({ label, name, value, onChange, type, placeholder,max, error }: InputFieldProps) => {
+    const [localError, setLocalError] = useState('');
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+
+    if (type === 'number' && max !== undefined) {
+      const numValue = parseInt(val);
+      if (!isNaN(numValue) && numValue > max) {
+        setLocalError(`Value cannot exceed ${max}`);
+        return; 
+        setLocalError('');
+      }
+    }
+
+    onChange(e);
+  };
+
   return (
-    <div>
-      <label htmlFor={name} className="block text-lg font-semibold mb-2 text-gray-700">
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         {label}
       </label>
       <input
         type={type}
-        id={name}
         name={name}
         value={value}
-        onChange={onChange}
-        className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 text-gray-500"
+        onChange={handleInput}
         placeholder={placeholder}
-        min={type === "number" ? 0 : undefined}
-        max={type === "number" ? 50 : undefined}
+        max={max}
+        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 ${
+          error ||localError ? 'border-red-500' : 'border-gray-300'
+        }`}
       />
-       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
+       {(error || localError) && (
+        <p className="mt-1 text-sm text-red-500">{error || localError}</p>
+      )}
     </div>
   );
-}
+};
+
+export default InputField;

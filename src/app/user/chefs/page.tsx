@@ -4,10 +4,19 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@/api/axiosInstance';
 import { Bookmark, MoreHorizontal} from 'lucide-react';
 
+// import Pagination from '@/components/admin/userManagement/pagination';
+import toast from 'react-hot-toast';
+
 import { Skeleton } from '@/components/loaders/Skeleton';
 
+
 import Pagination from '@/components/admin/userManagement/Pagination';
+
+import Link from 'next/link';
+
+
 import AuthWrapper from '@/components/AuthWrapper';
+
 
 
 interface ChefPost {
@@ -64,13 +73,33 @@ const HostViewChefPosts = () => {
     }).format(date);
   };
 
-  const toggleSavePost = (postId: string) => {
-    setSavedPosts(prev =>
-      prev.includes(postId)
-        ? prev.filter(id => id !== postId)
-        : [...prev, postId]
-    );
-  };
+  // const toggleSavePost = (postId: string) => {
+  //   setSavedPosts(prev =>
+  //     prev.includes(postId)
+  //       ? prev.filter(id => id !== postId)
+  //       : [...prev, postId]
+  //   );
+  // };
+  const toggleSavePost = async (postId: string) => {
+  try {
+    const alreadySaved = savedPosts.includes(postId);
+    console.log('alread',alreadySaved);
+    
+
+    // If already saved, optionally implement an unsave endpoint
+    if (!alreadySaved) {
+      await axiosInstance.post(`userclient/savedPost/${postId}`); // Call the backend to save the post
+      setSavedPosts(prev => [...prev, postId]);
+    } else {
+      // Optionally add un-save logic here
+      setSavedPosts(prev => prev.filter(id => id !== postId));
+      toast.success('Saved to favorites!');
+    }
+  } catch (error) {
+    console.error('Failed to save post:', error);
+  }
+};
+
 
 
   if (loading) 
@@ -104,12 +133,15 @@ const HostViewChefPosts = () => {
           {/* Post Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
+              <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">              
+              <Link href={`/profiles/chefProfile/${post.chefId?._id}`} className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 block">
                 <img
                   src={post.chefId?.profileImage || '/default-profile.png'}
                   alt={post.chefId?.name}
                   className="w-full h-full object-cover"
                 />
+              </Link>
+
               </div>
               <div>
                 <p className="font-semibold text-sm">{post.chefId?.username || post.chefId?.name}</p>

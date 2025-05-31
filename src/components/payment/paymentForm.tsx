@@ -101,10 +101,16 @@ const router=useRouter()
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded shadow-md">
+     <button
+      onClick={() => router.back()}
+      className="mb-4 text-sm text-[#B8755D]  flex items-center"
+    >
+      ← Back
+    </button>
+
       <h2 className="text-xl font-semibold mb-4">Proceed Payment </h2>
 
       <form onSubmit={handleCreatePayment} className="space-y-4">
-       {/* Only show this if bidId is not passed */}
 
        {bid?.chefProfile?.location?.lat !== undefined &&
           bid?.chefProfile?.location?.lng !== undefined &&
@@ -165,12 +171,12 @@ const router=useRouter()
       </form>
 
       {error && <p className="mt-4 text-red-600">Error: {error}</p>}
-
+{/* 
       {success && payment && (
         <p className="mt-4 text-green-600">
           Payment successful! Payment ID: {payment.razorpayPaymentId}
         </p>
-      )}
+      )} */}
     </div>
   );
 };
