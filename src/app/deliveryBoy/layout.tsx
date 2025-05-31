@@ -4,7 +4,7 @@ import React from "react";
 export const metadata: Metadata = {
   title: "Delivery App",
   manifest: "/manifest.json",
-  themeColor: "#317EFB",
+  themeColor: "#ff4d00",
   icons: [
     {
       rel: "icon",
