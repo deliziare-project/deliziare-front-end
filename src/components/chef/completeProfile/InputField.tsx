@@ -1,40 +1,32 @@
-type Props = {
+interface InputFieldProps {
   label: string;
   name: string;
-  value: string | number;
+  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
+  type: string;
   placeholder?: string;
-  error?:string;
-};
+  error?: string;  // Add this line
+}
 
-export default function InputField({
-  label,
-  name,
-  value,
-  onChange,
-  type = "text",
-  placeholder,
-  error,
-}: Props) {
+const InputField = ({ label, name, value, onChange, type, placeholder, error }: InputFieldProps) => {
   return (
-    <div>
-      <label htmlFor={name} className="block text-lg font-semibold mb-2 text-gray-700">
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         {label}
       </label>
       <input
         type={type}
-        id={name}
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 text-gray-500"
         placeholder={placeholder}
-        min={type === "number" ? 0 : undefined}
-        max={type === "number" ? 50 : undefined}
+        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 ${
+          error ? 'border-red-500' : 'border-gray-300'
+        }`}
       />
-       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
-}
+};
+
+export default InputField;
