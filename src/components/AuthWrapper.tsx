@@ -63,42 +63,36 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
       if (!isAuthenticated) {
         router.push('/login');
       } else {
-       
-        if (currentUser?.role === 'admin' && pathname !== '/admin/dashboard') {
+        // Handle authenticated user redirection
+        if (currentUser?.role === 'admin' && !pathname.startsWith('/admin')) {
           router.push('/admin/dashboard');
         } else if (currentUser?.role === 'host' && !pathname.startsWith('/user')) {
           router.push('/user/home');
         } else if (currentUser?.role === 'chef') {
           if (!currentUser?.isProfileCompleted && pathname !== '/chef/complete-profile') {
             router.push('/chef/complete-profile');
-          } else if (
-            currentUser.isProfileCompleted &&
-            !pathname.startsWith('/chef')
-          ) {
+          } else if (currentUser.isProfileCompleted && !pathname.startsWith('/chef')) {
             router.push('/chef/home');
           }
+        } else if (currentUser?.role === 'deliveryBoy' && !pathname.startsWith('/deliveryBoy')) {
+          router.push('/deliveryBoy/welcome'); 
         }
-        
-        
       }
     } else if (routeType === 'public') {
       if (isAuthenticated) {
-        
+        // Redirect authenticated users away from public routes
         if (currentUser?.role === 'admin') {
           router.push('/admin/dashboard');
         } else if (currentUser?.role === 'host') {
           router.push('/user/home');
         } else if (currentUser?.role === 'chef') {
           router.push('/chef/home');
-        } else if (currentUser?.role==='deliveryBoy'){
-          router.push('/deliveryBoy/welcome')
+        } else if (currentUser?.role === 'deliveryBoy') {
+          router.push('/deliveryBoy/home');  // Added delivery boy redirection
         }
-
       }
     }
   }, [ready, loading, isAuthenticated, router, currentUser, pathname, routeType]);
-  
-
  
   if (!ready || loading) {
     return (
