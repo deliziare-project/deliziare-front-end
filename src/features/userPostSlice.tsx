@@ -13,6 +13,7 @@ export interface Post {
   description: string;
   userId: { name: string; email: string ,profileImage:string};
   createdAt:string;
+  status:string;
 }
 
 interface ChefDistrictPostsState {

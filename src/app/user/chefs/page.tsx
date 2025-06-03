@@ -9,8 +9,11 @@ import toast from 'react-hot-toast';
 
 import { Skeleton } from '@/components/loaders/Skeleton';
 
-import Pagination from '@/components/admin/userManagement/pagination';
+
+import Pagination from '@/components/admin/userManagement/Pagination';
+
 import Link from 'next/link';
+
 
 import AuthWrapper from '@/components/AuthWrapper';
 

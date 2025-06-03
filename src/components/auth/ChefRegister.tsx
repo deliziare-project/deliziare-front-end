@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import * as yup from 'yup';
+import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import {
@@ -21,19 +21,21 @@ import Link from 'next/link';
 import { useDebounce } from '@/hooks/useDebounce';
 import { GoogleLogin } from '@react-oauth/google';
 import axiosInstance from '@/api/axiosInstance';
+// import { InferType } from 'yup';
+// type ChefFormInputs = InferType<typeof chefRegisterSchema>;
 
 const ChefLocationPicker = dynamic(() => import('@/components/LocationPicker'), {
   ssr: false,
 })
 
-type ChefFormInputs = {
+export type ChefFormInputs = {
   name: string;
   email: string;
   phone: string;
   password: string;
-  experience: string;
-  specializations: string[];
-  certificate: File | null;
+  experience: number;
+  specializations: { value: string }[];
+  certificate?: File | null  ;
 };
 
 const ChefRegister = () => {
@@ -58,7 +60,7 @@ const ChefRegister = () => {
       email: '',
       phone: '',
       password: '',
-      experience: '',
+      experience: 0,
       specializations: [],
       certificate: null,
     },
@@ -72,6 +74,7 @@ const ChefRegister = () => {
     control,
     name: 'specializations',
   });
+  
 
   const specializations = watch('specializations') || [];
 
@@ -109,8 +112,8 @@ const ChefRegister = () => {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('password', data.password);
-    formData.append('experience', data.experience);
-    formData.append('specialize', JSON.stringify(data.specializations));
+    formData.append('experience', data.experience.toString());
+    formData.append('specialize', JSON.stringify(data.specializations.map((s) => s.value)));
     formData.append('locationLat', location.lat.toString());
     formData.append('locationLng', location.lng.toString());
     formData.append('role', 'chef');
@@ -153,7 +156,7 @@ const ChefRegister = () => {
           <label className="block text-gray-700 font-medium mb-1">{label}</label>
           <input
             type={type}
-            {...register(name as keyof ChefFormInputs)}
+            {...register(name as keyof ChefFormInputs, name === 'experience' ? { valueAsNumber: true } : undefined)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
           {errors[name as keyof ChefFormInputs] && (
@@ -164,6 +167,7 @@ const ChefRegister = () => {
           )}
         </div>
       ))}
+
 
 
         {/* Specializations */}
@@ -181,11 +185,12 @@ const ChefRegister = () => {
               type="button"
               onClick={() => {
                 const trimmed = specialize.trim();
-                if (trimmed && !specializations.includes(trimmed)) {
-                  append(trimmed);
+                if (trimmed && !specializations.some((s) => s.value === trimmed)) {
+                  append({ value: trimmed });
                   setSpecialize('');
                 }
               }}
+              
               className="p-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg"
             >
               <Plus className="w-5 h-5" />
@@ -195,13 +200,17 @@ const ChefRegister = () => {
           {fields.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {fields.map((item, idx) => (
-                <span key={item.id} className="flex items-center gap-1 bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">
-                  {specializations[idx]}
+                <span
+                  key={item.id}
+                  className="flex items-center gap-1 bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm"
+                >
+                  {item.value}
                   <button type="button" onClick={() => remove(idx)} className="hover:text-red-600">
                     <X className="w-4 h-4" />
                   </button>
                 </span>
               ))}
+
             </div>
           )}
           {errors.specializations && <p className="text-sm text-red-600 mt-1">{errors.specializations.message}</p>}

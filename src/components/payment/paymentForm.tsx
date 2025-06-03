@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Replay } from '@/types/Replay';
@@ -111,34 +112,38 @@ const router=useRouter()
 
       <form onSubmit={handleCreatePayment} className="space-y-4">
 
-           {bid && (
-          <PaymentSummary
-            bidAmount={Number(bid.bidAmount)}
-            chefLocation={{
-              lat: bid.chefProfile?.location?.lat,
-              lng: bid.chefProfile?.location?.lng,
-            }}
-            eventLocation={{
-              lat: bid.postId?.location?.lat,
-              lng: bid.postId?.location?.lng,
-            }}
-          />
-        )}
-        {!bidIdFromQuery && (
-          <div>
-            <label htmlFor="bidId" className="block mb-1 font-medium">
-              Bid ID
-            </label>
-            <input
-              type="text"
-              id="bidId"
-              value={bidId}
-              onChange={(e) => setBidId(e.target.value)}
-              className="w-full border px-3 py-2 rounded"
-              required
+       {bid?.chefProfile?.location?.lat !== undefined &&
+          bid?.chefProfile?.location?.lng !== undefined &&
+          bid?.postId?.location?.lat !== undefined &&
+          bid?.postId?.location?.lng !== undefined && (
+            <PaymentSummary
+              bidAmount={Number(bid.bidAmount)}
+              chefLocation={{
+                lat: bid.chefProfile.location.lat,
+                lng: bid.chefProfile.location.lng,
+              }}
+              eventLocation={{
+                lat: bid.postId.location.lat,
+                lng: bid.postId.location.lng,
+              }}
             />
-          </div>
-        )}
+          )}
+
+{!bidIdFromQuery && (
+  <div>
+    <label htmlFor="bidId" className="block mb-1 font-medium">
+      Bid ID
+    </label>
+    <input
+      type="text"
+      id="bidId"
+      value={bidId}
+      onChange={(e) => setBidId(e.target.value)}
+      className="w-full border px-3 py-2 rounded"
+      required
+    />
+  </div>
+)}
 
 
         <div>

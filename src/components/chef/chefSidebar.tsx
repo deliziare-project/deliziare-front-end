@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 
 
 import socket from '@/socket';
+import { AppDispatch } from '@/redux/store';
 
 
 const sidebarItems = [
@@ -31,7 +32,7 @@ const sidebarItems = [
 ];
 
 function ChefSidebar() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   // const handleLogout = () => {

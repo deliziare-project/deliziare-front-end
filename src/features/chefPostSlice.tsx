@@ -8,6 +8,7 @@ interface Post {
   images: { url: string; altText?: string }[];
   tags: string[];
   createdAt: string;
+  status:string;
 }
 
 interface PostState {

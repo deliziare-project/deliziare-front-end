@@ -5,10 +5,11 @@ import ProfileHeader from './ProfileHeader';
 import ProfileDetails from './ProfileDetails';
 import ProfileActions from './ProfileActions';
 import { checkCurrentUser } from '@/features/authSlice';
+import { AppDispatch } from '@/redux/store';
 
 function UserProfile() {
   const { currentUser } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   
   useEffect(() => {
     if (!currentUser) {

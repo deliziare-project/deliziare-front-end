@@ -10,7 +10,7 @@ import ChefDetailModal from './components/ChefDetailModal';
 import CertificateModal from './components/CertificateModal';
 import EmptyState from './components/EmptyState';
 import axiosInstance from '@/api/axiosInstance';
-import Pagination from '../userManagement/pagination';
+import Pagination from '../userManagement/Pagination';
 
 const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
   const [chefs, setChefs] = useState<Chef[]>(initialChefs);
