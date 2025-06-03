@@ -11,9 +11,8 @@ const TABS = ['pending', 'accepted', 'rejected'];
 const ChefBids = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { bids=[], loading, error } = useSelector((state: RootState) => state.chefBids);
-
- 
-    const { pay } = useSelector((state: RootState) => state.payment);
+   const { pay } = useSelector((state: RootState) => state.payment);
+   console.log('amount',pay)
   
     useEffect(() => {
       dispatch(getAllPay());
@@ -21,7 +20,7 @@ const ChefBids = () => {
 
   const [activeTab, setActiveTab] = useState('pending');
 
-  console.log(bids)
+  // console.log(bids)
 
   useEffect(() => {
     dispatch(getChefBids());
@@ -31,7 +30,15 @@ const filteredBids = Array.isArray(bids)
   ? bids.filter((bid) => bid.status === activeTab)
   : [];
 
-  console.log('filtered by tabs',filteredBids)
+ const paymentMap = new Map(
+  (pay || []).map((payment) => [
+    payment.bid?.bidId?._id, 
+    payment,
+  ])
+);
+
+
+console.log(paymentMap)
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
@@ -124,6 +131,20 @@ const filteredBids = Array.isArray(bids)
                     {bid?.status}
                   </span>
                 </div>
+
+                 {bid.status === 'accepted' && (
+                  <div>
+                    <span className="text-gray-600">Payment:</span>{' '}
+                    <span
+                      className={`font-semibold ${
+                        paymentMap.has(bid._id) ? 'text-green-600' : 'text-red-500'
+                      }`}
+                    >
+                      {paymentMap.has(bid._id) ? 'Paid' : 'Not Paid'}
+                    </span>
+                  </div>
+                )}
+
                 <div className="text-gray-500 text-sm">
                   {/* {new Date(bid?.createdAt).toLocaleString()} */}
                    {new Date(bid?.createdAt).toLocaleDateString('en-GB', {

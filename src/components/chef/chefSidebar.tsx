@@ -62,8 +62,8 @@ const handleLogout = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const toggleSidebar = () => setIsMinimized(!isMinimized);
   return (
-      <div className="w-64 h-screen bg-white text-gray-900 p-6 flex flex-col gap-4 shadow-xl">
-      {/* Logo */}
+     <div className="w-64   bg-white text-gray-900 p-6 flex flex-col gap-4 shadow-xl">
+
       <div className="flex justify-center mb-6">
         <img
           src="/logo/delizaire-logo.png"

@@ -129,12 +129,12 @@ const onSubmit = async (data: FormDataType) => {
   console.log('Form data before submission:', data); 
   setIsSubmitting(true);
   try {
-    // Determine if we're completing the profile for the first time
+   
     const isFirstCompletion = !chef?.userId?.isProfileCompleted;
     
     const updatedFormData = {
       ...data,
-      isProfileCompleted: true, // Always mark as completed when submitting
+      isProfileCompleted: true,
     };
     
     console.log('Dispatching update...'); 

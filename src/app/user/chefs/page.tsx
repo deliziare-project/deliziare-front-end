@@ -122,7 +122,7 @@ const HostViewChefPosts = () => {
 
   return (
     <AuthWrapper routeType='private'>
-  <div className="min-h-screen flex flex-col max-w-6xl mx-auto px-4 py-8">
+  <div className=" flex flex-col max-w-6xl mx-auto px-4 py-8">
     {/* Post Grid */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
       {currentPosts.map((post) => (
