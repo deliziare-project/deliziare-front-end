@@ -33,7 +33,9 @@ interface Pay {
   _id: string;
   user: string;
   bid: {
-    bidId: string;
+    bidId: {
+      _id:string
+    },
     amount: number;
   };
   gst: number;

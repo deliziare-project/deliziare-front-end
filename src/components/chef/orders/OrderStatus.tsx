@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { getChefBids, updateBidStatus } from '@/features/bidSlice';
+import { getAllPay } from '@/features/paymentSlice';
 
 const OrderStatus = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { bids, loading, error } = useSelector((state: RootState) => state.chefBids);
+  const { pay } = useSelector((state: RootState) => state.payment);
 
   const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
   const [filterDate, setFilterDate] = useState('');
@@ -16,10 +18,32 @@ const OrderStatus = () => {
     dispatch(getChefBids());
   }, [dispatch]);
 
+  
+      useEffect(() => {
+        dispatch(getAllPay());
+      }, [dispatch]);
+  
+
+  const paymentMap = new Map(
+  (pay || []).map((payment) => [
+    payment.bid?.bidId?._id, 
+    payment,
+  ])
+);
+
+
+console.log('Payments:', pay);
+console.log('Payment Map Keys:', [...paymentMap.keys()]);
+
   const pendingBids = bids.filter(
-    (bid) => bid.status === 'accepted' &&
-      (!filterDate || new Date(bid.postId.date).toISOString().split('T')[0] === filterDate)
-  );
+  (bid) =>
+    bid.status === 'accepted' &&
+    paymentMap.has(bid._id) &&
+    (!filterDate ||
+      new Date(bid.postId.date).toISOString().split('T')[0] === filterDate)
+);
+
+console.log('accepted and paid ',pendingBids)
 
   const completedBids = bids.filter((bid) => bid.status === 'completed');
 
@@ -74,7 +98,7 @@ const OrderStatus = () => {
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Menu:</span>{' '}
-                  {bid.postId.menu}
+                  {bid.postId.menu.join(', ')}
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Quantity:</span>{' '}
@@ -106,20 +130,7 @@ const OrderStatus = () => {
             </div>
           ))
         )}
-      </div>
-          {/* Date Filter (Only for Pending) */}
-      {/* {activeTab === 'pending' && (
-        <div className="mb-6 flex justify-end">
-          <input
-            type="date"
-            value={filterDate}
-            onChange={(e) => setFilterDate(e.target.value)}
-            className="border border-gray-300 px-3 py-2 rounded-md"
-          />
-        </div>
-      )} */}
-
-      
+      </div>   
     </div>
   );
 };

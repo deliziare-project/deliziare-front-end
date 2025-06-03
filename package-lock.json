@@ -1979,7 +1979,6 @@
         "arm64"
       ],
       "license": "MIT",
-
       "optional": true,
       "os": [
         "darwin"
@@ -1995,9 +1994,7 @@
       "cpu": [
         "x64"
       ],
-
       "license": "MIT",
-
       "optional": true,
       "os": [
         "darwin"
@@ -2013,9 +2010,7 @@
       "cpu": [
         "arm64"
       ],
-
       "license": "MIT",
-
       "optional": true,
       "os": [
         "linux"
@@ -2031,9 +2026,7 @@
       "cpu": [
         "arm64"
       ],
-
       "license": "MIT",
-
       "optional": true,
       "os": [
         "linux"
@@ -2049,9 +2042,7 @@
       "cpu": [
         "x64"
       ],
-
       "license": "MIT",
-
       "optional": true,
       "os": [
         "linux"
@@ -2067,9 +2058,7 @@
       "cpu": [
         "x64"
       ],
-
       "license": "MIT",
-
       "optional": true,
       "os": [
         "linux"
@@ -2085,9 +2074,7 @@
       "cpu": [
         "arm64"
       ],
-
       "license": "MIT",
-
       "optional": true,
       "os": [
         "win32"
@@ -8333,7 +8320,6 @@
         "toposort": "^2.0.2",
         "type-fest": "^2.19.0"
       }
-
     },
     "node_modules/yup/node_modules/type-fest": {
       "version": "2.19.0",
@@ -8346,7 +8332,6 @@
       "funding": {
         "url": "https://github.com/sponsors/sindresorhus"
       }
-
     }
   }
 }

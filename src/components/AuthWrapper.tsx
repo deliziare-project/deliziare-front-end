@@ -78,7 +78,8 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
           router.push('/deliveryBoy/welcome'); 
         }
       }
-    } else if (routeType === 'public') {
+    } 
+    else if (routeType === 'public') {
       if (isAuthenticated) {
         // Redirect authenticated users away from public routes
         if (currentUser?.role === 'admin') {
