@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect } from "react";
 
 const toRad = (value: number) => (value * Math.PI) / 180;

@@ -28,8 +28,11 @@ const ChefProfile: React.FC = () => {
       } catch (error) {
         console.error('Error loading chef profile:', error);
         // Redirect to complete profile if no chef profile exists
-        if (error.message.includes('not found') && currentUser?.role === 'chef') {
-          router.push('/chef/complete-profile');
+        if (error instanceof Error) {
+          // Redirect to complete profile if no chef profile exists
+          if (error.message.includes('not found') && currentUser?.role === 'chef') {
+            router.push('/chef/complete-profile');
+          }
         }
       }
     };

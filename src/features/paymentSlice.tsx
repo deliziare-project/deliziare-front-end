@@ -2,9 +2,16 @@ import axiosInstance from '@/api/axiosInstance';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+
+interface User {
+  _id: string;
+  name: string;
+  
+}
+
 interface Payment {
   _id: string;
-  user: string;
+  user?: User | null; 
   bid: {
     bidId: string;
     amount: number;
@@ -19,6 +26,7 @@ interface Payment {
   razorpayPaymentId?: string;
   createdAt: string;
   updatedAt: string;
+  
 }
 
 interface Pay {

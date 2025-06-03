@@ -20,6 +20,7 @@ interface RegisterState {
     isGoogleUser: boolean;
     hasPassword: boolean; 
     profileImage?: string;
+    isProfileCompleted?:boolean;
   } | null;
   isAuthenticated: boolean;
   tempToken?: string; 
@@ -148,7 +149,7 @@ export const verifyOtp = createAsyncThunk<VerifiedUser, OtpPayload, { rejectValu
         formData.append('phone', payload.phone?.toString() || '');
         formData.append('role', 'chef');
         formData.append('experience', payload.experience || '');
-        formData.append('specializations', JSON.stringify(payload.specializations || []));
+        formData.append('specializations', JSON.stringify(payload.specialize|| []));
         if (payload.location) {
           formData.append('locationLat', payload.location.lat.toString());
           formData.append('locationLng', payload.location.lng.toString());
@@ -418,6 +419,13 @@ export const resendOtp = createAsyncThunk(
   }
 );
 
+function getErrorMessage(payload: unknown, defaultMsg = 'Not authenticated'): string {
+  if (typeof payload === 'string') return payload;
+  if (payload && typeof payload === 'object' && 'message' in payload) {
+    return (payload as { message: string }).message;
+  }
+  return defaultMsg;
+}
 
 const registerSlice = createSlice({
   name: 'auth',
@@ -481,7 +489,7 @@ const registerSlice = createSlice({
       state.loading = false;
       state.currentUser = null;
       state.isAuthenticated = false;
-      state.error = action.payload || 'Not authenticated';
+      state.error = getErrorMessage(action.payload, 'Not authenticated');
     })    
       .addCase(registerHost.pending, (state) => {
         state.loading = true;
@@ -598,9 +606,15 @@ const registerSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.currentUser = {
-          ...action.payload.user,
-          hasPassword: action.payload.user.hasPassword 
+          _id: action.payload.user._id,
+          name: action.payload.user.name,
+          email: action.payload.user.email,
+          hasPassword: false,          
+          role: 'host',               
+          isGoogleUser: false,         
+          
         };
+        
         state.isAuthenticated = true;
         state.registrationData = action.payload; 
         state.accessToken = action.payload.token;

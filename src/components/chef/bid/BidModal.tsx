@@ -18,18 +18,20 @@ const BidModal: React.FC<BidModalProps> = ({ postId, onClose, onBidSent }) => {
 
   const handleSubmit = async () => {
     if (!bidAmount) return alert('Enter a valid amount');
-
+  
     try {
-      await dispatch(createBid({ postId, bidAmount: Number(bidAmount), description })).unwrap();
+      await dispatch(createBid({ 
+        postId, 
+        bidAmount: Number(bidAmount), 
+        description 
+      })).unwrap();
       
-     
       onBidSent();
-
-    
       onClose();
-    } catch (error) {
-      alert('Failed to send bid. Please try again.');
-      console.error(error);
+    } catch (error: any) {
+      // Show the actual error message from server
+      alert(error.payload || error.message || 'Failed to send bid');
+      console.error('Full error:', error);
     }
   };
 

@@ -7,6 +7,8 @@ import { editPostIs } from '@/services/postService';
 import ReplayModal from '@/components/ui/ReplayModal';
 import socket from '@/socket';
 import { markBidsAsRead } from '@/features/bidSlice';
+import { Replay } from '@/types/Replay';
+import { NotificationType } from '@/features/notificationSlice';
 
 interface PostCardProps {
   post: Post;
@@ -16,7 +18,8 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReplayModalOpen, setIsReplayModalOpen] = useState(false);
   const [editedPost, setEditedPost] = useState(post);
-  const [replays, setReplays] = useState([]);
+  const [replays, setReplays] = useState<Replay[]>([]);
+
   const [showBidCount, setShowBidCount] = useState(true);
   const [hasUnreadBids, setHasUnreadBids] = useState(
     () => replays.some(bid => !bid.readByUser)
@@ -28,51 +31,53 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
 
   const fetchReplays = async () => {
-    try {
-      const res = await axiosInstance.get('/bids/get-post-replay', {
-        params: { postId: editedPost._id },
-      });
-      console.log('Fetched replays:', res.data);
-      const replayData = res.data;
-      setReplays(replayData);
-  
-      const hasUnread = replayData.some(bid => !bid.readByUser);
-      setHasUnreadBids(hasUnread);
-      if (hasUnread) setShowBidCount(true);
-  
-      setRefreshKey(prev => prev + 1); // force rerender
-    } catch (error) {
-      console.error('Error fetching replays:', error);
-    }
-  };
+  try {
+    const res = await axiosInstance.get('/bids/get-post-replay', {
+      params: { postId: editedPost._id },
+    });
+    console.log('Fetched replays:', res.data);
+    const replayData: Replay[] = res.data; // <-- add type here
+    setReplays(replayData);
+
+    const hasUnread = replayData.some(bid => !bid.readByUser);
+    setHasUnreadBids(hasUnread);
+    if (hasUnread) setShowBidCount(true);
+
+    setRefreshKey(prev => prev + 1); // force rerender
+  } catch (error) {
+    console.error('Error fetching replays:', error);
+  }
+};
+
   
 
   useEffect(() => {
     fetchReplays();
   }, [editedPost._id]);
 
+  interface NotificationPayload {
+    type: string;
+    postId: string;
+  }
+  
+
   useEffect(() => {
-    const handleNewNotification = ({ type, postId }) => {
-      if (type === 'new_bid' && postId === editedPost._id) {
-        // Optimistically show bid count immediately
+    const handleNewNotification = (notification: NotificationType) => {
+      // Example check: if the notification.message contains 'new_bid'
+      // or if you have a way to identify bid notifications in message or another field
+      if (notification.message === 'new_bid' && notification.postId === editedPost._id) {
         setShowBidCount(true);
         setHasUnreadBids(true);
   
-        // Optionally: add a subtle animation
-        const postElement = document.getElementById(`post-${postId}`);
+        const postElement = document.getElementById(`post-${notification.postId}`);
         if (postElement) {
           postElement.classList.add('animate-pulse');
           setTimeout(() => {
             postElement.classList.remove('animate-pulse');
-          }, 500); // remove after animation duration
+          }, 500);
         }
   
-        // Re-fetch replays for accurate data
         fetchReplays();
-  
-        // Optional: play a sound
-        // const audio = new Audio('/sounds/new-bid.mp3');
-        // audio.play();
       }
     };
   
@@ -81,7 +86,8 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     return () => {
       socket?.off('new_notification', handleNewNotification);
     };
-  }, [editedPost._id, socket]);
+  }, [editedPost._id]);
+  
   
   
   

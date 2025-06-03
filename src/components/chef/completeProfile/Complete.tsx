@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -19,40 +18,49 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-// Updated validation schema
-const profileSchema = yup.object().shape({
-  name: yup
-    .string()
-    .required('Name is required')
-    .min(3, 'Name must be at least 3 characters')
-    .max(50, 'Name must not exceed 50 characters'),
+const profileSchema = yup.object({
+  name: yup.string().required('Name is required').min(3).max(50),
+
   bio: yup
     .string()
+    .nullable()
     .notRequired()
+    .defined()
     .max(500, 'Bio must not exceed 500 characters')
     .test(
       'min-length-if-exists',
       'Bio must be at least 10 characters if provided',
       (value) => !value || value.length >= 10
     ),
+
   specialize: yup
     .array()
-    .of(yup.string().min(2, 'Speciality must be at least 2 characters'))
-    .min(1, 'Add at least one speciality')
-    .max(10, 'Maximum 10 specialities allowed'),
+    .of(yup.string().min(2))
+    .notRequired()
+    .defined(),
+
   qualifications: yup
     .array()
-    .of(yup.string().min(2, 'Qualification must be at least 2 characters'))
-    .min(0, 'Add at least one qualification')
-    .max(10, 'Maximum 10 qualifications allowed'),
+    .of(yup.string().min(2))
+    .notRequired()
+    .defined(),
+
   experience: yup
     .string()
-    .typeError('Experience must be a number')
-    .min(1,'experience must be positive')
-    .max(50, 'Experience must not exceed 50 years'),
+    .nullable()
+    .notRequired()
+    .defined()
+    .min(1)
+    .max(50),
+
   district: yup.string().required('District is required'),
-  isProfileCompleted: yup.boolean()
-});
+
+  isProfileCompleted: yup.boolean().nullable().notRequired().defined(),
+}).required();
+
+
+
+
 
 type FormDataType = yup.InferType<typeof profileSchema>;
 
@@ -95,10 +103,10 @@ const {
   mode: 'onChange',
   defaultValues: {
     name: '',
-    bio: '',
+    bio: null,
     specialize: [],
     qualifications: [],
-    experience: '',
+    experience: null,
     district: '',
     isProfileCompleted: false,
   }
@@ -125,38 +133,52 @@ const {
       }
     }
   }, [chef, setValue, dispatch]);
-const onSubmit = async (data: FormDataType) => {
-  console.log('Form data before submission:', data); 
-  setIsSubmitting(true);
-  try {
-   
-    const isFirstCompletion = !chef?.userId?.isProfileCompleted;
-    
-    const updatedFormData = {
-      ...data,
-      isProfileCompleted: true,
-    };
-    
-    console.log('Dispatching update...'); 
-    await dispatch(updateChefProfile(updatedFormData)).unwrap();
-    console.log('Profile update successful'); 
-    
 
-    if (isModal) {
-     
-    } else if (isFirstCompletion) {
-     
-      router.push('/chef/profile');
-    } else {
+
+  const onSubmit = async (data: FormDataType) => {
+    console.log('Form data before submission:', data); 
+    setIsSubmitting(true);
+    try {
+      if (!chef?.userId) {
+        throw new Error("User ID not found");
+      }
+  
+      const isFirstCompletion = !chef.userId.isProfileCompleted;
+  
+      const updatedFormData = {
+        ...data,
+        bio: data.bio ?? '',
+        experience: data.experience ?? '', // <-- Add this line to convert null to empty string
+        isProfileCompleted: true,
+        userId: chef.userId,
+        certificate: certificateUrl || chef.certificate || '',
+        specialize: (data.specialize ?? []).filter((v): v is string => !!v),
+        qualifications: (data.qualifications ?? []).filter((v): v is string => !!v),
+      };
       
-      router.push('/chef/profile');
+      
+
+      console.log('Dispatching update...'); 
+      await dispatch(updateChefProfile(updatedFormData)).unwrap();
+      console.log('Profile update successful'); 
+  
+      if (isModal) {
+        // handle modal logic
+      } else if (isFirstCompletion) {
+        router.push('/chef/profile');
+      } else {
+        router.push('/chef/profile');
+      }
+    } catch (error) {
+      console.error('Submission failed:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error('Submission failed:', error);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
+  
+  
+  
+  
 
    
   const handleCertificateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,11 +193,23 @@ const [isSkipping, setIsSkipping] = useState(false);
 const handleSkip = async () => {
   setIsSkipping(true);
   try {
+    if (!chef?.userId) {
+      throw new Error("User ID not found");
+    }
     const formValues = getValues();
+
     await dispatch(updateChefProfile({
       ...formValues,
-      isProfileCompleted: true
+      bio: formValues.bio ?? '',
+      experience: formValues.experience ?? '',
+      isProfileCompleted: true,
+      userId: chef.userId,
+      certificate: certificateUrl || chef.certificate || '',
+      specialize: (formValues.specialize ?? []).filter((v): v is string => !!v),
+      qualifications: (formValues.qualifications ?? []).filter((v): v is string => !!v),
     }));
+    
+
     router.push('/chef/home');
   } catch (error) {
     console.log('skipping error', error);
@@ -183,6 +217,8 @@ const handleSkip = async () => {
     setIsSkipping(false);
   }
 };
+
+
 
 
   const { uploading, imageUrl, error } = useSelector((state: RootState) => state.profileImage);
@@ -201,7 +237,7 @@ const handleSkip = async () => {
   }, [chef, isModal]);
 
   const finalCertificateUrl = certificateUrl || chef?.certificate;
-
+  const profileImageSrc = imageUrl || chef?.userId?.profileImage || '';
   return (
     <div className="max-w-2xl mx-auto p-7 bg-gray-50 shadow-xl rounded-xl">
       <h1 className="text-2xl md:text-2xl font-bold text-center bg-red-200 text-[#B8755D] mb-12 tracking-tight animate-fadeInDown bg-clip-text">
@@ -217,11 +253,13 @@ const handleSkip = async () => {
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           />
 
-          {imageUrl || chef?.userId?.profileImage ? (
+
+
+          {profileImageSrc ? (
             <Image
               width={100}
               height={100}
-              src={imageUrl || chef?.userId?.profileImage}
+              src={profileImageSrc}
               alt="Profile"
               className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 shadow-md transition-transform duration-300 group-hover:scale-105"
             />
@@ -230,6 +268,7 @@ const handleSkip = async () => {
               {chef?.userId?.name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
           )}
+
 
           <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0">
             <p className="text-white text-sm"><CameraIcon /></p>
@@ -266,11 +305,13 @@ const handleSkip = async () => {
             <TextAreaField
               label="Bio (Optional)"
               {...field}
+              value={field.value ?? ''}  
               error={errors.bio?.message}
               placeholder="Tell us about yourself (min 10 characters if provided)"
             />
           )}
         />
+
 
         <Controller
           name="specialize"
@@ -278,7 +319,7 @@ const handleSkip = async () => {
           render={({ field :{value,onChange}}) => (
             <TagInput
               label="Specialities"
-              tags={value||[]}
+              tags={(value || []).filter((v): v is string => !!v)}
               setTags={onChange}
               error={errors.specialize?.message}
               placeholder="e.g., Italian, Pastry"
@@ -288,13 +329,13 @@ const handleSkip = async () => {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Controller
+        <Controller
             name="qualifications"
             control={control}
             render={({ field }) => (
               <TagInput
                 label="Qualifications"
-                tags={field.value}
+                tags={(field.value ?? []).filter((v): v is string => !!v)}
                 setTags={(tags) => field.onChange(tags)}
                 error={errors.qualifications?.message}
                 placeholder="e.g., Culinary Arts Diploma"
@@ -304,6 +345,7 @@ const handleSkip = async () => {
             )}
           />
 
+
           <Controller
             name="experience"
             control={control}
@@ -311,15 +353,16 @@ const handleSkip = async () => {
               <InputField
                 label="Years of Experience"
                 {...field}
+                value={field.value ?? ''}  
                 error={errors.experience?.message}
                 type="number"
                 placeholder="e.g., 5"
                 onChange={(e) => field.onChange(e.target.value)}
-                
                 max={50}
               />
             )}
           />
+
         </div>
 
         <Controller

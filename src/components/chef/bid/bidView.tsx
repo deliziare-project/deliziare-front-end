@@ -100,7 +100,10 @@ console.log(paymentMap)
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Menu:</span>{' '}
-                  {bid?.postId?.menu.join(', ')}
+                  {Array.isArray(bid?.postId?.menu)
+                  ? bid.postId.menu.join(', ')
+                  : bid?.postId?.menu}
+
                 </div>
                 <div>
                   <span className="font-medium text-[#B8755D]">Quantity:</span>{' '}

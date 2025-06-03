@@ -8,6 +8,7 @@ import { logoutUser } from '@/features/authSlice';
 import { useRouter } from 'next/navigation';
 import EditProfileModal from './EditProfileModal';
 import SetPasswordModal from './SetPasswordModal';
+import { RootState } from '@/redux/store';
 
 const ProfileActions = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -16,7 +17,7 @@ const ProfileActions = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isSetPasswordModalOpen, setSetPasswordModalOpen] = useState(false);
 
-  const user = useAppSelector((state) => state.auth.currentUser);
+  const user = useAppSelector((state: RootState) => state.auth.currentUser);
 
 
   const handleLogout = async () => {
