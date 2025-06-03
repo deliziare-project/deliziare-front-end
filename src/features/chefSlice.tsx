@@ -9,15 +9,26 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 //   linkedin?: string;
 // }
 
-interface ChefProfile {
-  userId:string;
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  isProfileCompleted:boolean;
+  profileImage:string;
+  
+}
+
+export interface ChefProfile {
+  userId:User;
   bio: string;
   specialize: string[];
   qualifications: string[];
   experience: string;
   district:string;
-  //socialLinks?: SocialLinks;
   isProfileCompleted?: boolean;
+  certificate:string;
+  
 }
 
 interface ChefState {
@@ -87,7 +98,7 @@ const chefSlice = createSlice({
       .addCase(fetchLoggedInChef.fulfilled, (state, action) => {
         state.loading = false;
         state.chef = action.payload;
-        console.log('Fetched chef:', action.payload);
+        // console.log('Fetched chef:', action.payload);
       })
       .addCase(fetchLoggedInChef.rejected, (state, action) => {
         state.loading = false;

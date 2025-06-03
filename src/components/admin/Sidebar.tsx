@@ -2,7 +2,7 @@
 import { useDispatch } from 'react-redux';
 
 import { logoutUser } from '@/features/authSlice';
-import { LayoutDashboard, Users, ChefHat, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, ChefHat, LogOut, Truck, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; 
 import { AppDispatch } from '@/redux/store';
@@ -38,6 +38,18 @@ export default function Sidebar() {
         <Link href="/admin/chefmanagement">
           <div title="Chefs" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
             <ChefHat size={24} />
+          </div>
+        </Link>
+
+        <Link href="/admin/deliverymanagement">
+          <div title="Delivery Boy" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
+            <Truck size={24} />
+          </div>
+        </Link>
+
+         <Link href="/admin/paymentManagement">
+          <div title="Transactions" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
+            <CreditCard size={24} />
           </div>
         </Link>
       </nav>

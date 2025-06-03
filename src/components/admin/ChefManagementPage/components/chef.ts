@@ -10,6 +10,7 @@ export type Chef = {
   specialisations: string[];
   certificate: string;
   userId:number;
+  profileImage:string;
 };
 
 export type FilterStatus = 'all' | 'blocked' | 'unblocked';

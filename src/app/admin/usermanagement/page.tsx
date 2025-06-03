@@ -2,17 +2,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchHosts, toggleBlockStatus } from "@/features/userManagementSlice";
-import { RootState } from "@/redux/store"; 
-import Pagination from "@/components/admin/userManagement/pagination";
+import { AppDispatch, RootState } from "@/redux/store"; 
+import Pagination from "@/components/admin/userManagement/Pagination";
 import SearchAndFilter from "@/components/admin/userManagement/SearchandFilter";
 import UserTableRow from "@/components/admin/userManagement/UserTableRow";
 import UserOverviewCard from "@/components/admin/userManagement/userOverview";
 import UserMobileCard from "@/components/admin/userManagement/UserMobileview";
+import { Skeleton } from "@/components/loaders/Skeleton";
 
 const USERS_PER_PAGE = 5;
 
 function UserManagement() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { hosts, loading, error } = useSelector(
     (state: RootState) => state.hosts
@@ -79,21 +80,24 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
         onFilterChange={(value) => setStatusFilter(value)}
       />
 
-      {loading && <p className="text-[#5a2e0e]">Loading users...</p>}
-      {error && <p className="text-red-600">Error: {error}</p>}
+{loading ? (
+  <Skeleton />
+) : (
+  <>
+    {error && <p className="text-red-600">Error: {error}</p>}
 
-      <div className="hidden md:block">
-        <table className="w-full table-fixed bg-white shadow rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-[#f0d9c6] text-[#5a2e0e]">
-              <th className="w-[10%] p-4 text-left">Profile</th>
-              <th className="w-[20%] p-4 text-left">Name</th>
-              <th className="w-[30%] p-4 text-left">Email</th>
-              <th className="w-[20%] p-4 text-left">Status</th>
-              <th className="w-[20%] p-4 text-left">Action</th>
-            </tr>
-          </thead>
-          <tbody>
+    <div className="hidden md:block">
+      <table className="w-full table-fixed bg-white shadow rounded-lg overflow-hidden">
+        <thead>
+          <tr className="bg-[#f0d9c6] text-[#5a2e0e]">
+            <th className="w-[10%] p-4 text-left">Profile</th>
+            <th className="w-[20%] p-4 text-left">Name</th>
+            <th className="w-[30%] p-4 text-left">Email</th>
+            <th className="w-[20%] p-4 text-left">Status</th>
+            <th className="w-[20%] p-4 text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
           {paginatedUsers.map((user) => (
             <UserTableRow
               key={user._id}
@@ -104,21 +108,23 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
             />
           ))}
         </tbody>
+      </table>
+    </div>
 
-        </table>
-      </div>
+    <div className="block md:hidden space-y-4">
+      {paginatedUsers.map((user) => (
+        <UserMobileCard key={user._id} user={user} />
+      ))}
+    </div>
 
-        <div className="block md:hidden space-y-4">
-          {paginatedUsers.map((user) => (
-            <UserMobileCard key={user._id} user={user} />
-          ))}
-        </div>
-    
-       <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
-        />
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => setCurrentPage(page)}
+    />
+  </>
+)}
+
 
       
     </div>

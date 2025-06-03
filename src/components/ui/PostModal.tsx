@@ -2,8 +2,11 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputBox from "./InputBox";
-import ChefLocationPicker from "../LocationPicker";
+import dynamic from "next/dynamic";
 
+const ChefLocationPicker = dynamic(() => import('@/components/LocationPicker'), {
+  ssr: false,
+});
 interface FormInputData {
   eventName: string;
   locationLat: number;
@@ -108,6 +111,7 @@ const PostModal: React.FC<PostModalProps> = ({
               label="Date"
               name="date"
               register={register}
+              
               type="date"
               required
             />

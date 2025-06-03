@@ -8,6 +8,7 @@ interface Post {
   images: { url: string; altText?: string }[];
   tags: string[];
   createdAt: string;
+  status:string;
 }
 
 interface PostState {
@@ -30,7 +31,7 @@ const initialState: PostState = {
   postsError: null,
 };
 
-// ✅ Create a new post
+
 export const createChefPost = createAsyncThunk(
   'chefPost/create',
   async (formData: FormData, { rejectWithValue }) => {
@@ -47,12 +48,12 @@ export const createChefPost = createAsyncThunk(
   }
 );
 
-// ✅ Fetch logged-in chef's posts
+
 export const fetchChefPosts = createAsyncThunk(
   'chefPost/fetchMyPosts',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/chefs/my-posts');
+      const response = await axiosInstance.get('/chefs/getPost');
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || error.message);

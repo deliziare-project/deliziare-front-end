@@ -91,6 +91,20 @@ const PasswordResetOtp: React.FC = () => {
     inputRefs.current[0]?.focus();
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('Text').trim();
+  
+    if (!/^\d{6}$/.test(pastedData)) return;
+  
+    const digits = pastedData.split('');
+    setOtpDigits(digits);
+  
+    // Focus the last field to indicate completion
+    inputRefs.current[5]?.focus();
+  };
+  
+
   // Format seconds as mm:ss
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -115,16 +129,18 @@ const PasswordResetOtp: React.FC = () => {
           <div className="flex justify-center gap-3">
             {otpDigits.map((digit, index) => (
               <input
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                type="text"
-                inputMode="numeric"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                className="w-12 h-12 text-center text-lg border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#B87333] focus:border-[#B87333] text-black"
-              />
+              key={index}
+              ref={el => { inputRefs.current[index] = el; }}
+              type="text"
+              inputMode="numeric"
+              maxLength={1}
+              value={digit}
+              onChange={(e) => handleChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              onPaste={(e) => handlePaste(e)}
+              className="w-12 h-12 text-center text-lg border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#B87333] focus:border-[#B87333] text-black"
+            />
+            
             ))}
           </div>
 

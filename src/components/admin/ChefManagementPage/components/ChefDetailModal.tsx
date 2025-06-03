@@ -9,7 +9,7 @@ interface ChefDetailModalProps {
 
 const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps) => {
   console.log(chef.specialisations)
-  const sp=JSON.parse(chef.specialisations)
+  const sp=chef.specialisations
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
       <div 

@@ -12,10 +12,21 @@ interface RegisterState {
   emailCheckError: string | null;
   otpVerified: boolean;
   registrationData?: any;
-  currentUser: any;
+  currentUser: {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    isGoogleUser: boolean;
+    hasPassword: boolean; 
+    profileImage?: string;
+    isProfileCompleted?:boolean;
+  } | null;
   isAuthenticated: boolean;
   tempToken?: string; 
   resetPasswordSuccess: boolean; 
+  accessToken?:string;
+
 }
 
 const initialState: RegisterState = {
@@ -31,6 +42,7 @@ const initialState: RegisterState = {
   isAuthenticated: false,
   tempToken: undefined,
   resetPasswordSuccess: false,
+  accessToken: undefined,
 };
 
 export const checkEmailExists = createAsyncThunk(
@@ -137,7 +149,7 @@ export const verifyOtp = createAsyncThunk<VerifiedUser, OtpPayload, { rejectValu
         formData.append('phone', payload.phone?.toString() || '');
         formData.append('role', 'chef');
         formData.append('experience', payload.experience || '');
-        formData.append('specializations', JSON.stringify(payload.specializations || []));
+        formData.append('specializations', JSON.stringify(payload.specialize|| []));
         if (payload.location) {
           formData.append('locationLat', payload.location.lat.toString());
           formData.append('locationLng', payload.location.lng.toString());
@@ -249,26 +261,43 @@ interface LoginPayload {
     async (loginData, thunkAPI) => {
       try {
         const response = await axiosInstance.post('/users/login', loginData);
-        console.log("res",response.data)
         return response.data;
       } catch (err: any) {
-        console.log("error",err);
-        
-        return thunkAPI.rejectWithValue(err.response?.data?.error || 'Login failed');
+        const message =
+          err.response?.status === 401
+            ? err.response?.data?.message || 'Invalid email or password'
+            : err.response?.data?.message || 'Login failed';
+        return thunkAPI.rejectWithValue(message);
       }
     }
   );
-  export const checkCurrentUser = createAsyncThunk(
+  
+  
+//   export const checkCurrentUser = createAsyncThunk(
+//   'auth/checkCurrentUser',
+//   async (_, thunkAPI) => {
+//     try {
+//       const response = await axiosInstance.get('/users/me',{withCredentials:true});
+//       return response.data;
+//     } catch (err: any) {
+//       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
+//     }
+//   }
+// );
+
+export const checkCurrentUser = createAsyncThunk(
   'auth/checkCurrentUser',
   async (_, thunkAPI) => {
     try {
-      const response = await axiosInstance.get('/users/me',{withCredentials:true});
+      const response = await axiosInstance.get('/users/me');
       return response.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
+    } catch (error) {
+      // Don't throw unless absolutely sure token refresh failed
+      return thunkAPI.rejectWithValue('Session invalid');
     }
   }
 );
+
 export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
   async (_, thunkAPI) => {
@@ -390,6 +419,13 @@ export const resendOtp = createAsyncThunk(
   }
 );
 
+function getErrorMessage(payload: unknown, defaultMsg = 'Not authenticated'): string {
+  if (typeof payload === 'string') return payload;
+  if (payload && typeof payload === 'object' && 'message' in payload) {
+    return (payload as { message: string }).message;
+  }
+  return defaultMsg;
+}
 
 const registerSlice = createSlice({
   name: 'auth',
@@ -410,9 +446,13 @@ const registerSlice = createSlice({
       state.currentUser = action.payload;
       state.isAuthenticated = !!action.payload;
     },
-    logoutUser: (state) => {
+    logout: (state) => {
       state.currentUser = null;
       state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
+      
+      state.success = false;
     },
     clearTempToken: (state) => {
       state.tempToken = undefined;
@@ -432,19 +472,25 @@ const registerSlice = createSlice({
   extraReducers: (builder) => {
     builder
        
-        .addCase(checkCurrentUser.pending, (state) => {
-        state.loading = true;
-        })
-        .addCase(checkCurrentUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentUser = action.payload;
-        state.isAuthenticated = true;
-        })
-       .addCase(checkCurrentUser.rejected, (state) => {
-        state.loading = false;
-        state.currentUser = null;
-        state.isAuthenticated = false;
-        })
+    .addCase(checkCurrentUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(checkCurrentUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentUser = {
+        ...action.payload,
+        hasPassword: action.payload.hasPassword
+      };
+      state.isAuthenticated = true;
+      state.error = null;
+    })
+    .addCase(checkCurrentUser.rejected, (state, action) => {
+      state.loading = false;
+      state.currentUser = null;
+      state.isAuthenticated = false;
+      state.error = getErrorMessage(action.payload, 'Not authenticated');
+    })    
       .addCase(registerHost.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -559,14 +605,25 @@ const registerSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.currentUser = action.payload.user;
+        state.currentUser = {
+          _id: action.payload.user._id,
+          name: action.payload.user.name,
+          email: action.payload.user.email,
+          hasPassword: false,          
+          role: 'host',               
+          isGoogleUser: false,         
+          
+        };
+        
         state.isAuthenticated = true;
         state.registrationData = action.payload; 
+        state.accessToken = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
         state.success = false;
+        state.accessToken = undefined;
       })
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
@@ -645,7 +702,7 @@ export const {
   resetRegisterState,
   setRegistrationData,
   setCurrentUser,
-  
+  logout,
   clearTempToken,
   setUser,
   clearUser

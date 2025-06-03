@@ -10,6 +10,7 @@ const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRotated, setIsRotated] = useState(false);
   const [chefs, setChefs] = useState<Chef[]>([]);
+  const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handlePostSubmit = async (data: any) => {
@@ -29,21 +30,19 @@ const Home: React.FC = () => {
     setIsRotated(!isRotated);
   };
 
-  //================================================chef==============================
-
-  useEffect(() => {
-    const fetchChefs = async () => {
-      try {
-        const response = await axiosInstance.get<Chef[]>(
-          "/userclient/getChefs"
-        );
-        setChefs(response.data);
-      } catch (error) {
-        console.error("Failed to load chefs", error);
-      }
-    };
-    fetchChefs();
-  });
+  // useEffect(() => {
+  //   const fetchChefs = async () => {
+  //     try {
+  //       const response = await axiosInstance.get<Chef[]>(
+  //         "/userclient/getChefs"
+  //       );
+  //       setChefs(response.data);
+  //     } catch (error) {
+  //       console.error("Failed to load chefs", error);
+  //     }
+  //   };
+  //   fetchChefs();
+  // });
 
   const scrollLeft = () => {
     if (scrollRef.current) {
