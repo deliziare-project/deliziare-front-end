@@ -77,11 +77,14 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
           ) {
             router.push('/chef/home');
           }
+
         }
         
         
+        
       }
-    } else if (routeType === 'public') {
+    } 
+    else if (routeType === 'public') {
       if (isAuthenticated) {
         
         if (currentUser?.role === 'admin') {

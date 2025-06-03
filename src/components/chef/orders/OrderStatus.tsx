@@ -130,20 +130,7 @@ console.log('accepted and paid ',pendingBids)
             </div>
           ))
         )}
-      </div>
-          {/* Date Filter (Only for Pending) */}
-      {/* {activeTab === 'pending' && (
-        <div className="mb-6 flex justify-end">
-          <input
-            type="date"
-            value={filterDate}
-            onChange={(e) => setFilterDate(e.target.value)}
-            className="border border-gray-300 px-3 py-2 rounded-md"
-          />
-        </div>
-      )} */}
-
-      
+      </div>   
     </div>
   );
 };

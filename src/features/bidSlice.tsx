@@ -9,7 +9,7 @@ export interface Bid {
     date: string;
     time: string;
     district: string;
-    menu: string;
+    menu: string[];
     quantity: number;
     description: string;
   };
