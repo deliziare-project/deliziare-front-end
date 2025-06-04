@@ -49,10 +49,11 @@ console.log(posts);
     router.push(`/chef/postDetails/${postId}`);
   };
 
+  const reversedPosts=[...filteredPosts].reverse();
    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = reversedPosts.slice(indexOfFirstPost, indexOfLastPost);
 
 
   if (loading) {

@@ -47,7 +47,7 @@ const PostModal: React.FC<PostModalProps> = ({
   const { register, handleSubmit, reset, setValue } = useForm<FormInputData>();
 
   const onSubmit: SubmitHandler<FormInputData> = (data) => {
-    console.log("Submitted");
+    console.log("Submitted",data);
     const postData: PostFormData = {
       eventName: data.eventName,
       location: {

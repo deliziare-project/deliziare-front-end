@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { getChefBids, updateBidStatus } from '@/features/bidSlice';
 import { getAllPay } from '@/features/paymentSlice';
+import { showSuccess } from '@/components/shared/ToastUtilis';
 
 const OrderStatus = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -50,6 +51,7 @@ console.log('accepted and paid ',pendingBids)
   console.log('completed bids',completedBids)
   const handleComplete = (bidId: string) => {
     dispatch(updateBidStatus({ id: bidId, status: 'completed' }));
+    showSuccess('You are succefully Completed the menu')
   };
 
   const displayedBids = activeTab === 'pending' ? pendingBids : completedBids;

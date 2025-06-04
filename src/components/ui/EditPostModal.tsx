@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Post } from '@/types/post';
+import { X } from 'lucide-react';
+import { showSuccess } from '../shared/ToastUtilis';
 
 interface EditPostModalProps {
   post: Post;
@@ -33,108 +35,102 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ post, onClose, onSave }) 
   const handleSave = () => {
     onSave(updatedPost);
     onClose();
+    showSuccess('Post updated successfully')
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Edit Post</h3>
-        <div className="space-y-4">
+    <div className="fixed inset-0 backdrop-blur-sm bg-white/10 flex justify-center items-center z-50 px-4">
+      <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+        <h3 className="text-2xl font-bold text-gray-800 mb-6">Edit Post</h3>
+        <div className="space-y-5">
+          {/* Input Fields */}
+          {[
+            { id: 'eventName', label: 'Event Name', type: 'text' },
+            { id: 'date', label: 'Date', type: 'date' },
+            { id: 'time', label: 'Time', type: 'time' },
+            { id: 'quantity', label: 'Quantity', type: 'number' },
+          ].map(({ id, label, type }) => (
+            <div key={id}>
+              <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+                {label}
+              </label>
+              <input
+                id={id}
+                name={id}
+                type={type}
+                value={(updatedPost as any)[id]}
+                 min={new Date().toISOString().split('T')[0]}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              />
+            </div>
+          ))}
+
+          {/* Menu Items */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Menu</label>
+  <div className="space-y-3">
+    {updatedPost.menu.map((menuItem, index) => (
+      <div key={index} className="flex items-center gap-2">
+        <input
+          type="text"
+          value={menuItem}
+          onChange={(e) => handleMenuChange(index, e.target.value)}
+          placeholder={`Menu Item ${index + 1}`}
+          className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={() => handleRemoveMenu(index)}
+          className="text-gray-500 hover:text-red-500 transition"
+          aria-label="Remove Menu Item"
+        >
+          <X size={18} />
+        </button>
+      </div>
+    ))}
+  </div>
+
+  <button
+    type="button"
+    onClick={handleAddMenu}
+    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-md transition"
+  >
+    + Add Menu Item
+  </button>
+</div>
+
+         
+
+          {/* Description */}
           <div>
-            <label className="block text-gray-700" htmlFor="eventName">Event Name</label>
-            <input
-              id="eventName"
-              name="eventName"
-              type="text"
-              value={updatedPost.eventName}
-              onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700" htmlFor="date">Date</label>
-            <input
-              id="date"
-              name="date"
-              type="date"
-              value={updatedPost.date}
-              onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700" htmlFor="time">Time</label>
-            <input
-              id="time"
-              name="time"
-              type="time"
-              value={updatedPost.time}
-              onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700" htmlFor="quantity">Quantity</label>
-            <input
-              id="quantity"
-              name="quantity"
-              type="number"
-              value={updatedPost.quantity}
-              onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">Menu</label>
-            {updatedPost.menu.map((menuItem, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={menuItem}
-                  onChange={(e) => handleMenuChange(index, e.target.value)}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveMenu(index)}
-                  className="text-red-500"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddMenu}
-              className="text-blue-500 mt-2"
-            >
-              Add Menu Item
-            </button>
-          </div>
-          <div>
-            <label className="block text-gray-700" htmlFor="description">Description</label>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
             <textarea
               id="description"
               name="description"
               value={updatedPost.description}
               onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+              rows={4}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none resize-none"
             />
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end gap-4">
+        {/* Buttons */}
+        <div className="mt-8 flex justify-end gap-4">
           <button
-            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
             onClick={onClose}
+            className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
           >
             Cancel
           </button>
           <button
-            className="bg-orange-500 text-white px-4 py-2 rounded-md"
             onClick={handleSave}
+            className="px-4 py-2 text-sm rounded-md bg-orange-500 text-white hover:bg-orange-600 transition"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </div>

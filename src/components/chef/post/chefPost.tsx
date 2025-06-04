@@ -8,6 +8,7 @@ import { createChefPost, resetPostState } from '@/features/chefPostSlice';
 import toast from 'react-hot-toast';
 import { Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { showSuccess } from '@/components/shared/ToastUtilis';
 
 type FormValues = {
   title: string;
@@ -50,10 +51,11 @@ const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
   useEffect(() => {
     if (success) {
-      toast.success('Post created successfully!');
+      
       reset();
       dispatch(resetPostState());
       router.push('/chef/post')
+      showSuccess('Post created successfully')
     }
   }, [success, dispatch, reset,router]);
 

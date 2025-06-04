@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import PaymentSummary from './paymentSummary';
 import axiosInstance from '@/api/axiosInstance';
+import { showSuccess } from '../shared/ToastUtilis';
 
 declare global {
   interface Window {
@@ -85,6 +86,7 @@ const router=useRouter()
       return;
     }
     dispatch(createPayment({ bidId, paymentMethod }));
+    showSuccess('payment completed successfully')
   };
 
   useEffect(() => {
