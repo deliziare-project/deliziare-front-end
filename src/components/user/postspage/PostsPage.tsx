@@ -7,6 +7,7 @@ import PostsGrid from './PostsGrid';
 import PostModal from '@/components/ui/PostModal';
 import axiosInstance from '@/api/axiosInstance';
 import toast from 'react-hot-toast';
+import { showSuccess } from '@/components/shared/ToastUtilis';
 
 const PostsPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -22,7 +23,7 @@ const PostsPage: React.FC = () => {
       });
       console.log(res.data);
 
-      toast("Post submitted successfully");
+      showSuccess("Post created successfully");
     } catch (error) {
       alert("Error creating post");
     }
@@ -51,9 +52,6 @@ const PostsPage: React.FC = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 mt-4">My Posts</h1>
-          {/* <p className="text-gray-500 mt-1">
-            Browse all available food donation events
-          </p> */}
         </div>
         <PostModal
         isOpen={isModalOpen}

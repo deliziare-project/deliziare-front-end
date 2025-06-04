@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { createBid } from '@/features/bidSlice';
+import { showSuccess } from '@/components/shared/ToastUtilis';
 
 type BidModalProps = {
   postId: string;
@@ -28,6 +29,7 @@ const BidModal: React.FC<BidModalProps> = ({ postId, onClose, onBidSent }) => {
       
       onBidSent();
       onClose();
+      showSuccess('Bid request sented succefully')
     } catch (error: any) {
       // Show the actual error message from server
       alert(error.payload || error.message || 'Failed to send bid');

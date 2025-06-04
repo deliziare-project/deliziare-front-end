@@ -30,6 +30,10 @@ const filteredBids = Array.isArray(bids)
   ? bids.filter((bid) => bid.status === activeTab)
   : [];
 
+  console.log("Before reverse", filteredBids.map(b => b.createdAt));
+console.log("After reverse", [...filteredBids].reverse().map(b => b.createdAt));
+
+
  const paymentMap = new Map(
   (pay || []).map((payment) => [
     payment.bid?.bidId?._id, 

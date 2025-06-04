@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { getAllPay } from '@/features/paymentSlice';
+import Link from 'next/link';
 
 interface ReplayCardProps {
   replay: Replay;
@@ -15,6 +16,8 @@ interface ReplayCardProps {
 }
 
 const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
+
+  // console.log('bids',replay)
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { pay } = useSelector((state: RootState) => state.payment);
@@ -46,7 +49,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
   
   
   const bidPayment = pay?.find(
-    (payment) => payment?.bid?.bidId === replay._id
+    (payment) => payment?.bid?.bidId._id === replay._id
   );
   
 
@@ -57,6 +60,14 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
   return (
     <div className="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow replay-card">
       <div className="flex justify-between items-start mb-3">
+        <Link href={`/profiles/chefProfile/${replay.chefId?._id}`} className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 block">
+                        <img
+                          src={replay.chefId?.profileImage || '/default-profile.png'}
+                          alt={replay.chefId?.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </Link>
+        
         <div>
           <h3 className="font-medium text-gray-900">{replay.chefId?.name}</h3>
         </div>

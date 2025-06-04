@@ -135,6 +135,16 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     setEditedPost(updatedPost);
   };
 
+  const isEditDisabled = () => {
+  const eventDate = new Date(editedPost.date); 
+  const now = new Date();
+  const msInDay = 24 * 60 * 60 * 1000;
+  const dayDiff = Math.floor((eventDate.getTime() - now.getTime()) / msInDay);
+
+  return dayDiff < 2;
+};
+
+
   const handleViewReplay = async (id: any) => {
     try {
       const res = await axiosInstance.get('/bids/get-post-replay', {
@@ -157,19 +167,29 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     <>
       <div
         className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col relative"
-        onClick={handleCardClick}
+      
       >
         {/* Top Section */}
         <div className="bg-white border-b border-gray-100 p-4 flex justify-between">
           <h2 className="text-xl font-bold text-gray-800 truncate">{editedPost.eventName}</h2>
           <Pen
-            className="h-4 w-4 text-gray-400 hover:text-orange-500 cursor-pointer"
-            onClick={handleEditClick}
+            className={`h-5 w-5 transition-colors duration-200 ${
+              isEditDisabled()
+                ? 'text-gray-300 cursor-not-allowed'
+                : 'text-gray-400 hover:text-orange-500 cursor-pointer'
+            }`}
+            onClick={(e) => {
+              if (!isEditDisabled()) handleEditClick(e);
+            }}
+          
           />
+
         </div>
 
         {/* Content */}
-        <div className="p-5 flex-grow flex flex-col justify-between">
+        <div className="p-5 flex-grow flex flex-col justify-between"
+          onClick={handleCardClick}
+        >
           <div className="space-y-4">
             <div className="flex items-start gap-2">
               <MapPin className="h-5 w-5 text-orange-500 mt-0.5" />
