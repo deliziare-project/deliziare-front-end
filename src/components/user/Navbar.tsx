@@ -6,6 +6,7 @@ import NavLink from "../ui/NavLink";
 import Image from "next/image";
 
 import { useRouter } from 'next/navigation';
+import { FaComments } from "react-icons/fa";
 
 // import { useRouter } from 'next/navigation';
 
@@ -46,8 +47,8 @@ const router=useRouter()
             {/* Icons */}
             <div className="flex items-center space-x-4 ml-4">
               <button className="relative p-1 rounded-full text-gray-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
-                <span className="sr-only">View notifications</span>
-                <Bell className="h-6 w-6" />
+                <span className="sr-only">Messages</span>
+                <FaComments className="h-6 w-6" onClick={()=>router.push('/chat')}/>
                 <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-orange-500 ring-2 ring-white"></span>
               </button>
 
@@ -95,9 +96,9 @@ const router=useRouter()
 
           <div className="flex space-x-4 items-center pt-4 border-t border-gray-200 mt-4">
             <button className="relative flex items-center p-2 rounded-md text-gray-600 hover:text-orange-500 hover:bg-orange-50 focus:outline-none transition-colors">
-              <Bell className="h-6 w-6 mr-2" />
+              <FaComments className="h-6 w-6 mr-2" />
               <span>Notifications</span>
-              <span className="ml-2 inline-block h-2 w-2 rounded-full bg-orange-500"></span>
+    
             </button>
           </div>
 

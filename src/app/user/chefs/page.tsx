@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/api/axiosInstance';
-import { Bookmark, MoreHorizontal} from 'lucide-react';
+import { Bookmark, MessageCircle, MoreHorizontal, Reply} from 'lucide-react';
 
 // import Pagination from '@/components/admin/userManagement/pagination';
 import toast from 'react-hot-toast';
@@ -16,6 +16,9 @@ import Link from 'next/link';
 
 
 import AuthWrapper from '@/components/AuthWrapper';
+import { useDispatch, useSelector } from 'react-redux';
+import { openChat, replayChat } from '@/features/chatSlice';
+import { RootState } from '@/redux/store';
 
 
 
@@ -46,6 +49,7 @@ const HostViewChefPosts = () => {
   const [error, setError] = useState('');
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+const dispatch=useDispatch()
   const postsPerPage = 4;
 
   useEffect(() => {
@@ -100,7 +104,11 @@ const HostViewChefPosts = () => {
   }
 };
 
+const handleReplay=(post:any)=>{
+dispatch(replayChat(post))
+dispatch(openChat(post.chefId._id))
 
+}
 
   if (loading) 
     return (
@@ -125,7 +133,7 @@ const HostViewChefPosts = () => {
 
   return (
     <AuthWrapper routeType='private'>
-  <div className="min-h-screen flex flex-col max-w-6xl mx-auto px-4 py-8">
+  <div className=" flex flex-col max-w-6xl mx-auto px-4 py-8">
     {/* Post Grid */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
       {currentPosts.map((post) => (
@@ -188,14 +196,23 @@ const HostViewChefPosts = () => {
           </div>
 
           {/* Post Actions */}
-          <div className="flex justify-end items-center px-4 pb-4">
-            <button onClick={() => toggleSavePost(post._id)}>
-              <Bookmark
-                className={savedPosts.includes(post._id) ? 'text-black fill-current' : 'text-gray-600'}
-                size={20}
-              />
-            </button>
-          </div>
+         {/* Post Actions */}
+<div className="flex justify-between items-center px-4 pb-4">
+  {/* Reply Icon */}
+  <button className="flex items-center text-gray-600 hover:text-black" onClick={()=>handleReplay(post)}>
+    <Reply size={20} className="mr-1" />
+    <span className="text-sm">Reply</span>
+  </button>
+
+  {/* Bookmark Icon */}
+  <button onClick={() => toggleSavePost(post._id)}>
+    <Bookmark
+      className={savedPosts.includes(post._id) ? 'text-black fill-current' : 'text-gray-600'}
+      size={20}
+    />
+  </button>
+</div>
+
         </div>
       ))}
     </div>

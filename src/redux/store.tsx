@@ -11,7 +11,7 @@ import bidReducer from '../features/bidSlice'
 import profileImageReducer from '../features/profileImageSlice'
 
 import notificationReducer from '../features/notificationSlice'
-
+import chatReducer from '@/features/chatSlice'
 import fileUploadReducer from '../features/fileUploadSlice'
 import adminReducer from '../features/adminSlice'
 import paymentReducer from '../features/paymentSlice'
@@ -28,7 +28,7 @@ export const store = configureStore({
     profileImage:profileImageReducer,
 
     notifications:notificationReducer,
-
+   chat: chatReducer,
     Certificate:fileUploadReducer,
     admin:adminReducer,
     payment:paymentReducer,

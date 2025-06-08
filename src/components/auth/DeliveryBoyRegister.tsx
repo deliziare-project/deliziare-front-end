@@ -32,8 +32,8 @@ type DeliveryBoyFormData = {
   phone: string;
   password: string;
   vehicleType: 'two' | 'three' | 'four';
-  IDProof: any; 
-  license: any;
+  IDProof: FileList; 
+  license: FileList;
 };
 
 
@@ -77,10 +77,10 @@ const DeliveryBoyRegister = () => {
       formData.append('vehicleType', data.vehicleType);
       formData.append('role', 'deliveryBoy');
   
-      if (data.IDProof?.length) {
+      if (data.IDProof && data.IDProof[0]) {
         formData.append('IDProof', data.IDProof[0]);
       }
-      if (data.license?.length) {
+      if (data.license && data.license[0]) {
         formData.append('license', data.license[0]);
       }
   

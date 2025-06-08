@@ -74,10 +74,14 @@ const Login: React.FC = () => {
       case 'chef':
         router.push('/chef/home');
         break;
+      case 'deliveryBoy':
+        router.push('/deliveryBoy/welcome');
+        break;
       default:
         router.push('/');
     }
   };
+  
 
   useEffect(() => {
     const user = registrationData?.user;
