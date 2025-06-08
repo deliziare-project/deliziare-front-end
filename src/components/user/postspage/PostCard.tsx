@@ -150,7 +150,6 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       const res = await axiosInstance.get('/bids/get-post-replay', {
         params: { postId: id._id },
       });
-      console.log(res.data);
       setReplays(res.data);
       setIsReplayModalOpen(true);
     } catch (error) {

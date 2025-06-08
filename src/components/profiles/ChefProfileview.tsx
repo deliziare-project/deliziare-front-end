@@ -3,7 +3,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { fetchChefProfileById } from '@/features/profileSlice';
-
+import { FaComments } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import { openChat } from '@/features/chatSlice';
 type Props = {
   chefId: string;
 };
@@ -11,8 +13,10 @@ type Props = {
 const ChefProfileview = ({ chefId }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const { chefProfile, loading, error } = useSelector((state: RootState) => state.profile);
-  // console.log('chf data',chefProfile)
 
+ const handleStartChat = () => {
+    dispatch(openChat(chefId))
+  }
   useEffect(() => {
     if (chefId) dispatch(fetchChefProfileById(chefId));
   }, [chefId, dispatch]);
@@ -46,6 +50,15 @@ const ChefProfileview = ({ chefId }: Props) => {
               ))}
             </div>
           )}
+   <div className="mt-4">
+  <button
+    className="flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-5 rounded-full shadow-md transition duration-200"
+    onClick={handleStartChat}
+  >
+    <FaComments className="text-lg" />
+    Message
+  </button>
+</div>
         </div>
       </div>
 

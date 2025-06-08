@@ -1,0 +1,32 @@
+/* ./css/Chat.css*/
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  cursor: se-resize;
+  background: transparent;
+}
+
+.floating-chat {
+  transition: width 0.3s ease, height 0.3s ease;
+  resize: both;
+  overflow: hidden;
+  min-width: 300px;
+  min-height: 400px;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+/* For the minimized state */
+.minimized-chat {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}

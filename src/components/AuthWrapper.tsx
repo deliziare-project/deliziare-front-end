@@ -64,6 +64,9 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
         router.push('/login');
       } else {
         // Handle authenticated user redirection
+        if(pathname.startsWith('/chat')){
+         return 
+        }
         if (currentUser?.role === 'admin' && !pathname.startsWith('/admin')) {
           router.push('/admin/dashboard');
         } else if (currentUser?.role === 'host' && !pathname.startsWith('/user')) {
