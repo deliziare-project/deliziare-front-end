@@ -17,6 +17,8 @@ import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import ChefLocationPicker from '@/components/LocationPicker';
+import { showSuccess } from '@/components/shared/ToastUtilis';
 
 const profileSchema = yup.object({
   name: yup.string().required('Name is required').min(3).max(50),
@@ -52,6 +54,10 @@ const profileSchema = yup.object({
     .defined()
     .min(1)
     .max(50),
+    location: yup.object({
+    lat: yup.number().required('Latitude is required'),
+    lng: yup.number().required('Longitude is required'),
+  }).required('Location is required'),
 
   district: yup.string().required('District is required'),
 
@@ -89,14 +95,14 @@ const CompleteProfilePage = ({ isModal = false }: { isModal?: boolean }) => {
     dispatch(fetchLoggedInChef());
   }, [dispatch]);
 
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState('');  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 const { 
   control, 
   handleSubmit, 
   setValue, 
-  getValues, // Add this
+  getValues, 
   formState: { errors, isValid } 
 } = useForm<FormDataType>({
   resolver: yupResolver(profileSchema),
@@ -109,6 +115,10 @@ const {
     experience: null,
     district: '',
     isProfileCompleted: false,
+    location: {
+      lat: 0,
+      lng: 0,
+    },
   }
 });
 
@@ -127,7 +137,10 @@ const {
       setValue('experience', chef.experience || '');
       setValue('district', chef.district || '');
       setValue('isProfileCompleted', chef.userId?.isProfileCompleted || false);
-
+       if (chef.location) {
+      setValue('location', chef.location);
+    
+    }
       if (chef?.certificate) {
         dispatch(setCertificateUrl(chef?.certificate));
       }
@@ -148,26 +161,30 @@ const {
       const updatedFormData = {
         ...data,
         bio: data.bio ?? '',
-        experience: data.experience ?? '', // <-- Add this line to convert null to empty string
+        experience: data.experience ?? '', 
         isProfileCompleted: true,
         userId: chef.userId,
         certificate: certificateUrl || chef.certificate || '',
         specialize: (data.specialize ?? []).filter((v): v is string => !!v),
         qualifications: (data.qualifications ?? []).filter((v): v is string => !!v),
+         location: data.location,
       };
       
       
-
+      console.log('updated form data',updatedFormData)
       console.log('Dispatching update...'); 
       await dispatch(updateChefProfile(updatedFormData)).unwrap();
       console.log('Profile update successful'); 
+
   
       if (isModal) {
         // handle modal logic
       } else if (isFirstCompletion) {
         router.push('/chef/profile');
+        showSuccess('Profile updation completed')
       } else {
         router.push('/chef/profile');
+        showSuccess('Profile updation completed')
       }
     } catch (error) {
       console.error('Submission failed:', error);
@@ -207,6 +224,7 @@ const handleSkip = async () => {
       certificate: certificateUrl || chef.certificate || '',
       specialize: (formValues.specialize ?? []).filter((v): v is string => !!v),
       qualifications: (formValues.qualifications ?? []).filter((v): v is string => !!v),
+      
     }));
     
 
@@ -378,6 +396,28 @@ const handleSkip = async () => {
             />
           )}
         />
+
+       
+  <div className="mb-6">
+  <label className="block mb-1 font-semibold text-gray-700">Location</label>
+  <Controller
+    name="location"
+    control={control}
+    render={({ field }) => (
+      <ChefLocationPicker
+        initialLocation={field.value}
+        onLocationChange={(lat, lng) => {
+          field.onChange({ lat, lng });
+        }}
+      />
+    )}
+  />
+  {errors.location && (
+    <p className="text-red-600 text-sm mt-1">
+      {errors.location.lat?.message || errors.location.lng?.message || errors.location.message}
+    </p>
+  )}
+</div>
 
         <div className="mt-4 mb-6">
           <button

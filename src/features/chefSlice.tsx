@@ -28,6 +28,10 @@ export interface ChefProfile {
   district:string;
   isProfileCompleted?: boolean;
   certificate:string;
+  location?: {
+      lat: number;
+      lng: number;
+    };
   
 }
 

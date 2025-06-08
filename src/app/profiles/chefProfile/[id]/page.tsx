@@ -12,7 +12,7 @@ const Page = () => {
   return (
     <div className="bg-white min-h-screen">
       <button
-        onClick={() => router.push('/user/chefs')}
+        onClick={() => router.back()}
         className="mb-4 text-sm text-[#B8755D] cursor-pointer flex items-center"
       >
         ← Back

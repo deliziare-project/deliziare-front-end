@@ -123,7 +123,7 @@ dispatch(openChat(post.chefId._id))
   const totalPages = Math.ceil(posts.length / postsPerPage);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = [...posts].reverse().slice(indexOfFirstPost, indexOfLastPost);
 
 
   if (loading) return <div className="flex justify-center items-center h-screen">Loading posts...</div>;

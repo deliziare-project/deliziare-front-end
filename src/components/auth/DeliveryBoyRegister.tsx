@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { GoogleLogin } from '@react-oauth/google';
 import axiosInstance from '@/api/axiosInstance';
+import ChefLocationPicker from '../LocationPicker';
 
 
 
@@ -53,6 +54,15 @@ const DeliveryBoyRegister = () => {
     license: '',
   });
 
+   const [location, setLocation] = useState<{ lat: number; lng: number }>({ lat: 0, lng: 0 });
+  
+    useEffect(() => {
+       navigator.geolocation.getCurrentPosition(
+         (pos) => setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+         (err) => console.warn('Geolocation error:', err.message)
+       );
+     }, []);
+
   function getErrorMessage(error: any) {
     if (!error) return null;
     if (typeof error === 'string') return error;
@@ -75,6 +85,8 @@ const DeliveryBoyRegister = () => {
       formData.append('phone', data.phone);
       formData.append('password', data.password);
       formData.append('vehicleType', data.vehicleType);
+      formData.append('locationLat', location.lat.toString());
+      formData.append('locationLng', location.lng.toString());
       formData.append('role', 'deliveryBoy');
   
       if (data.IDProof && data.IDProof[0]) {
@@ -174,6 +186,11 @@ const DeliveryBoyRegister = () => {
           {errors.vehicleType && (
             <p className="text-red-500 text-sm mt-1">{errors.vehicleType.message}</p>
           )}
+        </div>
+
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">Pick Location</label>
+          <ChefLocationPicker onLocationChange={(lat, lng) => setLocation({ lat, lng })} />
         </div>
 
         <div>
