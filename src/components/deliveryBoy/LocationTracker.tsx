@@ -1,9 +1,7 @@
-// components/LocationTracker.tsx
 
 'use client';
 
 import { useEffect } from 'react';
-import axios from 'axios';
 import axiosInstance from '@/api/axiosInstance';
 
 const LocationTracker = () => {

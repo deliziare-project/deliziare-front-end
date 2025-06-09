@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axiosInstance from '@/api/axiosInstance'
+import axiosInstance from '@/api/axiosInstance';
 
 export interface Bid {
   _id: string;
@@ -10,13 +10,17 @@ export interface Bid {
     time: string;
     district: string;
     menu: string[];
-    quantity: number;
+     location?: {
+      lat: number;
+      lng: number;
+    };
+   quantity: number;
     description: string;
   };
   chefId: {
     _id:string;
     name:string;
-    
+     
   };
   bidAmount: number;
   description: string;
@@ -28,7 +32,12 @@ export interface Order{
     _id:string,
     status:'pending'|'picked up'|'delivered',
     bidId:Bid,
-}
+
+    chefLocation?: {
+      lat: number;
+      lng: number;
+    };
+  }
 
 interface DeliveryState {
   loading: boolean
