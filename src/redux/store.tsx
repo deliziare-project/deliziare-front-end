@@ -36,6 +36,7 @@ export const store = configureStore({
     wallet:walletReducer,
     profile:profileReducer,
     delivery:deliveryReducer,
+    
   },
 });
 

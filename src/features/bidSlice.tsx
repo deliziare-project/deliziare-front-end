@@ -20,15 +20,36 @@ export interface Bid {
   createdAt: string;
 }
 
+export interface AllBid{
+   _id: string;
+  postId: {
+    _id:string;
+    eventName: string;
+    date: string;
+    time: string;
+    district: string;
+    menu: string[];
+    quantity: number;
+    description: string;
+    deliveryStatus:'pending'|'accepted'|'delivered'
+  };
+  chefId: string;
+  bidAmount: number;
+  description: string;
+  status: 'pending' | 'accepted' | 'rejected'|'completed';
+  createdAt: string;
+}
 
 interface BidState {
   bids: Bid[];
+  allbids:AllBid[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: BidState = {
   bids: [],
+  allbids:[],
   loading: false,
   error: null,
 };
@@ -63,7 +84,7 @@ export const getChefBids = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await axiosInstance.get(`/bids/getBid`);
-      console.log('bid data',res.data)
+      // console.log('bid data',res.data)
       return res.data;
       
     } catch (err: any) {
@@ -79,6 +100,22 @@ export const updateBidStatus = createAsyncThunk(
     return response.data;
   }
 );
+
+
+export const getAllBids = createAsyncThunk(
+  'bids/getAllbids',
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(`/bids/gettingBid`);
+      console.log('all bid data',res.data)
+      return res.data.nearbyPosts;
+      
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch bids');
+    }
+  }
+);
+
 
 export const markBidsAsRead = async (postId: string) => {
   return await axiosInstance.patch('/bids/mark-read', { postId });
@@ -118,7 +155,18 @@ const chefBidSlice = createSlice({
       if (index !== -1) {
         state.bids[index] = updatedBid;
       }
-    });
+    })
+      .addCase(getAllBids.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllBids.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allbids = action.payload;
+      })
+      .addCase(getAllBids.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 

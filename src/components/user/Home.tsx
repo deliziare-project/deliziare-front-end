@@ -285,7 +285,7 @@ const Home: React.FC = () => {
             onClose={() => setIsModalOpen(false)}
             onSubmitPost={handlePostSubmit}
           />
-          <button
+        <button
   className="fixed top-8 right-8 bg-orange-600 text-white w-14 h-14 rounded-full text-3xl shadow-lg hover:bg-orange-700 transition duration-300 z-[60]"
   title="Upload Post"
   onClick={() => setIsModalOpen(true)}
