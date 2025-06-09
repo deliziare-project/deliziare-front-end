@@ -1,9 +1,9 @@
-// useSocket.ts
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { addMessage, setOnlineUsers } from '@/features/chatSlice';
 import { useDispatch } from 'react-redux';
 import axiosInstance from '@/api/axiosInstance';
+import { store } from '@/redux/store';
 
 let socket: Socket;
 
@@ -18,16 +18,13 @@ export const useSocket = (userId: string) => {
 
   const sendMessage = async (message: SendMessageParams) => {
     try {
-      // First save to backend
       const response = await axiosInstance.post('/messages/sendMessage', message);
       const savedMessage = response.data;
-      
-      // Then emit via socket
+
       if (socket) {
         socket.emit('send_message', savedMessage);
       }
-      
-      // Add to local state
+
       dispatch(addMessage(savedMessage));
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -48,13 +45,10 @@ export const useSocket = (userId: string) => {
     });
 
     socket.on('receive_message', (message) => {
-       dispatch((dispatch, getState) => {
-    const { messages } = getState().chat;
-    if (!messages.some(m => m._id === message._id)) {
-      dispatch(addMessage(message));
-    }
-  });
-      // dispatch(addMessage(message));
+      const { messages } = store.getState().chat;
+      if (!messages.some(m => m._id === message._id)) {
+        dispatch(addMessage(message));
+      }
     });
 
     socket.on('online_users', (users: string[]) => {
