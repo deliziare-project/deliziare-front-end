@@ -89,7 +89,7 @@ console.log('accepted and paid ',pendingBids)
                   {bid.postId.eventName}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {bid.postId.date} at {bid.postId.time} • {bid.postId.district}
+                  {bid.postId.date} at {bid.postId.time} 
                 </p>
               </div>
 

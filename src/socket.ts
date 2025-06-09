@@ -1,4 +1,4 @@
-// socket.ts
+
 import { io, Socket } from "socket.io-client";
 
 export interface NotificationType {
@@ -14,11 +14,13 @@ export interface NotificationType {
 
 interface ServerToClientEvents {
   new_notification: (notification: NotificationType) => void;
-  
+  new_bid: (postId: string, bidId:string,message:string) => void;
+  bid_updated: (postId: string, bidCount:string) => void;
 }
 
 interface ClientToServerEvents {
-  register: (userId: string) => void;
+  register: (userId: string) => void
+  locationUpdate: (coords: { lat: number; lng: number }) => void
 }
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
@@ -35,11 +37,12 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
 );
 
 export const connectSocket = (userId: string) => {
-  if (!socket.connected) {
+  if (!socket.connected || socket.disconnected) {
     socket.auth = { userId };
     socket.connect();
   }
 };
+
 
 socket.on("connect", () => {
   console.log("Connected to socket server with ID:", socket.id);

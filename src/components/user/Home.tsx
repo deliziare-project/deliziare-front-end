@@ -286,12 +286,13 @@ const Home: React.FC = () => {
             onSubmitPost={handlePostSubmit}
           />
           <button
-            className="fixed bottom-8 right-8 bg-orange-600 text-white w-14 h-14 rounded-full text-3xl shadow-lg hover:bg-orange-700 transition duration-300"
-            title="Upload Post"
-            onClick={() => setIsModalOpen(true)}
-          >
-            +
-          </button>
+  className="fixed top-8 right-8 bg-orange-600 text-white w-14 h-14 rounded-full text-3xl shadow-lg hover:bg-orange-700 transition duration-300 z-[60]"
+  title="Upload Post"
+  onClick={() => setIsModalOpen(true)}
+>
+  +
+</button>
+
         </>
 
         {/* <section className="py-20 bg-white">
