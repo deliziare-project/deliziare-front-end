@@ -36,19 +36,27 @@ export const useChat = (recipientId: string) => {
 
   const fetchMessages = async () => {
     if (!recipientId || !currentUser?._id) return;
-    
+  
     try {
       dispatch(setLoading(true));
       const response = await axiosInstance.get<Message[]>(
         `/messages/get-message/${currentUser._id}/${recipientId}`
       );
-      dispatch(setMessages(response.data));
+  
+      // Add default isRead = false to each message:
+      const messagesWithIsRead = response.data.map(msg => ({
+        ...msg,
+        isRead: false, // or true if you want a different default
+      }));
+  
+      dispatch(setMessages(messagesWithIsRead));
     } catch (error) {
       console.error('Failed to fetch messages:', error);
     } finally {
       dispatch(setLoading(false));
     }
   };
+  
 
   useEffect(() => {
   dispatch(checkCurrentUser());

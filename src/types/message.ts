@@ -17,5 +17,6 @@ export interface Message {
   receiverId: string;
   content: string;
   timestamp: Date;
-  postId?:PostId
+  postId?:PostId;
+  
 }
