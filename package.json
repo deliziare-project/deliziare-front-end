@@ -33,6 +33,7 @@
     "react-icons": "^5.5.0",
     "react-leaflet": "^5.0.0",
     "react-redux": "^9.2.0",
+    "sharp": "^0.34.2",
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.0",
     "yup": "^1.6.1"
@@ -43,6 +44,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "lightningcss": "^1.30.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
