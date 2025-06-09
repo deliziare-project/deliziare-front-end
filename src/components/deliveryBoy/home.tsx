@@ -52,54 +52,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white px-4 sm:px-6 py-3 border-b border-gray-100 sticky top-0 z-10 shadow-sm">
-        <div className="flex justify-between items-center max-w-6xl mx-auto">
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
-              <Image
-                src="/logo/delizaire-logo.png"
-                alt="Deliziare Logo"
-                width={40}
-                height={40}
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div>
-              <h1 className="text-lg sm:text-xl font-bold text-gray-800">Deliziare</h1>
-              <p className="text-[10px] sm:text-xs text-gray-400 tracking-wider">Delivery Partner</p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3 sm:space-x-4">
-            <button className="relative p-1 sm:p-2 rounded-full hover:bg-gray-50 transition-colors">
-              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-              <span className="absolute top-1 right-1 sm:top-2 sm:right-2 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#FF4D00] rounded-full"></span>
-            </button>
-            
-            <div className="flex items-center space-x-1 sm:space-x-2">
-              <div className="relative">
-                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-gray-200">
-                  <Image
-                    src="/userSideImage/deliveryMan.jpg"
-                    alt="User Profile"
-                    width={36}
-                    height={36}
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-green-500 rounded-full border border-white"></span>
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-sm font-medium text-gray-700">Varun</p>
-                <p className="text-xs text-gray-400">Online</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
+     
       <main className="p-3 sm:p-4 max-w-6xl mx-auto">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -249,19 +202,7 @@ const Home: React.FC = () => {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-sm">
-        <div className="max-w-md mx-auto flex justify-around py-1 sm:py-2">
-          <button className="flex flex-col items-center px-3 py-1 sm:px-4 sm:py-2 text-[#FF4D00]">
-            <HomeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="text-[10px] sm:text-xs mt-1">Home</span>
-          </button>
-          <button className="flex flex-col items-center px-3 py-1 sm:px-4 sm:py-2 text-gray-500 hover:text-gray-700">
-            <List className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="text-[10px] sm:text-xs mt-1">Orders</span>
-          </button>
-        </div>
-      </nav>
+    
     </div>
   );
 };
