@@ -8,13 +8,13 @@ import {
   ChefHat,
   CalendarDays,
   Clock,
-  MapPin,
-  List,
-  ShoppingCart,
   CircleCheck,
   Info
 } from 'lucide-react'
-import DeliveryMap from './mapview'
+
+
+import dynamic from 'next/dynamic'
+const DeliveryMap = dynamic(() => import('./mapview'), { ssr: false })
 
 interface Props {
   postId: string

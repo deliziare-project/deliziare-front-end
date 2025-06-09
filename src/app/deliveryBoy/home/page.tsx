@@ -1,7 +1,7 @@
 'use client'
 
 import BottomBar from '@/components/deliveryBoy/bottomBar'
-import DeliveryBoyTracker from '@/components/deliveryBoy/DeliveryTracker'
+// import DeliveryBoyTracker from '@/components/deliveryBoy/DeliveryTracker'
 import Home from '@/components/deliveryBoy/home'
 import Navbar from '@/components/deliveryBoy/Navbar'
 import ReqUi from '@/components/deliveryBoy/OrderRequests/ReqUi'
@@ -23,7 +23,7 @@ const page = () => {
         <ReqUi />
         <DeliveryUi/>
      
-       <DeliveryBoyTracker />
+       {/* <DeliveryBoyTracker /> */}
 
         <BottomBar/>
         </div>

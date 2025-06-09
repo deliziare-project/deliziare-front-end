@@ -8,6 +8,7 @@ interface Message {
   receiverId: string;
   content: string;
   timestamp: Date;
+   isRead: boolean;
 }
 interface Size{ 
   width: number,
@@ -20,6 +21,7 @@ interface ChatState {
   loading: boolean;
   error: string | null;
   isChatOpen: boolean;
+  unreadCount: number;
   currentChatId: string | null;
   isMinimized: boolean;
   position: { x: number; y: number };
@@ -34,6 +36,7 @@ const initialState: ChatState = {
   loading: false,
   error: null,
   isChatOpen: false,
+  unreadCount: 0,
   currentChatId: null,
   isMinimized: false,
   position: { x: 20, y: 20 },
@@ -88,6 +91,19 @@ const chatSlice = createSlice({
     updateSize: (state, action: PayloadAction<Size>) => {
       state.size = action.payload
     },
+    setUnreadCount(state, action: PayloadAction<number>) {
+      state.unreadCount = action.payload;
+    },
+    incrementUnreadCount(state) {
+      state.unreadCount += 1;
+    },
+    markMessagesAsRead(state, action: PayloadAction<string>) {
+      
+      state.messages = state.messages.map((msg) =>
+        msg.senderId === action.payload ? { ...msg, isRead: true } : msg
+      );
+    },
+
   },
 });
 
@@ -98,6 +114,9 @@ export const {
   setCurrentConversation,
   setLoading,
   setError,
+  setUnreadCount,
+  incrementUnreadCount,
+  markMessagesAsRead,
   clearError,
   openChat, closeChat, toggleMinimize, updatePosition,updateSize ,replayChat
 } = chatSlice.actions;
