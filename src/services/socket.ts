@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { addMessage, setOnlineUsers } from '@/features/chatSlice';
 import { useDispatch } from 'react-redux';
 import axiosInstance from '@/api/axiosInstance';
+import { store } from '@/redux/store';
 
 let socket: Socket;
 
@@ -54,14 +55,12 @@ export const useSocket = (userId: string) => {
 socket.on('online_users_update', (users: string[]) => {
       dispatch(setOnlineUsers(users));
     });
-      socket.on('receive_message', (message) => {
-        dispatch((dispatch, getState) => {
-          const { messages } = getState().chat;
-          if (!messages.some(m => m._id === message._id)) {
-            dispatch(addMessage(message));
-          }
-        });
-      });
+    socket.on('receive_message', (message) => {
+      const { messages } = store.getState().chat;
+      if (!messages.some(m => m._id === message._id)) {
+        dispatch(addMessage(message));
+      }
+    });
 
       socket.on('online_users', (users: string[]) => {
         dispatch(setOnlineUsers(users));

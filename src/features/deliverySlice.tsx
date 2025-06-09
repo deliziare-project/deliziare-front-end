@@ -14,7 +14,7 @@ export interface Bid {
       lat: number;
       lng: number;
     };
-    quantity: number;
+   quantity: number;
     description: string;
   };
   chefId: {
@@ -24,7 +24,6 @@ export interface Bid {
   };
   bidAmount: number;
   description: string;
-  
   status: 'pending' | 'accepted' | 'rejected'|'completed';
   createdAt: string;
 }
@@ -33,11 +32,12 @@ export interface Order{
     _id:string,
     status:'pending'|'picked up'|'delivered',
     bidId:Bid,
+
     chefLocation?: {
       lat: number;
       lng: number;
     };
-}
+  }
 
 interface DeliveryState {
   loading: boolean
