@@ -1,6 +1,9 @@
 'use client'
 
-import DeliveryBoyRegister from '@/components/auth/DeliveryBoyRegister'
+import dynamic from 'next/dynamic';
+//import DeliveryBoyRegister from '@/components/auth/DeliveryBoyRegister'
+const DeliveryBoyRegister = dynamic(() => import('@/components/auth/DeliveryBoyRegister'), { ssr: false });
+
 import AuthWrapper from '@/components/AuthWrapper'
 import React from 'react'
 

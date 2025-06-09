@@ -9,14 +9,15 @@ import {
   replayChat,
 } from '@/features/chatSlice';
 import { checkCurrentUser } from '@/features/authSlice';
+import { Message } from '@/types/message';
 
-interface Message {
-  _id: string;
-  senderId: string;
-  receiverId: string;
-  content: string;
-  timestamp: string | Date;
-}
+// interface Message {
+//   _id: string;
+//   senderId: string;
+//   receiverId: string;
+//   content: string;
+//   timestamp: string | Date;
+// }
 
 export const useChat = (recipientId: string) => {
   const [messageInput, setMessageInput] = useState('');
@@ -66,7 +67,7 @@ useEffect(() => {
       senderId: currentUser._id,
       receiverId: recipientId,
       content: messageInput,
-      postId:replayMessage?._id
+      postId:replayMessage?._id as string
     };
 
     try {
