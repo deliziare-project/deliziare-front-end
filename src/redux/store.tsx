@@ -17,6 +17,7 @@ import adminReducer from '../features/adminSlice'
 import paymentReducer from '../features/paymentSlice'
 import walletReducer from '../features/walletSlice'
 import profileReducer from '../features/profileSlice'
+import deliveryReducer from '../features/deliverySlice'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -34,6 +35,8 @@ export const store = configureStore({
     payment:paymentReducer,
     wallet:walletReducer,
     profile:profileReducer,
+    delivery:deliveryReducer,
+    
   },
 });
 

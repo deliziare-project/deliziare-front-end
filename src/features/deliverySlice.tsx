@@ -10,16 +10,21 @@ export interface Bid {
     time: string;
     district: string;
     menu: string[];
+     location?: {
+      lat: number;
+      lng: number;
+    };
     quantity: number;
     description: string;
   };
   chefId: {
     _id:string;
     name:string;
-    
+     
   };
   bidAmount: number;
   description: string;
+  
   status: 'pending' | 'accepted' | 'rejected'|'completed';
   createdAt: string;
 }
@@ -28,6 +33,10 @@ export interface Order{
     _id:string,
     status:'pending'|'picked up'|'delivered',
     bidId:Bid,
+    chefLocation?: {
+      lat: number;
+      lng: number;
+    };
 }
 
 interface DeliveryState {

@@ -1,5 +1,9 @@
+
+import BottomBar from "@/components/deliveryBoy/bottomBar";
+import Navbar from "@/components/deliveryBoy/Navbar";
 import type { Metadata } from "next";
 import React from "react";
+
 
 export const metadata: Metadata = {
   title: "Delivery App",
@@ -23,8 +27,11 @@ export default function DeliveryLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      {children}
-    </div>
+  <div className="flex flex-col min-h-screen">
+  
+  <main className="flex-grow">{children}</main>
+  
+</div>
+
   );
 }

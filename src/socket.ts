@@ -1,4 +1,4 @@
-// socket.ts
+
 import { io, Socket } from "socket.io-client";
 
 export interface NotificationType {
@@ -18,7 +18,8 @@ interface ServerToClientEvents {
 }
 
 interface ClientToServerEvents {
-  register: (userId: string) => void;
+  register: (userId: string) => void
+  locationUpdate: (coords: { lat: number; lng: number }) => void
 }
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(

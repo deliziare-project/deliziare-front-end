@@ -29,7 +29,7 @@ const ChatPersonList: React.FC= () => {
 console.log(onlineUsers)
 
     const onSelectUser =async (user: User) => {
-       await axiosInstance.patch(`/messages/mark-read`);
+      //  await axiosInstance.patch(`/messages/mark-read`);
      dispatch(openChat(user._id))
     };
 
