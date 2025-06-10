@@ -26,7 +26,9 @@ interface ChatState {
   isMinimized: boolean;
   position: { x: number; y: number };
   size: Size;
-  replayMessage:ChefPost|null
+  replayMessage:ChefPost|null;
+  unreadPerUser: Record<string, number>;
+
 }
 
 const initialState: ChatState = {
@@ -41,7 +43,8 @@ const initialState: ChatState = {
   isMinimized: false,
   position: { x: 20, y: 20 },
   size:{ width: 400, height: 500 },
-  replayMessage:null
+  replayMessage:null,
+  unreadPerUser: {},
 };
 
 const chatSlice = createSlice({
@@ -103,6 +106,20 @@ const chatSlice = createSlice({
         msg.senderId === action.payload ? { ...msg, isRead: true } : msg
       );
     },
+    setUnreadPerUser(state, action: PayloadAction<{ userId: string; count: number }>) {
+      state.unreadPerUser[action.payload.userId] = action.payload.count;
+    },
+    incrementUnreadForUser(state, action: PayloadAction<string>) {
+      const userId = action.payload;
+      state.unreadPerUser[userId] = (state.unreadPerUser[userId] || 0) + 1;
+    },
+    resetUnreadForUser(state, action: PayloadAction<string>) {
+      delete state.unreadPerUser[action.payload];
+    },
+    setUnreadPerUserBulk(state, action: PayloadAction<{ [userId: string]: number }>) {
+      state.unreadPerUser = action.payload;
+    }
+    
 
   },
 });
@@ -118,6 +135,10 @@ export const {
   incrementUnreadCount,
   markMessagesAsRead,
   clearError,
+  incrementUnreadForUser,
+  resetUnreadForUser,
+  setUnreadPerUser,
+  setUnreadPerUserBulk,
   openChat, closeChat, toggleMinimize, updatePosition,updateSize ,replayChat
 } = chatSlice.actions;
 
