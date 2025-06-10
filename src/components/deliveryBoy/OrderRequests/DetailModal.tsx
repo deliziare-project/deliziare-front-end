@@ -1,4 +1,5 @@
 import axiosInstance from '@/api/axiosInstance'
+import { showSuccess } from '@/components/shared/ToastUtilis'
 import { acceptDelivery } from '@/features/deliverySlice'
 import { AppDispatch } from '@/redux/store'
 import {
@@ -7,18 +8,23 @@ import {
   Users,
   List,
   X,
+  Router,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 interface DetailModalProps {
   bidId: string
   onClose: () => void
+  onActionComplete: (bidId: string) => void
 }
 
-function DetailModal({ bidId, onClose }: DetailModalProps) {
+
+function DetailModal({ bidId, onClose ,onActionComplete}: DetailModalProps) {
   const [bid, setBid] = useState<any>(null)
   const dispatch=useDispatch<AppDispatch>()
+  const router=useRouter()
 
   useEffect(() => {
     if (bidId) {
@@ -29,9 +35,21 @@ function DetailModal({ bidId, onClose }: DetailModalProps) {
     }
   }, [bidId])
 
-  const handleAccept=()=>{
-    dispatch(acceptDelivery(bidId))
-  }
+ const handleAccept = () => {
+  dispatch(acceptDelivery(bidId))
+    .then(() => {
+      showSuccess('You accepted the order')
+      onActionComplete(bidId) 
+    })
+    .catch((err) => console.error('Failed to accept delivery:', err))
+}
+
+const handleReject = () => {
+  showSuccess('You rejected the order')
+  onActionComplete(bidId) 
+}
+
+
 
   if (!bid) return null
 
@@ -89,6 +107,7 @@ function DetailModal({ bidId, onClose }: DetailModalProps) {
           </button>
           <button
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            onClick={handleReject}
           >
             Reject
           </button>
