@@ -47,7 +47,7 @@ const PostsPage: React.FC = () => {
     } finally {
       setIsLoading(false);
 
-      showSuccess("Post created successfully");
+      // showSuccess("Post created successfully");
     } 
   };
 
