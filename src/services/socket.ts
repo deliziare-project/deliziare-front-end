@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { addMessage, setOnlineUsers, setUnreadCount } from '@/features/chatSlice';
+import { addMessage, setOnlineUsers } from '@/features/chatSlice';
 import { useDispatch } from 'react-redux';
 import axiosInstance from '@/api/axiosInstance';
 import { store } from '@/redux/store';
@@ -47,38 +47,20 @@ export const useSocket = (userId: string) => {
   });
 
     const setupSocketListeners = () => {
-      // In useSocket.ts, modify the connect handler:
-socket.on('connect', () => {
-  console.log('Connected to socket server');
-  socket.emit('register', userId);
-  
-  // Fetch initial unread count on connect
-  axiosInstance.get('/messages/unread-count')
-    .then(response => {
-      dispatch(setUnreadCount(response.data.count));
-    })
-    .catch(error => {
-      console.error('Failed to fetch unread count:', error);
-    });
-  
-  socket.emit('request_online_users');
-});
+      socket.on('connect', () => {
+        console.log('Connected to socket server');
+        socket.emit('register', userId);
+        socket.emit('request_online_users');
+      });
 socket.on('online_users_update', (users: string[]) => {
       dispatch(setOnlineUsers(users));
     });
-    socket.on('receive_message', (message) => {
-      const { messages, isChatOpen, unreadCount } = store.getState().chat;
-    
-      // Prevent duplicate messages
-      if (!messages.some(m => m._id === message._id)) {
-        dispatch(addMessage(message));
-    
-        if (!isChatOpen) {
-          dispatch(setUnreadCount(unreadCount + 1));
-        }
-      }
-    });
-    
+      socket.on('receive_message', (message) => {
+  const { messages } = store.getState().chat;
+  if (!messages.some(m => m._id === message._id)) {
+    dispatch(addMessage(message));
+  }
+});
 
       socket.on('online_users', (users: string[]) => {
         dispatch(setOnlineUsers(users));
