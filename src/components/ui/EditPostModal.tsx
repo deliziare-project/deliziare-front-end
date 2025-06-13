@@ -43,7 +43,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ post, onClose, onSave }) 
       <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
         <h3 className="text-2xl font-bold text-gray-800 mb-6">Edit Post</h3>
         <div className="space-y-5">
-          {/* Input Fields */}
+          
           {[
             { id: 'eventName', label: 'Event Name', type: 'text' },
             { id: 'date', label: 'Date', type: 'date' },
@@ -66,7 +66,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ post, onClose, onSave }) 
             </div>
           ))}
 
-          {/* Menu Items */}
+          
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">Menu</label>
   <div className="space-y-3">
@@ -82,7 +82,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ post, onClose, onSave }) 
         <button
           type="button"
           onClick={() => handleRemoveMenu(index)}
-          className="text-gray-500 hover:text-red-500 transition"
+          className="text-gray-500 cursor-pointer hover:text-red-500 transition"
           aria-label="Remove Menu Item"
         >
           <X size={18} />
@@ -94,7 +94,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ post, onClose, onSave }) 
   <button
     type="button"
     onClick={handleAddMenu}
-    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-md transition"
+    className="mt-4 inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-md transition"
   >
     + Add Menu Item
   </button>
@@ -122,13 +122,13 @@ const EditPostModal: React.FC<EditPostModalProps> = ({ post, onClose, onSave }) 
         <div className="mt-8 flex justify-end gap-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+            className="px-4 py-2 cursor-pointer text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 text-sm rounded-md bg-orange-500 text-white hover:bg-orange-600 transition"
+            className="px-4 py-2 cursor-pointer text-sm rounded-md bg-orange-500 text-white hover:bg-orange-600 transition"
           >
             Save Changes
           </button>

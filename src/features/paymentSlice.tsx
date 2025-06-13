@@ -8,12 +8,23 @@ interface User {
   name: string;
   
 }
+interface BidId{
+  postId:{
+    deliveryStatus:'pending'|'accepted'|'picked up'|'delivered';
+  },
+  deliveryBoyId:{
+    name:string
+  },
+  chefId:{
+    name:string
+  }
+}
 
 interface Payment {
   _id: string;
   user?: User | null; 
   bid: {
-    bidId: string;
+    bidId: BidId|null;
     amount: number;
   };
   gst: number;

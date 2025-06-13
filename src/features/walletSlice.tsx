@@ -7,21 +7,25 @@ interface Transaction {
   amount: number;
   reason: string;
   date?: string;
+  description:string;
 }
 
 
-interface Wallet {
-    
-    
+interface Wallet {  
     balance:number,
     transactions:Transaction[],
+}
 
+interface Earning{ 
+    balance:number,
+    transactions:Transaction[],
 }
 
 
 interface WalletState {
   loading: boolean;
   wallet: Wallet | null;
+  earning:Earning|null;
   error: string | null;
 }
 
@@ -29,7 +33,8 @@ interface WalletState {
 
 const initialState: WalletState = {
   loading: false,
- wallet: null,
+  wallet: null,
+  earning:null,
   error: null,
 };
 
@@ -45,6 +50,19 @@ export const fetchWallet = createAsyncThunk<Wallet>(
     }
   }
 );
+
+export const fetchEarning=createAsyncThunk<Earning>(
+  '/earning/fetchEarning',
+  async(_,{rejectWithValue})=>{
+    try {
+      const res=await axiosInstance.get('/wallet/getEarning',{})
+      console.log(res.data)
+      return res.data
+    } catch (error:any) {
+      return rejectWithValue(error.response?.data?.message||'failed to fetch earning of delivery partner')
+    }
+  }
+)
 
 const walletSlice = createSlice({
   name: 'wallet',
@@ -70,7 +88,12 @@ const walletSlice = createSlice({
 .addCase(fetchWallet.rejected, (state, action) => {
   state.loading = false;
   state.error = action.payload as string;
-});
+})
+.addCase(fetchEarning.fulfilled, (state, action: PayloadAction<Earning>) => {
+  state.loading = false;
+  state.earning=action.payload
+ 
+})
 
   },
 });

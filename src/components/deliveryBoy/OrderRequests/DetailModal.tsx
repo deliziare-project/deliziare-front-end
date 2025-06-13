@@ -56,37 +56,45 @@ const handleReject = () => {
   return (
     <div className="fixed inset-0 backdrop-blur bg-opacity-40  flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-xl w-[90%] max-w-md shadow-2xl relative">
-        {/* Close button */}
+       
         <button
           onClick={onClose}
-          className="absolute top-2 cursor-pointer right-3 text-gray-600 hover:text-black text-2xl"
+          className="absolute top-2 cursor-pointer right-3 text-gray-600 hover:text-white hover:bg-red-500 hover:rounded-sm text-2xl"
         >
           <X />
         </button>
 
-        {/* Event Info */}
-        <h2 className="text-2xl font-bold mb-1 text-[#B8755D]">{bid.postId?.eventName}</h2>
+       
+        <h2 className="text-2xl font-bold mb-1 text-red-700">{bid.postId?.eventName}</h2>
         <p className="text-sm text-gray-600 mb-4 italic">{bid.postId?.description || "No additional details"}</p>
 
-        {/* Details */}
+        
         <div className="space-y-2 text-sm text-gray-700">
           <div className="flex items-center gap-2">
-            <MapPinnedIcon className="w-4 h-4 text-[#B8755D]" />
+            <div className='bg-red-50 p-2 rounded-lg'>
+              <MapPinnedIcon className="w-4 h-4 text-[#E53935]" />
+            </div>
             <span>{bid.postId?.district}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#B8755D]" />
+            <div className='bg-red-50 p-2 rounded-lg'>
+               <Clock className="w-4 h-4 text-[#E53935]" />
+            </div>
             <span>{bid.postId?.date} at {bid.postId?.time}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-[#B8755D]" />
+            <div className='bg-red-50 p-2 rounded-lg'>
+              <Users className="w-4 h-4 text-[#E53935]" />
+            </div>
             <span>Food for {bid.postId?.quantity} people</span>
           </div>
         </div>
 
         <div className="mt-5">
           <div className="flex items-center gap-2 mb-2">
-            <List className="w-4 h-4 text-[#B8755D]" />
+           <div className='bg-red-50 p-2 rounded-lg'>
+             <List className="w-4 h-4 text-[#E53935]" />
+           </div>
             <h3 className="font-semibold">Menu Items:</h3>
           </div>
           <ul className="list-disc pl-5 text-sm text-gray-700">
@@ -100,13 +108,13 @@ const handleReject = () => {
           {bid.postId?.deliveryStatus=='pending'?(
             <>
             <button
-            className="px-4 py-2 bg-green-500 cursor-pointer text-white rounded-lg hover:bg-green-600 transition"
+            className="px-4 py-2 bg-green-600 cursor-pointer text-white rounded-lg hover:bg-green-600 transition"
             onClick={handleAccept}
           >
             Accept
           </button>
           <button
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            className="px-4 py-2 bg-[#E53935] text-white rounded-lg hover:bg-red-600 transition"
             onClick={handleReject}
           >
             Reject

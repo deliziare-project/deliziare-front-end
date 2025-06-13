@@ -3,17 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState, AppDispatch } from '@/redux/store';
-import { fetchWallet } from '@/features/walletSlice';
-import ChefWithdrawalForm from './Withdraw';
+import { fetchEarning, fetchWallet } from '@/features/walletSlice';
+import DeliveryWithdrawalForm from './WithdrawalForm';
 
 const WalletInfo = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { wallet, loading, error } = useSelector((state: RootState) => state.wallet);
+  const { earning, loading, error } = useSelector((state: RootState) => state.wallet);
+  console.log(earning)
 
   const [activeTab, setActiveTab] = useState<'credit' | 'debit'>('credit');
 
   useEffect(() => {
-    dispatch(fetchWallet());
+    dispatch(fetchEarning());
   }, [dispatch]);
 
   if (loading) return (
@@ -37,7 +38,7 @@ const WalletInfo = () => {
     </div>
   );
   
-  if (!wallet) return (
+  if (!earning) return (
     <div className="text-center mt-6 p-6 bg-gray-50 rounded-lg max-w-5xl mx-auto">
       <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -47,16 +48,16 @@ const WalletInfo = () => {
     </div>
   );
 
-  const filteredTransactions = wallet.transactions.filter(tx => tx.type === activeTab);
+  const filteredTransactions = earning.transactions.filter(tx => tx.type === activeTab);
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow-sm overflow-hidden">
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-[#B8755D] mb-2">Wallet Summary</h2>
-        <div className="inline-block bg-[#F8F1EE] px-6 py-3 rounded-full">
+        <h2 className="text-3xl font-bold text-[#E53935] mb-2">Wallet Summary</h2>
+        <div className="inline-block bg-red-50 px-6 py-3 rounded-full">
           <p className="text-lg font-medium">
             <span className="text-gray-600">Current Balance:</span>{' '}
-            <span className="text-2xl font-bold text-[#B8755D]">₹{wallet.balance.toFixed(2)}</span>
+            <span className="text-2xl font-bold text-[#E53935]">₹{earning.balance.toFixed(2)}</span>
           </p>
         </div>
       </div>
@@ -66,7 +67,7 @@ const WalletInfo = () => {
           onClick={() => setActiveTab('credit')}
           className={`px-6 py-3 cursor-pointer rounded-full font-medium transition-all duration-200 ${
             activeTab === 'credit' 
-              ? 'bg-[#B8755D] text-white shadow-md' 
+              ? 'bg-[#E53935] text-white shadow-md' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -81,7 +82,7 @@ const WalletInfo = () => {
           onClick={() => setActiveTab('debit')}
           className={`px-6 py-3 rounded-full cursor-pointer font-medium transition-all duration-200 ${
             activeTab === 'debit' 
-              ? 'bg-[#B8755D] text-white shadow-md' 
+              ? 'bg-[#E53935] text-white shadow-md' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -109,7 +110,7 @@ const WalletInfo = () => {
               key={idx}
               className={`p-5 rounded-lg transition-all duration-200 hover:shadow-md ${
                 tx.type === 'credit' 
-                  ? 'bg-[#F8F1EE] border-l-4 border-amber-700' 
+                  ? 'bg-red-50 border-l-4 border-red-700' 
                   : 'bg-red-50 border-l-4 border-red-500'
               }`}
             >
@@ -138,7 +139,7 @@ const WalletInfo = () => {
           ))}
         </div>
       )}
-      <ChefWithdrawalForm/>
+      <DeliveryWithdrawalForm/>
     </div>
   );
 };

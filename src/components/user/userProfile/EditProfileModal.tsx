@@ -91,13 +91,13 @@ const EditProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+              className="px-4 py-2 cursor-pointer rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700 transition-all"
+              className="px-4 py-2 cursor-pointer rounded-lg bg-orange-600 text-white hover:bg-orange-700 transition-all"
             >
               Save
             </button>
