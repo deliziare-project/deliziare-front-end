@@ -107,7 +107,7 @@ const PostsPage: React.FC = () => {
           onSubmitPost={handlePostSubmit}
         />
         <button
-          className="bg-white hover:bg-orange-50 text-orange-500 p-3 rounded-full shadow-lg transition-colors duration-200 border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="bg-white cursor-pointer hover:bg-orange-50 text-orange-500 p-3 rounded-full shadow-lg transition-colors duration-200 border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400"
           aria-label="Add new post"
         >
           <PlusCircle className="h-9 w-9" onClick={() => setIsModalOpen(true)} />

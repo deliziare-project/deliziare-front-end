@@ -1,4 +1,4 @@
-import AdminPaymentList from '@/components/admin/paymentManagement.jsx/PaymentList'
+import AdminPaymentList from '@/components/admin/paymentManagement/PaymentList'
 import React from 'react'
 
 function page() {

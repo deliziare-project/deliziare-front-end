@@ -41,15 +41,12 @@ const router=useRouter()
 
             <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
             <NavLink href="/user/chefs" icon={<ChefHat size={18} />} label="Chef" />
-            <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
-            {/* <NavLink href="/user/trackFood" icon={<Box size={18} />} label="Order" /> */}
-
-            
+            <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />   
             {/* Icons */}
             <div className="flex items-center space-x-4 ml-4">
             
 
-              <button className="p-1 rounded-full text-gray-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors" onClick={()=>router.push('/user/profile')}>
+              <button className="p-1 rounded-full cursor-pointer text-gray-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors" onClick={()=>router.push('/user/profile')}>
 
                 <span className="sr-only">View profile</span>
                 <User className="h-6 w-6" />
@@ -65,9 +62,9 @@ const router=useRouter()
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
+                <X className="block cursor-pointer h-6 w-6" aria-hidden="true" />
               ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
+                <Menu className="block cursor-pointer h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -91,10 +88,15 @@ const router=useRouter()
             mobile
           />
 
-          <button className="w-full flex items-center p-2 rounded-md text-gray-600 hover:text-orange-500 hover:bg-orange-50 focus:outline-none transition-colors">
-            <User className="h-6 w-6 mr-2" />
-            <span>Profile</span>
-          </button>
+
+          
+          <NavLink
+            href="/user/profile"
+            icon={<User size={18} />}
+            label="Profile"
+            mobile
+          />
+
         </div>
       </div>
     </nav>

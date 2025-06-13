@@ -2,7 +2,7 @@
 import { useDispatch } from 'react-redux';
 
 import { logoutUser } from '@/features/authSlice';
-import { LayoutDashboard, Users, ChefHat, LogOut, Truck, CreditCard } from 'lucide-react';
+import { LayoutDashboard, Users, ChefHat, LogOut, Truck, CreditCard, BadgeIndianRupee } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; 
 import { AppDispatch } from '@/redux/store';
@@ -50,6 +50,12 @@ export default function Sidebar() {
          <Link href="/admin/paymentManagement">
           <div title="Transactions" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
             <CreditCard size={24} />
+          </div>
+        </Link>
+
+        <Link href="/admin/withdrawals">
+          <div title="Withdrawals" className="hover:bg-gray-100 p-3 rounded-md cursor-pointer">
+            <BadgeIndianRupee size={24} />
           </div>
         </Link>
       </nav>

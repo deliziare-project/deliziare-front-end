@@ -69,7 +69,7 @@ const PostDetailsPage = () => {
 
    return (
         <div className="max-w-4xl mx-auto mt-12 p-8 bg-white rounded-2xl border border-[#F9EBE5] shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn">
-          {/* Header */}
+          
           <div className="flex items-center mb-4">
             <div className='flex item-center'>
              {userId?.profileImage ? (
@@ -90,16 +90,19 @@ const PostDetailsPage = () => {
             </div>
           </div>
 
-          {/* Event Title */}
+         
           <h2 className="text-3xl font-bold font-['Playfair_Display'] text-[#74391F] mb-6 tracking-tight">
             {eventName}
           </h2>
 
-          {/* Event Info */}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#5C4639] font-['Nunito_Sans'] mb-8">
             <div className="space-y-4">
               <div className="flex items-center">
-                <Calendar className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <div className='bg-[#FFF0E8] p-2 mr-2 rounded-lg'>
+                  <Calendar className="w-5 h-5 text-[#C26E4B] group-hover:scale-110 transition-transform duration-200" />
+                </div>
+                
                 <span className="text-sm font-semibold"><strong>Date:</strong>  {new Date(date).toLocaleDateString('en-GB', {
                           day: '2-digit',
                           month: '2-digit',
@@ -107,7 +110,10 @@ const PostDetailsPage = () => {
                         })}</span>
               </div>
               <div className="flex items-center">
-                <Clock className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <div className='bg-[#FFF0E8] p-2 mr-2 rounded-lg'>
+                  <Clock className="w-5 h-5 text-[#C26E4B] group-hover:scale-110 transition-transform duration-200" />
+                </div>
+                
                 <span className="text-sm font-semibold"><strong>Time:</strong> {new Date(`1970-01-01T${time}`).toLocaleTimeString('en-US', {
                           hour: 'numeric',
                           minute: '2-digit',
@@ -115,27 +121,37 @@ const PostDetailsPage = () => {
                         })}</span>
               </div>
               <div className="flex items-center">
-                <MapPin className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <div className='bg-[#FFF0E8] p-2 mr-2 rounded-lg'>
+                   <MapPin className="w-5 h-5 text-[#C26E4B] group-hover:scale-110 transition-transform duration-200" />
+                </div>
+               
                 <span className="text-sm font-semibold"><strong>District:</strong> {district}</span>
               </div>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center">
-                <Users className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <div className='bg-[#FFF0E8] p-2 mr-2 rounded-lg'>
+                  <Users className="w-5 h-5  text-[#C26E4B] group-hover:scale-110 transition-transform duration-200" />
+                </div>
+                
                 <span className="text-sm font-semibold"><strong>Quantity:</strong> {quantity} people</span>
               </div>
               <div className="flex items-center">
-                <UtensilsCrossed className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+                <div className='bg-[#FFF0E8] p-2 mr-2 rounded-lg'>
+                  <UtensilsCrossed className="w-5 h-5  text-[#C26E4B] group-hover:scale-110 transition-transform duration-200" />
+                </div>
+                
                 <span className="text-sm font-semibold"><strong>Menu:</strong> {menu?.join(', ')}</span>
               </div>
             </div>
           </div>
 
-          {/* Description */}
           <div className="mb-8">
             <div className="flex items-center mb-3 text-[#74391F] font-semibold">
-              <Info className="w-5 h-5 mr-3 text-[#BF9A61] group-hover:scale-110 transition-transform duration-200" />
+              <div className='bg-[#FFF0E8] p-2 mr-2 rounded-lg'>
+              <Info className="w-5 h-5  text-[#C26E4B] group-hover:scale-110 transition-transform duration-200" />
+              </div>
               <span className="text-base">Description</span>
             </div>
             <p className="text-[#6B7280] text-sm leading-relaxed font-medium">
@@ -143,12 +159,12 @@ const PostDetailsPage = () => {
             </p>
           </div>
 
-          {/* Action Button */}
+          
           <div className="text-right">
             <button
               onClick={() => setShowModal(true)}
               disabled={hasBid}
-              className={`px-6 py-3 rounded-lg font-semibold text-base shadow-md transition-all duration-300 ${
+              className={`px-6 py-3 cursor-pointer rounded-lg font-semibold text-base shadow-md transition-all duration-300 ${
                 hasBid
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   : 'bg-[#C26E4B] hover:bg-[#A85A3A] text-white hover:shadow-lg'
@@ -158,7 +174,7 @@ const PostDetailsPage = () => {
             </button>
           </div>
 
-          {/* Modal */}
+        
           {showModal && (
             <BidModal
               postId={selectedPost._id}

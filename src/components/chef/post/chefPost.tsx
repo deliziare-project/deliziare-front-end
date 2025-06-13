@@ -166,7 +166,7 @@ const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
           <button
             type="submit"
             disabled={loading}
-            className="bg-[#B8755D] hover:bg-[#a66249] text-white font-semibold px-6 py-2 rounded-lg transition duration-200 ease-in-out disabled:opacity-50"
+            className="bg-[#B8755D] cursor-pointer hover:bg-[#a66249] text-white font-semibold px-6 py-2 rounded-lg transition duration-200 ease-in-out disabled:opacity-50"
           >
             {loading ? 'Uploading...' : 'Create Post'}
           </button>
