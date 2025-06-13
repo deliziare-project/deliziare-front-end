@@ -79,7 +79,8 @@ console.log('accepted and paid ',pendingBids)
         {displayedBids.length === 0 ? (
           <p className="text-center text-gray-500">No orders found.</p>
         ) : (
-          displayedBids.map((bid) => (
+          displayedBids
+          .filter((bid) => bid.postId).map((bid) => (
             <div
               key={bid._id}
               className="border border-[#e2d4cf] rounded-xl shadow-md p-6 bg-white hover:shadow-lg transition"
