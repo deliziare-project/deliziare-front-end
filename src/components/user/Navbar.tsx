@@ -41,8 +41,7 @@ const router=useRouter()
 
             <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
             <NavLink href="/user/chefs" icon={<ChefHat size={18} />} label="Chef" />
-            <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
-            
+            <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />   
             {/* Icons */}
             <div className="flex items-center space-x-4 ml-4">
             
@@ -89,6 +88,7 @@ const router=useRouter()
             mobile
           />
 
+<<<<<<< HEAD
           
           <NavLink
             href="/user/profile"
@@ -97,6 +97,12 @@ const router=useRouter()
             mobile
           />
 
+=======
+          <button className="w-full flex items-center p-2 rounded-md text-gray-600 hover:text-orange-500 hover:bg-orange-50 focus:outline-none transition-colors">
+            <User className="h-6 w-6 mr-2" />
+            <span>Profile</span>
+          </button>
+>>>>>>> upstream/dev
         </div>
       </div>
     </nav>

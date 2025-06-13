@@ -3,9 +3,11 @@
 import ChefNavbar from '@/components/chef/chefNavbar';
 import ChefSidebar from '@/components/chef/chefSidebar';
 import ToastProvider from '@/components/shared/ToastProvider';
+import { RootState } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { FaComment } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 export default function ChefLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -17,6 +19,7 @@ export default function ChefLayout({ children }: { children: ReactNode }) {
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const wasDraggingRef = useRef(false);
   const [messageCount, setMessageCount] = useState(0)
+  const unreadCount = useSelector((state: RootState) => state.chat.unreadCount);
 
 
   useEffect(() => {
@@ -99,7 +102,7 @@ export default function ChefLayout({ children }: { children: ReactNode }) {
 
           {/* Draggable Chat Icon */}
           <div
-            className="fixed z-50 bg-[#B8755D] text-white p-3 rounded-full shadow-lg cursor-pointer transition"
+            className="fixed z-50 bg-[#B8755D] text-white p-3 rounded-full shadow-lg cursor-pointer transition "
             style={{
               left: `${position.x}px`,
               top: `${position.y}px`,
@@ -108,7 +111,14 @@ export default function ChefLayout({ children }: { children: ReactNode }) {
             onClick={handleClick}
           >
             <FaComment className="h-6 w-6" />
+
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full shadow">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
           </div>
+
 
           <main className="p-6">{children}</main>
         </div>
