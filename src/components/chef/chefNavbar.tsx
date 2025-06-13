@@ -84,8 +84,8 @@ function ChefNavbar() {
         <CirclePlus className="w-7 h-7" />
       </Link>
 
-      <div className="relative">
-        <button onClick={toggleDropdown} className="relative hover:text-gray-600 transition">
+      <div className="relative ">
+        <button onClick={toggleDropdown} className="relative hover:text-gray-600 cursor-pointer transition">
           <Bell className="w-6 h-6" />
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">

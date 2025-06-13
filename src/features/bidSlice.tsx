@@ -12,7 +12,12 @@ export interface Bid {
     menu: string[];
     quantity: number;
     description: string;
+    deliveryStatus:boolean;
   };
+  deliveryBoyId:{
+    _id:string;
+    name:string;
+  }
   chefId: string;
   bidAmount: number;
   description: string;

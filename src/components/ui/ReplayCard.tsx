@@ -91,7 +91,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
 
         {replay.status === 'pending' ? (
           <button
-            className="px-4 py-2 mt-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+            className="px-4 cursor-pointer py-2 mt-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
             onClick={() => handleClickAccept(replay)}
           >
             Accept
@@ -117,7 +117,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
           </button>
         ) : (replay.status === 'accepted' || isPaymentPending) && (
           <button
-            className="px-4 py-2 mt-2 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="px-4 py-2 cursor-pointer mt-2 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-lg transition-colors"
             onClick={handlePayment}
           >
             Pay

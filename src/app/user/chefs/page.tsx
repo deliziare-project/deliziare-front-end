@@ -138,7 +138,7 @@ dispatch(openChat(post.chefId._id))
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
       {currentPosts.map((post) => (
         <div key={post._id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-          {/* Post Header */}
+         
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">              
@@ -156,10 +156,10 @@ dispatch(openChat(post.chefId._id))
                 <p className="text-gray-500 text-xs">{post.chefId?.district}</p>
               </div>
             </div>
-            {/* <MoreHorizontal className="text-gray-500" size={20} /> */}
+           
           </div>
 
-          {/* Post Image */}
+         
           {post.images?.length ? (
             <img
               src={post.images[0].url}
@@ -195,17 +195,15 @@ dispatch(openChat(post.chefId._id))
             <p className="text-gray-400 text-xs">{formatDate(post.createdAt)}</p>
           </div>
 
-          {/* Post Actions */}
-         {/* Post Actions */}
 <div className="flex justify-between items-center px-4 pb-4">
-  {/* Reply Icon */}
-  <button className="flex items-center text-gray-600 hover:text-black" onClick={()=>handleReplay(post)}>
+  
+  <button className="flex cursor-pointer items-center text-gray-600 hover:text-black" onClick={()=>handleReplay(post)}>
     <Reply size={20} className="mr-1" />
     <span className="text-sm">Reply</span>
   </button>
 
-  {/* Bookmark Icon */}
-  <button onClick={() => toggleSavePost(post._id)}>
+ 
+  <button className='cursor-pointer' onClick={() => toggleSavePost(post._id)}>
     <Bookmark
       className={savedPosts.includes(post._id) ? 'text-black fill-current' : 'text-gray-600'}
       size={20}

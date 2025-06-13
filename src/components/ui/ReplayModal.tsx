@@ -83,7 +83,7 @@ const ReplayModal: React.FC<ReplayModalProps> = ({ isOpen, onClose, replays }) =
           <h2 className="text-xl font-semibold text-gray-800">Chef Responses</h2>
           <button 
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-1 cursor-pointer rounded-full hover:bg-gray-100 transition-colors"
             aria-label="Close modal"
           >
             <X size={20} />
@@ -93,7 +93,7 @@ const ReplayModal: React.FC<ReplayModalProps> = ({ isOpen, onClose, replays }) =
         <div className="flex items-center p-4 bg-gray-50">
           <div className="flex items-center space-x-4 text-sm text-gray-600">
             <button 
-              className={`flex items-center space-x-1 ${sortBy === 'bidAmount' ? 'text-blue-600 font-medium' : ''}`}
+              className={`flex cursor-pointer items-center space-x-1 ${sortBy === 'bidAmount' ? 'text-blue-600 font-medium' : ''}`}
               onClick={() => handleSort('bidAmount')}
             >
               <span>Bid Amount</span>
@@ -101,7 +101,7 @@ const ReplayModal: React.FC<ReplayModalProps> = ({ isOpen, onClose, replays }) =
             </button>
             
             <button 
-              className={`flex items-center space-x-1 ${sortBy === 'createdAt' ? 'text-blue-600 font-medium' : ''}`}
+              className={`flex cursor-pointer items-center space-x-1 ${sortBy === 'createdAt' ? 'text-blue-600 font-medium' : ''}`}
               onClick={() => handleSort('createdAt')}
             >
               <span>Date</span>

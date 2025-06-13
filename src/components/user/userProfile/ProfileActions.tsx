@@ -38,7 +38,7 @@ const ProfileActions = () => {
 
       <div className="flex flex-wrap gap-4">
         <button
-          className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-md 
+          className="inline-flex  cursor-pointer items-center px-4 py-2 bg-white border border-gray-200 rounded-md 
                      text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none 
                      focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
           onClick={() => setEditModalOpen(true)}
@@ -62,7 +62,7 @@ const ProfileActions = () => {
         <button
           className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-md 
                      text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none 
-                     focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
+                     focus:ring-2 cursor-pointer focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
           onClick={handleLogout}
         >
           <LogOut size={16} className="mr-2" />

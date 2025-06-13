@@ -18,7 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 shadow-lg py-1 bg-[#e5c8b4] text-[#5a2e0e] rounded disabled:opacity-50"
+        className="px-3 shadow-lg py-1 cursor-pointer bg-[#e5c8b4] text-[#5a2e0e] rounded disabled:opacity-50 "
       >
         <ChevronLeft size={16} />
       </button>
@@ -30,7 +30,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 shadow-lg py-1 bg-[#e5c8b4] text-[#5a2e0e] rounded disabled:opacity-50"
+        className="px-3 cursor-pointer shadow-lg py-1 bg-[#e5c8b4] text-[#5a2e0e] rounded disabled:opacity-50"
       >
         <ChevronRight size={16} />
       </button>
