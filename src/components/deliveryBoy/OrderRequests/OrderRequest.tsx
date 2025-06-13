@@ -14,6 +14,8 @@ function OrderRequest() {
 
   const { allbids, loading, error } = useSelector((state: RootState) => state.chefBids)
 
+    const [bids, setBids] = useState<any[]>([])
+    
   useEffect(() => {
     dispatch(getAllBids())
   }, [dispatch])
@@ -27,6 +29,11 @@ function OrderRequest() {
   const closeModal = () => {
     setSelectedBidId(null)
   }
+
+  const removeBid = (bidIdToRemove: string) => {
+  setBids((prevBids) => prevBids.filter((b) => b._id !== bidIdToRemove))
+  closeModal()
+}
 
   return (
     <div className="p-4 h-screen overflow-y-auto">
@@ -62,7 +69,7 @@ function OrderRequest() {
             ))}
           </ul>
 
-          {selectedBidId && <DetailModal bidId={selectedBidId} onClose={closeModal} />}
+          {selectedBidId && <DetailModal bidId={selectedBidId} onClose={closeModal} onActionComplete={removeBid}  />}
         </>
       )}
     </div>

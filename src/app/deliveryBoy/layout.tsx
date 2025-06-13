@@ -1,6 +1,7 @@
 
 import BottomBar from "@/components/deliveryBoy/bottomBar";
 import Navbar from "@/components/deliveryBoy/Navbar";
+import ToastProvider from "@/components/shared/ToastProvider";
 import type { Metadata } from "next";
 import React from "react";
 
@@ -27,11 +28,13 @@ export default function DeliveryLayout({
   children: React.ReactNode;
 }) {
   return (
-  <div className="flex flex-col min-h-screen">
+  <ToastProvider>
+    <div className="flex flex-col min-h-screen">
   
   <main className="flex-grow">{children}</main>
   
 </div>
 
+  </ToastProvider>
   );
 }
