@@ -106,6 +106,13 @@ const deliverySlice = createSlice({
       state.selectedOrder = null;
       state.error = null;
     },
+      markAsDelivered: (state, action) => {
+    const orderId = action.payload;
+    const order = state.order.find((o) => o._id === orderId);
+    if (order) {
+      order.status = 'delivered';
+    }
+  },
   },
   extraReducers: (builder) => {
     builder

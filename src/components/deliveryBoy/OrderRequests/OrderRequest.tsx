@@ -76,7 +76,7 @@ function OrderRequest() {
         ) : (
           <>
             <div className="grid gap-6">
-              {completedBids.map((bid) => (
+              {[...completedBids].reverse().map((bid) => (
                 <div
                   key={bid._id}
                   onClick={() => openModal(bid._id)}
