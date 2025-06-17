@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState, AppDispatch } from '@/redux/store';
-import { fetchEarning, fetchWallet } from '@/features/walletSlice';
+import { fetchEarning } from '@/features/walletSlice';
 import DeliveryWithdrawalForm from './WithdrawalForm';
 
 const WalletInfo = () => {
@@ -12,10 +12,17 @@ const WalletInfo = () => {
   console.log(earning)
 
   const [activeTab, setActiveTab] = useState<'credit' | 'debit'>('credit');
-
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  
   useEffect(() => {
     dispatch(fetchEarning());
   }, [dispatch]);
+
+    const openWithdrawModal = () => setShowWithdrawModal(true);
+  const closeWithdrawModal = () => setShowWithdrawModal(false);
+
+  const filteredTransactions = earning?.transactions.filter(tx => tx.type === activeTab) || [];
+
 
   if (loading) return (
     <div className="flex justify-center items-center h-64">
@@ -48,7 +55,6 @@ const WalletInfo = () => {
     </div>
   );
 
-  const filteredTransactions = earning.transactions.filter(tx => tx.type === activeTab);
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow-sm overflow-hidden">
@@ -59,6 +65,14 @@ const WalletInfo = () => {
             <span className="text-gray-600">Current Balance:</span>{' '}
             <span className="text-2xl font-bold text-[#E53935]">₹{earning.balance.toFixed(2)}</span>
           </p>
+        </div>
+         <div className="mt-4">
+          <button
+            onClick={openWithdrawModal}
+            className="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition duration-200"
+          >
+            Withdraw Now
+          </button>
         </div>
       </div>
 
@@ -139,7 +153,12 @@ const WalletInfo = () => {
           ))}
         </div>
       )}
-      <DeliveryWithdrawalForm/>
+       {showWithdrawModal && (
+        <DeliveryWithdrawalForm
+          onClose={() => setShowWithdrawModal(false)}
+          balance={earning.balance}
+      />
+      )}
     </div>
   );
 };

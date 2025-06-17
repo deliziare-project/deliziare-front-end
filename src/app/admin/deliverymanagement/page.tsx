@@ -9,15 +9,17 @@ import UserTableRow from "@/components/admin/userManagement/UserTableRow";
 import UserOverviewCard from "@/components/admin/userManagement/userOverview";
 import UserMobileCard from "@/components/admin/userManagement/UserMobileview";
 import { fetchDeliveryBoy, toggleBlockStatus } from "@/features/adminSlice";
+import DeliveryTable from "@/components/admin/deliveryBoyManagement/DeliveryTable";
 
 const USERS_PER_PAGE = 5;
 
-function UserManagement() {
+function Page() {
   const dispatch = useDispatch<AppDispatch>();
 
   const { deliveryBoy, loading, error } = useSelector(
     (state: RootState) => state.admin
   );
+  console.log('delivery',deliveryBoy)
 
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
@@ -42,19 +44,19 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
   const filteredUsers = deliveryBoy.filter((user) => {
     const matchesStatus =
       statusFilter === "all" ||
-      (statusFilter === "active" && !user.isBlock) || 
-           (statusFilter === "inactive" && user.isBlock);
+      (statusFilter === "active" && !user.userId?.isBlock) || 
+           (statusFilter === "inactive" && user.userId?.isBlock);
 
     const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+      user.userId?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.userId?.email.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesStatus && matchesSearch;
   });
 
   const totalUsers = deliveryBoy.length;
-  const activeUsers = deliveryBoy.filter((user) => !user.isBlock).length;
-  const inactiveUsers = deliveryBoy.filter((user) => user.isBlock).length;
+  const activeUsers = deliveryBoy.filter((user) => !user.userId.isBlock).length;
+  const inactiveUsers = deliveryBoy.filter((user) => user.userId.isBlock).length;
 
   const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
   const paginatedUsers = filteredUsers.slice(
@@ -63,11 +65,12 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
   );
 
   return (
-    <div className="min-h-screen w-full bg-[#f9f5f0] p-6 font-sans">
-      <h2 className="text-3xl font-semibold text-[#8b3e0f] mb-6">
-        Customer Overview
-      </h2>
-
+   <div className="min-h-screen w-full bg-slate-50 p-6 font-sans text-slate-800">
+      
+      <div className="mb-6">
+           <h2 className="text-3xl font-semibold text-red-900 mb-6">Delevary Boys Overview</h2>
+           <p className="text-gray-600 text-sm">Manage all registered hosts on the platform.</p>
+      </div>
           <UserOverviewCard
           totalUsers={totalUsers}
           activeUsers={activeUsers}
@@ -83,21 +86,23 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
       {loading && <p className="text-[#5a2e0e]">Loading users...</p>}
       {error && <p className="text-red-600">Error: {error}</p>}
 
-      <div className="hidden md:block">
-        <table className="w-full table-fixed bg-white shadow rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-[#f0d9c6] text-[#5a2e0e]">
+      <div className="w-full overflow-x-auto">
+   <table className="min-w-[600px] w-full bg-white shadow rounded-lg overflow-hidden">
+     <thead> 
+            <tr className="bg-[#de6d37] text-white">
               <th className="w-[10%] p-4 text-left">Profile</th>
               <th className="w-[20%] p-4 text-left">Name</th>
               <th className="w-[30%] p-4 text-left">Email</th>
-              <th className="w-[20%] p-4 text-left">Status</th>
+              <th className="w-[20%] p-4 text-left">Lisence</th>
+              <th className="w-[10%] p-4 text-left">ID Proof</th>
+              <th className="w-[10%] p-4 text-left">Status</th>
               <th className="w-[20%] p-4 text-left">Action</th>
             </tr>
           </thead>
           <tbody>
           {paginatedUsers.map((user) => (
-            <UserTableRow
-              key={user._id}
+            <DeliveryTable
+              key={user.userId._id}
               user={user}
               openDropdownId={openDropdownId}
               toggleDropdown={toggleDropdown}
@@ -109,11 +114,6 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
         </table>
       </div>
 
-        <div className="block md:hidden space-y-4">
-          {paginatedUsers.map((user) => (
-            <UserMobileCard key={user._id} user={user} />
-          ))}
-        </div>
     
        <Pagination
           currentPage={currentPage}
@@ -126,4 +126,4 @@ const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
   );
 }
 
-export default UserManagement;
+export default Page;

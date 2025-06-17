@@ -17,7 +17,7 @@ const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps)
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative">
-          <div className="bg-gradient-to-r from-[#e04a2b] to-[#f78f60] p-6 text-white">
+          <div className="bg-[#de6d37] p-6 text-white">
             <button
               onClick={onClose}
               className="absolute top-4 right-4 text-white/80 hover:text-white p-1 rounded-full hover:bg-white/20 transition-all duration-200"
@@ -58,10 +58,8 @@ const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps)
                   <MapPin size={18} className="text-gray-500 mt-0.5 mr-2 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-500">Location</p>
-                    <p className="text-gray-900">
-                      Lat: {chef.location.lat}, Lng: {chef.location.lng}
-                    </p>
-                    <p className="text-gray-700 text-sm">{chef.district}, {chef.state}</p>
+                   
+                    <p className="text-gray-700 text-sm">{chef.district}</p>
                   </div>
                 </div>
               </div>
@@ -75,7 +73,7 @@ const ChefDetailModal = ({ chef, onClose, onToggleBlock }: ChefDetailModalProps)
                       {sp.map((spec:string, index:number) => (
                         <span 
                           key={index}
-                          className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-sm"
+                          className="bg-orange-50 text-orange-700 px-2 py-1 rounded-md text-sm"
                         >
                           {spec}
                         </span>
