@@ -148,7 +148,7 @@ const ChefRegister = () => {
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-white rounded-2xl shadow-xl mt-12">
-      <h2 className="text-3xl font-bold mb-8 text-center text-teal-700">Chef Registration</h2>
+      <h2 className="text-2xl font-bold mb-8 text-center text-[#C26E4B]">Chef Registration</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {inputFields.map(({ label, name, type }) => (
@@ -191,7 +191,7 @@ const ChefRegister = () => {
                 }
               }}
               
-              className="p-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg"
+              className="p-2 bg-[#C26E4B] text-white rounded-lg"
             >
               <Plus className="w-5 h-5" />
             </button>
@@ -233,7 +233,7 @@ const ChefRegister = () => {
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
                 onChange={(e) => field.onChange(e.target.files?.[0] || null)}
-                className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:bg-teal-600 hover:file:bg-teal-700"
+                className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:bg-[#C26E4B]"
               />
             )}
           />
@@ -247,7 +247,7 @@ const ChefRegister = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2 px-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg disabled:opacity-50"
+          className="w-full py-2 px-4 bg-[#C26E4B] text-white font-semibold rounded-lg disabled:opacity-50"
         >
           {loading ? 'Submitting...' : 'Register'}
         </button>
