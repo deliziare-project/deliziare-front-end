@@ -24,4 +24,5 @@ export interface Replay {
   createdAt?: string;
   description?: string;
   readByUser: boolean;
+  readByPostOwner: { type: Boolean, default: false },
 }

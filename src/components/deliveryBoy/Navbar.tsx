@@ -1,6 +1,6 @@
 'use client'
 import { checkCurrentUser, logoutUser } from '@/features/authSlice'
-import { addNotification, fetchNotifications } from '@/features/notificationSlice'
+import { addNotification, fetchNotifications, markNotificationAsRead, NotificationType } from '@/features/notificationSlice'
 import { AppDispatch, RootState } from '@/redux/store'
 import socket, { connectSocket } from '@/socket'
 import { Bell, LogOut } from 'lucide-react'
@@ -18,21 +18,29 @@ function Navbar() {
   useEffect(() => {
     dispatch(checkCurrentUser());
     dispatch(fetchNotifications());
+  }, [dispatch]);
   
+  useEffect(() => {
     if (currentUser?._id) {
       connectSocket(currentUser._id);
       socket.emit('register', currentUser._id);
   
-      socket.on('new_notification', (notification) => {
+      const handleNotification = (notification:NotificationType) => {
         console.log("📨 New notification received:", notification);
         dispatch(addNotification(notification));
-      });
-    }
+      };
   
-    return () => {
-      socket.off('new_notification');
-    };
-  }, [dispatch, currentUser?._id]);
+      socket.on('new_notification', handleNotification);
+  
+      return () => {
+        socket.off('new_notification', handleNotification);
+      };
+    }
+  }, [currentUser?._id, dispatch]);
+  
+  const handleBellClick = () => {
+    dispatch(markNotificationAsRead());
+  };
   
 
   const performLogout = async () => {
@@ -71,7 +79,7 @@ function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
-          <div className="relative group">
+          <div className="relative group" onMouseEnter={handleBellClick}>
   <button className="relative p-2 rounded-full hover:bg-orange-50 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400">
     <Bell className="w-5 h-5 text-gray-600" />
     {unreadCount > 0 && (

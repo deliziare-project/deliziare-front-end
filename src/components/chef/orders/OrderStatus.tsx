@@ -31,13 +31,16 @@ const OrderStatus = () => {
   const pendingBids = bids.filter(
     (bid) =>
       bid.status === 'accepted' &&
+      bid.postId &&
       paymentMap.has(bid._id) &&
       (!filterDate ||
         new Date(bid.postId.date).toISOString().split('T')[0] === filterDate)
   );
-
-  const completedBids = bids.filter((bid) => bid.status === 'completed');
-
+  
+  const completedBids = bids.filter(
+    (bid) => bid.status === 'completed' && bid.postId
+  );
+  
   const handleComplete = (bidId: string) => {
     dispatch(updateBidStatus({ id: bidId, status: 'completed' }));
     showSuccess('Order marked as completed successfully');
@@ -125,7 +128,7 @@ const OrderStatus = () => {
                 className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition"
               >
                 <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-[#B8755D]">{bid.postId.eventName}</h3>
+                <h3 className="text-xl font-bold text-[#B8755D]">{bid.postId?.eventName || 'Event Deleted'}</h3>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     activeTab === 'completed' 
                       ? 'bg-green-100 text-green-800' 
