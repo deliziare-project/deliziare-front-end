@@ -38,14 +38,14 @@ export default function MessageItem({
   const handleReject = async () => {
     if (!message.requstId) return;
     try {
-      await axiosInstance.post('/messages/rejectreqmessage', { chatRequstId: message.requstId._id });
+      await axiosInstance.post('/messages/rejectreqmessage', { chatRequstId: message.requstId._id ,status:'rejected'});
       console.log('Request rejected via API');
     } catch (error) {
       console.error('Error rejecting request:', error);
     }
   };
 
- const handleAcceptSuccess = () => {
+ const handleAcceptSuccess =async () => {
   if (message.requstId) {
     
     const updatedMessage = {
@@ -59,11 +59,81 @@ export default function MessageItem({
     
     
     dispatch(updateMessage(updatedMessage));
-    
+ 
     setShowAcceptModal(false);
   }
 };
 
+const handleStatusaccept=()=>{
+    const updatedMessage = {
+      ...message,
+      requstId: {
+        ...message.requstId,
+        status: 'accepted',
+      
+      }
+    };
+    
+    
+    dispatch(updateMessage(updatedMessage));
+}
+const handleAsseptClick=async()=>{
+  if(!message.requstId.isAddressAdd){
+    setShowAcceptModal(true)
+  }else{
+   const loadScript = () =>
+    new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+   const res = await loadScript();
+  if (!res) return alert('Razorpay SDK failed to load');
+  const { data: order } = await axiosInstance.post('/chatpayment/create-order', {
+    bidId:message.requstId._id,
+    receipt: `receipt_${message.requstId._id}`,
+  });
+ 
+  const options = {
+    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY!,
+    amount: order.amount,
+    currency: order.currency,
+    name: 'Chat Request Payment',
+    description: message.requstId.description,
+    order_id: order.id,
+    handler: async (response: any) => {
+     
+      const verifyRes = await axiosInstance.post('/chatpayment/verify', {
+        order_id: response.razorpay_order_id,
+        payment_id: response.razorpay_payment_id,
+        signature: response.razorpay_signature,
+        bidId:message.requstId._id
+      });
+
+      if (verifyRes.status === 200) {
+        
+        handleStatusaccept()
+        alert('pyment success');
+      } 
+    },
+    prefill: {
+      name: 'Ijas',
+      email: 'ijas@example.com',
+      contact: '9999999999',
+    },
+    theme: {
+      color: '#213D72',
+    },
+  };
+
+  const razorpay = new (window as any).Razorpay(options);
+  razorpay.open();
+
+  }
+  
+}
   return (
     <div className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'} mb-4 relative`}>
       <div className={`flex max-w-[80%] gap-3 ${isCurrentUser ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -103,9 +173,9 @@ export default function MessageItem({
                   <div className="mt-2 flex gap-2">
                     <button
                       className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
-                      onClick={() => !message.requstId.isAddressAdd&&setShowAcceptModal(true)}
+                      onClick={handleAsseptClick}
                     >
-                      Accept
+                     {message.requstId.isAddressAdd?" pay ":' Accept'}
                     </button>
                     <button
                       className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
