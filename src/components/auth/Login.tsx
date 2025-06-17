@@ -119,10 +119,10 @@ const Login: React.FC = () => {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-light text-[#D5451B] mb-2 drop-shadow-lg">
+          <h2 className="text-2xl font-light text-[#27391C] mb-2 drop-shadow-lg">
             Welcome Back
           </h2>
-          <p className="text-[#DF6D14] text-sm drop-shadow">
+          <p className="text-[#526E48] text-sm drop-shadow">
             Please sign in to your account
           </p>
         </div>
@@ -199,7 +199,7 @@ const Login: React.FC = () => {
               {/* Forgot Password */}
               <div className="flex justify-end">
                 <Link href="/forgot-password">
-                  <span className="text-sm text-[#D5451B] hover:text-[#D5451B] transition-colors cursor-pointer">
+                  <span className="text-sm text-[#27391C] hover:text-[#526E48] transition-colors cursor-pointer">
                     Forgot Password?
                   </span>
                 </Link>
@@ -217,7 +217,7 @@ const Login: React.FC = () => {
                 type="button"
                 onClick={handleSubmit(onSubmit)}
                 disabled={loading}
-                className="w-full bg-[#D5451B] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#DF6D14] focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                className="w-full bg-[#526E48] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#27391C] focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
               >
                 {loading ? (
                   <div className="flex items-center justify-center">
@@ -280,7 +280,7 @@ const Login: React.FC = () => {
           <p className="text-sm text-gray-400 drop-shadow">
             Don&apos;t have an account?{" "}
             <Link href="/register">
-              <span className="text-[#DF6D14] hover:text-[#D5451B] font-medium cursor-pointer underline decoration-white/50 hover:decoration-white/80 transition-all">
+              <span className="text-[#27391C] hover:text-[#526E48] font-medium cursor-pointer underline decoration-white/50 hover:decoration-white/80 transition-all">
                 Sign Up
               </span>
             </Link>

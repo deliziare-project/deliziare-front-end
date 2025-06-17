@@ -1,6 +1,7 @@
 'use client';
 
 import ToastProvider from '@/components/shared/ToastProvider';
+import Footer from '@/components/user/Footer';
 import Navbar from '@/components/user/Navbar';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -99,6 +100,8 @@ export default function UserLayout({ children }: { children: ReactNode }) {
 
         {/* Page Content */}
         <main className="">{children}</main>
+                <Footer/>
+
       </div>
     </ToastProvider>
   );

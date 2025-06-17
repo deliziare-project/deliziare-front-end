@@ -13,22 +13,24 @@ export default function HeroSection() {
       {/* Background image with overlay container */}
       <div className="absolute inset-0 -z-20 h-full w-full">
         <Image
-          src="/logo/background.jpg"
+          src="/userSideImage/img3.gif"
           alt="Elegant dining setup"
           fill
           priority
-          className="object-cover"
+          className="object-cover blur-lg opacity-70"
           quality={100}
         />
-        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0" />
       </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2D4F2B] via-[#708A58]/20 to-[#16610E] z-10 "></div>
+
 
       {/* Top-right corner buttons */}
       <div className="absolute top-6 right-6 z-20 flex gap-4">
         <Button
           asChild
           size="sm"
-          className="bg-orange-600 text-black font-semibold px-4 py-2 rounded-full hover:bg-gray-200"
+          className="bg-[#27391C] text-black font-semibold px-4 py-2 rounded-full hover:bg-gray-200"
         >
           <Link href="/register">Sign Up</Link>
         </Button>
@@ -63,7 +65,7 @@ export default function HeroSection() {
               <Button
                 asChild
                 size="lg"
-                className=" bg-orange-600 text-white hover:bg-orange-700 font-semibold px-8 py-3 rounded-full"
+                className=" bg-[#27391C] text-white hover:bg-[#526E48] font-semibold px-8 py-3 rounded-full"
               >
                 <Link href="/register">Get Started</Link>
               </Button>

@@ -118,21 +118,21 @@ const roles = [
     title: 'User',
     description: 'Find chefs, plan your events, and enjoy personalized menus.',
     icon: Users,
-    color: 'bg-[#DF6D14]',
+    color: 'bg-[#27391C]',
   },
   {
     id: 'chef',
     title: 'Chef',
     description: 'Showcase your cooking skills and get event opportunities.',
     icon: ChefHat,
-    color: 'bg-[#DF6D14]',
+    color: 'bg-[#27391C]',
   },
   {
     id: 'deliveryboy',
     title: 'Delivery Partner',
     description: 'Deliver food to customers and become a valued partner.',
     icon: Truck,
-    color: 'bg-[#DF6D14]',
+    color: 'bg-[#27391C]',
   },
 ];
 
@@ -172,7 +172,7 @@ export default function RegisterHome() {
                       <div className={`${role.color} w-12 h-12 rounded-full flex items-center justify-center mb-4`}>
                         <role.icon className="h-6 w-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold mb-2 text-[#a9621e]">{role.title}</h3>
+                      <h3 className="text-xl font-bold mb-2 text-[#526E48]">{role.title}</h3>
                       <p className="text-gray-600">{role.description}</p>
                     </div>
                   </div>
@@ -186,9 +186,9 @@ export default function RegisterHome() {
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="text-[#B87333] hover:underline font-medium"
+                className="text-[#27391C] hover:underline font-medium"
               >
-                Sign in
+                Sign In
               </Link>
             </p>
           </div>

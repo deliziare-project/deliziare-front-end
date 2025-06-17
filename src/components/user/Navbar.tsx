@@ -19,7 +19,8 @@ const router=useRouter()
   };
 
   return (
-    <nav className=" sticky top-0 z-50 bg-[linear-gradient(to_right,rgba(255,200,150,0.6),rgba(255,255,255,0.6))] backdrop-blur">
+    // <nav className=" sticky top-0 z-50 bg-[linear-gradient(to_right,rgba(255,200,150,0.6),rgba(255,255,255,0.6))] backdrop-blur">
+    <nav className="sticky top-0 z-50 backdrop-blur bg-transparent border-0" style={{backgroundColor: 'rgba(0,0,0,0)', border: 'none'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo and Brand */}
@@ -46,7 +47,7 @@ const router=useRouter()
             <div className="flex items-center space-x-4 ml-4">
             
 
-              <button className="p-1 rounded-full cursor-pointer text-gray-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors" onClick={()=>router.push('/user/profile')}>
+              <button className="p-1 rounded-full cursor-pointer text-gray-600 hover:text-[#526E48] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#526E48] transition-colors" onClick={()=>router.push('/user/profile')}>
 
                 <span className="sr-only">View profile</span>
                 <User className="h-6 w-6" />
