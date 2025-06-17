@@ -249,6 +249,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
           </p>
         </div>
 
+
         {/* Actions */}
         <div className="mt-6 flex items-center justify-between">
           {/* <div className="flex space-x-2">
@@ -306,6 +307,23 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
             )}
           </div>
         </div>
+
+        {isPaymentSuccess ? (
+          <button
+            className="px-4 py-2 mt-2 bg-gray-300 text-gray-700 rounded-lg cursor-not-allowed"
+            disabled
+          >
+            Paid
+          </button>
+        ) : (replay.status === 'accepted' || isPaymentPending) && (
+          <button
+            className="px-4 py-2  mt-2 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-lg transition-colors"
+            onClick={handlePayment}
+          >
+            Pay
+          </button>
+        )}
+
       </div>
     </div>
   );

@@ -105,6 +105,7 @@ export default function MessageList({
               key={message._id}
               message={message}
               isCurrentUser={message.senderId === currentUserId}
+              currentUserId={currentUserId}
               showAvatar={true} // Always show avatar for now
               avatar={avatar}
             />

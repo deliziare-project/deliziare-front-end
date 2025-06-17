@@ -1,76 +1,69 @@
-'use client'
 
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import React from 'react';
 import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import axiosInstance from '@/api/axiosInstance';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { openChat } from '@/features/chatSlice';
+import { useDispatch } from 'react-redux';
+
+import { openChat, setChatUsers, setError } from '@/features/chatSlice';
+import { useChatPersonList } from '@/components/hookss/useChatPersonList';
 
 interface User {
   _id: string;
   name: string;
   profileImage: string;
+  unreadCount: number;
 }
 
+const ChatPersonList: React.FC = () => {
+  const [hoveredUser, setHoveredUser] = React.useState<string | null>(null);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { currentUser, chatUsers, onlineUsers, isLoadingCurrentUser, error, isUserOnline ,fetchChatUsers} = useChatPersonList();
 
-const ChatPersonList: React.FC= () => {
-  const [hoveredUser, setHoveredUser] = useState<string | null>(null);
-   const [users, setUsers] = useState<User[]>([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const {  onlineUsers } = useSelector(
-    (state: RootState) => state.chat
-  );
-  
-  const dispatch=useDispatch()
+  const onSelectUser = (user: User) => {
+    dispatch(openChat(user._id));
+  };
 
-console.log(onlineUsers)
+  const onBack = () => router.back();
 
-    const onSelectUser =async (user: User) => {
-      //  await axiosInstance.patch(`/messages/mark-read`);
-     dispatch(openChat(user._id))
-    };
-
-   
-  const isUserOnline = (userId: string) => onlineUsers?.includes(userId);
-
-  const router=useRouter()
-
-const  onBack = () => router.back()
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoadingUsers(true);
-        const response = await axiosInstance.get('/messages/get-chat-users');
-        setUsers(response.data);
-      } catch (error) {
-        console.error('Failed to fetch chat users:', error);
-      } finally {
-        setLoadingUsers(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  if(loadingUsers){
+  if (isLoadingCurrentUser) {
     return (
-          <div className="flex justify-center items-center h-full">
-            <LoadingSpinner />
-          </div>
-        )
+      <div className="flex justify-center items-center h-full">
+        <p>Loading...</p>
+      </div>
+    );
   }
+
+ 
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <p className="text-red-500">Error: {error}</p>
+        <button
+          onClick={() => {
+            dispatch(setChatUsers([])); 
+            dispatch(setError(null)); 
+            fetchChatUsers();
+          }}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex items-center justify-between max-w-2xl mx-auto">
           <div className="flex items-center space-x-4">
-            <button 
-              onClick={onBack} 
+            <button
+              onClick={onBack}
               className="p-2 rounded-full hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95"
               aria-label="Go back"
             >
@@ -83,7 +76,7 @@ const  onBack = () => router.back()
           <div className="flex items-center">
             <MessageCircle size={20} className="text-gray-400" />
             <span className="ml-2 text-sm font-medium text-gray-500">
-              {users.length} Chats ({onlineUsers?.length} Online)
+              {chatUsers.length} Chats ({onlineUsers?.length>0?onlineUsers?.length-1:0} Online)
             </span>
           </div>
         </div>
@@ -92,7 +85,7 @@ const  onBack = () => router.back()
       {/* User List */}
       <div className="flex-1 overflow-y-auto px-4 py-2">
         <div className="max-w-2xl mx-auto">
-          {users.length === 0 ? (
+          {chatUsers.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 animate-fade-in">
               <MessageCircle size={48} className="text-gray-300 mb-4" />
               <p className="text-gray-500 text-center">No conversations yet</p>
@@ -100,15 +93,15 @@ const  onBack = () => router.back()
             </div>
           ) : (
             <ul className="space-y-2">
-              {users.map((user, index) => {
+              {chatUsers.map((user, index) => {
                 const isOnline = isUserOnline(user._id);
                 return (
-                  <li 
+                  <li
                     key={user._id}
-                    className="animate-slide-in"
+                    className="animate-slide-in relative"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <button 
+                    <button
                       className={`w-full p-3 flex items-center space-x-4 rounded-xl transition-all duration-300
                         ${hoveredUser === user._id ? 'bg-gray-50 shadow-sm transform scale-[1.02]' : 'hover:bg-gray-50'}
                       `}
@@ -117,10 +110,12 @@ const  onBack = () => router.back()
                       onMouseLeave={() => setHoveredUser(null)}
                     >
                       <div className="relative">
-                        <div className={`h-14 w-14 rounded-full overflow-hidden ring-2 ring-offset-2 
-                          ${isOnline ? 'ring-green-100' : 'ring-gray-100'} transition-all duration-300`}>
-                          <img 
-                            src={user.profileImage} 
+                        <div
+                          className={`h-14 w-14 rounded-full overflow-hidden ring-2 ring-offset-2 
+                          ${isOnline ? 'ring-green-100' : 'ring-gray-100'} transition-all duration-300`}
+                        >
+                          <img
+                            src={user.profileImage}
                             alt={`${user.name}'s profile`}
                             className="h-full w-full object-cover transform transition-transform duration-300 hover:scale-110"
                             onError={(e) => {
@@ -135,9 +130,7 @@ const  onBack = () => router.back()
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline justify-between">
-                          <h3 className="text-sm font-semibold text-gray-900 truncate pr-2">
-                            {user.name}
-                          </h3>
+                          <h3 className="text-sm font-semibold text-gray-900 truncate pr-2">{user.name}</h3>
                           <span className={`text-xs ${isOnline ? 'text-green-500' : 'text-gray-400'}`}>
                             {isOnline ? 'Online' : 'Offline'}
                           </span>
@@ -146,6 +139,11 @@ const  onBack = () => router.back()
                           {isOnline ? 'Available to chat' : 'Currently offline'}
                         </p>
                       </div>
+                      {user.unreadCount > 0 && (
+                        <div className="absolute right-4 top-9 flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white text-xs font-bold">
+                          {user.unreadCount > 9 ? '9+' : user.unreadCount}
+                        </div>
+                      )}
                     </button>
                   </li>
                 );
