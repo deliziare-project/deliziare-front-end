@@ -204,11 +204,11 @@ const PostsPage: React.FC = () => {
             onSubmitPost={handlePostSubmit}
           />
           <button
-            className="group relative bg-gradient-to-r from-orange-500 to-orange-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50"
+            className="group relative bg-[#708A58]  text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50"
             aria-label="Add new post"
             onClick={() => setIsModalOpen(true)}
           >
-            <PlusCircle className="h-7 w-7 group-hover:scale-110 transition-transform duration-200" />
+            <PlusCircle className="h-7 w-7 group-hover:scale-110 transition-transform duration-200 " />
             <span className="absolute hidden group-hover:block text-xs font-medium bg-gray-800 text-white py-1 px-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2">
               Add Post
             </span>
