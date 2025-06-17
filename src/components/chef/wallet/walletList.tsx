@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState, AppDispatch } from '@/redux/store';
 import { fetchWallet } from '@/features/walletSlice';
+import ChefWithdrawalForm from './Withdraw';
 
 const WalletInfo = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,66 +16,129 @@ const WalletInfo = () => {
     dispatch(fetchWallet());
   }, [dispatch]);
 
-  if (loading) return <p className="text-center mt-6">Loading wallet...</p>;
-  if (error) return <p className="text-center mt-6 text-red-500">Error: {error}</p>;
-  if (!wallet) return <p className="text-center mt-6">No wallet found</p>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B8755D]"></div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="bg-red-50 border-l-4 border-red-500 p-4 max-w-5xl mx-auto mt-6">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <div className="ml-3">
+          <p className="text-sm text-red-700">Error loading wallet: {error}</p>
+        </div>
+      </div>
+    </div>
+  );
+  
+  if (!wallet) return (
+    <div className="text-center mt-6 p-6 bg-gray-50 rounded-lg max-w-5xl mx-auto">
+      <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 className="mt-2 text-sm font-medium text-gray-900">No wallet found</h3>
+      <p className="mt-1 text-sm text-gray-500">Create a wallet to get started.</p>
+    </div>
+  );
 
   const filteredTransactions = wallet.transactions.filter(tx => tx.type === activeTab);
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6 text-center text-[#B8755D]">Wallet</h2>
-      <p className="text-lg mb-6">
-        <span className="font-semibold">Balance:</span>{' '}
-        <span className="text-[#B8755D]">₹{wallet.balance.toFixed(2)}</span>
-      </p>
+    <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-bold text-[#B8755D] mb-2">Wallet Summary</h2>
+        <div className="inline-block bg-[#F8F1EE] px-6 py-3 rounded-full">
+          <p className="text-lg font-medium">
+            <span className="text-gray-600">Current Balance:</span>{' '}
+            <span className="text-2xl font-bold text-[#B8755D]">₹{wallet.balance.toFixed(2)}</span>
+          </p>
+        </div>
+      </div>
 
-      
-      <div className="flex justify-center gap-6 mb-6">
+      <div className="flex justify-center gap-4 mb-8">
         <button
           onClick={() => setActiveTab('credit')}
-          className={`px-4 py-2 rounded-full ${
+          className={`px-6 py-3 cursor-pointer rounded-full font-medium transition-all duration-200 ${
             activeTab === 'credit' 
-              ? 'bg-[#B8755D] text-white' : 'bg-gray-200 text-gray-700'
+              ? 'bg-[#B8755D] text-white shadow-md' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          Credit
+          <div className="flex items-center">
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Credit
+          </div>
         </button>
         <button
           onClick={() => setActiveTab('debit')}
-          className={`px-4 py-2 rounded-full ${
+          className={`px-6 py-3 rounded-full cursor-pointer font-medium transition-all duration-200 ${
             activeTab === 'debit' 
-              ?  'bg-[#B8755D] text-white' : 'bg-gray-200 text-gray-700'
+              ? 'bg-[#B8755D] text-white shadow-md' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          Debit
+          <div className="flex items-center">
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Debit
+          </div>
         </button>
       </div>
 
-     
       {filteredTransactions.length === 0 ? (
-        <p className="text-center text-gray-500 mt-10">No {activeTab} transactions found.</p>
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No {activeTab} transactions</h3>
+          <p className="mt-1 text-sm text-gray-500">Your {activeTab} transactions will appear here.</p>
+        </div>
       ) : (
-        <ul className="space-y-3 max-h-64 overflow-y-auto">
+        <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
           {filteredTransactions.map((tx, idx) => (
-            <li
+            <div
               key={idx}
-              className={`p-4 rounded shadow-sm ${
-                tx.type === 'credit' ? 'bg-white border border-[#e2d4cf] rounded-xl shadow-md' : 'bg-red-50 border border-red-200'
+              className={`p-5 rounded-lg transition-all duration-200 hover:shadow-md ${
+                tx.type === 'credit' 
+                  ? 'bg-[#F8F1EE] border-l-4 border-amber-700' 
+                  : 'bg-red-50 border-l-4 border-red-500'
               }`}
             >
-              <div className="flex justify-between items-center">
-                {/* <span className="font-semibold">{tx.type.toUpperCase()}</span> */}
-                <span className={`font-bold ${tx.type === 'credit' ? 'text-green-700' : 'text-red-700'}`}>
-                  ₹{tx.amount.toFixed(2)}
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-gray-600">{tx.reason}</p>
+                  {tx.date && (
+                    <p className="text-xs text-gray-400 mt-1">
+                      {new Date(tx.date).toLocaleString('en-IN', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  )}
+                </div>
+                <span className={`text-lg font-bold ${
+                  tx.type === 'credit' ? 'text-green-700' : 'text-red-700'
+                }`}>
+                  {tx.type === 'credit' ? '+' : '-'}₹{tx.amount.toFixed(2)}
                 </span>
               </div>
-              <p className="text-gray-600">{tx.reason}</p>
-              {tx.date && <small className="text-gray-400">{new Date(tx.date).toLocaleString()}</small>}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
+      <ChefWithdrawalForm/>
     </div>
   );
 };

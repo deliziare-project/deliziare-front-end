@@ -2,6 +2,7 @@
 
 import { useChatPersonList } from '@/components/hookss/useChatPersonList';
 import ToastProvider from '@/components/shared/ToastProvider';
+import Footer from '@/components/user/Footer';
 import Navbar from '@/components/user/Navbar';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -109,6 +110,8 @@ const {unreadCount}=useChatPersonList()
 
         {/* Page Content */}
         <main className="">{children}</main>
+                <Footer/>
+
       </div>
     </ToastProvider>
   );

@@ -27,12 +27,15 @@ const AdminPaymentList = () => {
               <tr>
                 <th className="px-6 py-3 text-left">Paid User</th>
                 <th className="px-6 py-3 text-left">Payment Method</th>
-                <th className="px-6 py-3 text-left">Chef Amount</th>
+                <th className="px-6 py-3 text-left">Chef</th>
                 <th className="px-6 py-3 text-left">GST</th>
                 <th className="px-6 py-3 text-left">Delivery</th>
                 <th className="px-6 py-3 text-left">Total</th>
-                <th className="px-6 py-3 text-left">Status</th>
+                <th className="px-6 py-3 text-left">User Status</th>
                 <th className="px-6 py-3 text-left">Date</th>
+                <th className='px-6 py-3 text-left'>Chef data</th>
+                <th className='px-6 py-3 text-left'>deliveryBoy data</th>
+                <th className='px-6 py-3 text-left'>delivery Status</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100 ">
@@ -54,6 +57,9 @@ const AdminPaymentList = () => {
                       year: 'numeric',
                     })}
                   </td>
+                  <td className="px-6 py-4">{payment.bid.bidId?.chefId?.name}</td>
+                  <td className="px-6 py-4">{payment.bid?.bidId?.deliveryBoyId?.name}</td>
+                  <td className="px-6 py-4">{payment.bid?.bidId?.postId?.deliveryStatus}</td>
                 </tr>
               ))}
             </tbody>

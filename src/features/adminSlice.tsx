@@ -11,16 +11,44 @@ export interface deliveryBoy {
   isBlock: boolean;
 }
 
+export interface popularChef{
+  chefId:string;
+  name:string;
+  email:string;
+  profileImage:string;
+  acceptedBids:number;
+}
+
+interface withdrawal{
+  _id:string,
+  userId:string,
+  amount:number,
+  role:'chef'|'deliveryBoy',
+  status:'pending'|'approved'
+}
+
 interface deliveryBoyState {
   deliveryBoy: deliveryBoy[];
   loading: boolean;
   error: string | null;
+  popularChef:popularChef[];
+  withdrawal:withdrawal[];
+  chefLoading:boolean;
+  chefError:string|null;
+  withdrawLoading:boolean,
+  withdrawError:string|null
 }
 
 const initialState: deliveryBoyState = {
   deliveryBoy: [],
   loading: false,
   error: null,
+  popularChef:[],
+  withdrawal:[],
+  chefLoading:false,
+  chefError:null,
+  withdrawLoading:false,
+  withdrawError:null
 };
 
 
@@ -42,6 +70,32 @@ export const toggleBlockStatus = createAsyncThunk(
 );
 
 
+export const getpopularChef=createAsyncThunk(
+  "admin/popularchef",
+  async ( _,{ rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/admin/popularChef');
+      console.log('popular chefs',response.data);
+      
+      return response.data; 
+      
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch popular chefs");
+    }
+  }
+);
+
+
+export const getAllWithdrawals=createAsyncThunk('/wallet/getAllWithdrawals',
+  async(_,{rejectWithValue})=>{
+    try{
+        const res=await axiosInstance('/wallet/getWithdraw')
+        return res.data.withdrawals
+    }catch(err:any){
+        return rejectWithValue(err.response?.data?.message || 'failure in fetching')
+    }
+  }
+)
 
 const hostSlice = createSlice({
   name: "deliveryBoy",
@@ -69,8 +123,29 @@ const hostSlice = createSlice({
         if (index !== -1) {
             state.deliveryBoy[index] = updatedUser;
         }
-        });
-
+        })
+        .addCase(getpopularChef.pending,(state)=>{
+          state.chefLoading=true;
+          state.chefError=null;
+        })
+      .addCase(getpopularChef.fulfilled,(state,action:PayloadAction<popularChef[]>)=>{
+        state.loading=false;
+        state.popularChef=action.payload
+      })
+      .addCase(getpopularChef.rejected,(state,action)=>{
+        state.chefError=action.payload as string;
+      })
+      .addCase(getAllWithdrawals.pending,(state)=>{
+        state.withdrawLoading=true;
+        state.withdrawError=null
+      })
+      .addCase(getAllWithdrawals.fulfilled,(state,action:PayloadAction<withdrawal[]>)=>{
+        state.withdrawLoading=false;
+        state.withdrawal=action.payload
+      })
+      .addCase(getAllWithdrawals.rejected,(state,action)=>{
+        state.withdrawError=action.payload as string
+      })
   }
 });
 

@@ -52,7 +52,7 @@ console.log(paymentMap)
         {TABS.map((tab) => (
           <button
             key={tab}
-            className={`px-4 py-2 text-sm font-medium rounded-full transition ${
+            className={`px-4 py-2 cursor-pointer text-sm font-medium rounded-full transition ${
               activeTab === tab
                 ? 'bg-[#B8755D] text-white'
                 : 'bg-[#f0e6e2] text-[#B8755D] hover:bg-[#e5d4ce]'

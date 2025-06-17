@@ -57,8 +57,8 @@ const BidModal: React.FC<BidModalProps> = ({ postId, onClose, onBidSent }) => {
         />
         
         <div className="flex justify-end gap-2">
-          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>Cancel</button>
-          <button className="bg-[#B8755D] text-white px-4 py-2 rounded" onClick={handleSubmit}>Submit</button>
+          <button className="bg-gray-300 px-4 py-2 rounded cursor-pointer" onClick={onClose}>Cancel</button>
+          <button className="bg-[#B8755D] text-white px-4 py-2 rounded cursor-pointer" onClick={handleSubmit}>Submit</button>
         </div>
       </div>
     </div>

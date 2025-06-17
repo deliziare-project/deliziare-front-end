@@ -111,7 +111,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
           {!previewImage && (
             <button
               onClick={handleEditClick}
-              className="absolute bottom-0 right-0 bg-white border border-gray-300 rounded-full p-1 hover:bg-gray-100"
+              className="absolute cursor-pointer bottom-0 right-0 bg-white border border-gray-300 rounded-full p-1 hover:bg-gray-100"
             >
               <Pencil size={16} className="text-gray-600" />
             </button>
