@@ -122,9 +122,17 @@ export const getAllBids = createAsyncThunk(
 );
 
 
-export const markBidsAsRead = async (postId: string) => {
-  return await axiosInstance.patch('/bids/mark-read', { postId });
-};
+export const markBidsAsRead = createAsyncThunk(
+  'bids/markAsRead',
+  async (postId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch('/bids/mark-read', { postId });
+      return response.data.bids; // Return the updated bids
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
 const chefBidSlice = createSlice({
   name: 'chefBids',
@@ -172,6 +180,18 @@ const chefBidSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(markBidsAsRead.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(markBidsAsRead.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bids = action.payload;
+        
+      })
+      .addCase(markBidsAsRead.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
