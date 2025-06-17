@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -36,7 +37,7 @@ export default function HeroSection() {
           asChild
           variant="outline"
           size="sm"
-          className="bg-transparent text-white hover:bg-orange-700 font-semibold px-4 py-2 rounded-full"
+          className="bg-transparent text-white border-white hover:bg-white/10 font-semibold px-4 py-2 rounded-full"
         >
           <Link href="/login">Sign In</Link>
         </Button>
