@@ -1,18 +1,33 @@
 'use client'
-import { checkCurrentUser } from '@/features/authSlice'
+import { checkCurrentUser, logoutUser } from '@/features/authSlice'
 import { AppDispatch, RootState } from '@/redux/store'
-import { Bell } from 'lucide-react'
+import { Bell, LogOut } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 function Navbar() {
     const {currentUser}=useSelector((state:RootState)=>state.auth)
     const dispatch=useDispatch<AppDispatch>()
+    const router = useRouter();
     
     useEffect(()=>{
         dispatch(checkCurrentUser())
     },[dispatch])
+
+    const performLogout=async()=>{
+      const resultAction=await dispatch(logoutUser());
+      if(logoutUser.fulfilled.match(resultAction)){
+        router.push("/login")
+      }else{
+        console.error("logout failed",resultAction.payload);
+        
+      }
+    };
+    const handleLogout=()=>{
+      performLogout();
+    }
 
   return (
     <div>
@@ -59,6 +74,12 @@ function Navbar() {
                 <p className="text-sm font-medium text-gray-700">{currentUser?.name}</p>
                 <p className="text-xs text-gray-400">Online</p>
               </div>
+              <div
+                   onClick={handleLogout}
+                   className="mt-auto flex items-center gap-3 px-5 py-3 rounded-xl bg-white text-red-600 hover:bg-red-50 hover:shadow-md transition-all duration-300 cursor-pointer animate-fadeIn border border-red-100 hover:border-red-200 group mb-7">
+                        <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform duration-200"  />
+                        <span className="text-sm font-semibold tracking-tight">Logout</span>
+                      </div>
             </div>
           </div>
         </div>

@@ -91,13 +91,6 @@ const router=useRouter()
             mobile
           />
 
-          <div className="flex space-x-4 items-center pt-4 border-t border-gray-200 mt-4">
-            <button className="relative flex items-center p-2 rounded-md text-gray-600 hover:text-orange-500 hover:bg-orange-50 focus:outline-none transition-colors">
-              <FaComments className="h-6 w-6 mr-2" />
-              
-            </button>
-          </div>
-
           <button className="w-full flex items-center p-2 rounded-md text-gray-600 hover:text-orange-500 hover:bg-orange-50 focus:outline-none transition-colors">
             <User className="h-6 w-6 mr-2" />
             <span>Profile</span>

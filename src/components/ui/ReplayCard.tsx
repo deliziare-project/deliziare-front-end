@@ -49,7 +49,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
   
   
   const bidPayment = pay?.find(
-    (payment) => payment?.bid?.bidId._id === replay._id
+    (payment) => payment?.bid?.bidId?._id === replay._id
   );
   
 

@@ -20,9 +20,10 @@ interface Props {
   postId: string
   show: boolean
   onClose: () => void
+  refreshOrders:()=>void
 }
 
-const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose }) => {
+const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose ,refreshOrders}) => {
   const dispatch = useDispatch<AppDispatch>()
   const { selectedOrder, loading, error } = useSelector((state: RootState) => state.delivery)
 
@@ -68,15 +69,19 @@ const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose }) => {
             </div>
             <div className="flex items-center gap-2">
               <CalendarDays className="w-5 h-5" />
-              <strong>Date:</strong> {selectedOrder.bidId.postId.date}
+              <strong>Date:</strong> {new Date(selectedOrder.bidId.postId.date).toLocaleDateString('en-GB')}
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
-              <strong>Time:</strong> {selectedOrder.bidId.postId.time}
+              <strong>Time:</strong>  {new Date(`1970-01-01T${selectedOrder.bidId.postId.time}`).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                      })}
             </div>
            
 
-            <DeliveryMap mapHeight="400px" />
+            <DeliveryMap mapHeight="400px" refreshOrders={refreshOrders} />
           </div>
         )}
       </div>

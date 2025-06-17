@@ -14,6 +14,8 @@ function ReqUi() {
   const { allbids, loading, error } = useSelector((state: RootState) => state.chefBids)
   const [selectedBidId, setSelectedBidId] = useState<string | null>(null)
 
+  const [bids, setBids] = useState<any[]>([])
+
   useEffect(() => {
     dispatch(getAllBids())
   }, [dispatch])
@@ -22,7 +24,22 @@ function ReqUi() {
     (bid) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending'
   ) || []
 
-  const displayedBids = completedBids.slice(0, 3)
+  useEffect(() => {
+  dispatch(getAllBids()).then((res: any) => {
+    const filtered = res.payload?.filter(
+      (bid: any) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending'
+    )
+    setBids(filtered?.slice(0, 3) || [])
+  })
+}, [dispatch])
+
+const removeBid = (bidIdToRemove: string) => {
+  setBids((prevBids) => prevBids.filter((b) => b._id !== bidIdToRemove))
+  closeModal()
+}
+
+
+  const displayedBids = bids
 
   const openModal = (id: string) => {
     setSelectedBidId(id)
@@ -75,7 +92,13 @@ function ReqUi() {
               ))}
             </ul>
 
-            {selectedBidId && <DetailModal bidId={selectedBidId} onClose={closeModal} />}
+           {selectedBidId && (
+            <DetailModal
+              bidId={selectedBidId}
+              onClose={closeModal}
+              onActionComplete={removeBid} 
+            />
+          )}
 
             {completedBids.length > 3 && (
               <div className="mt-6 text-right">

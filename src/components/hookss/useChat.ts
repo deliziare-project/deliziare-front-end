@@ -7,22 +7,22 @@ import {
   setMessages,
   setLoading,
   replayChat,
+  updateRequstBid,
 } from '@/features/chatSlice';
 import { checkCurrentUser } from '@/features/authSlice';
 import { Message } from '@/types/message';
-
-// interface Message {
-//   _id: string;
-//   senderId: string;
-//   receiverId: string;
-//   content: string;
-//   timestamp: string | Date;
-// }
-
+interface BidRequest {
+  amount: string;
+  description: string;
+}
 export const useChat = (recipientId: string) => {
   const [messageInput, setMessageInput] = useState('');
+  const [bidRequest, setBidRequest] = useState<BidRequest>({
+    amount: '',
+    description: ''
+  });
   const dispatch = useDispatch<AppDispatch>();
-    const { replayMessage } = useSelector((state: RootState) => state.chat);
+  const { replayMessage } = useSelector((state: RootState) => state.chat);
   
   const { messages, onlineUsers, loading } = useSelector(
     (state: RootState) => state.chat
@@ -32,11 +32,11 @@ export const useChat = (recipientId: string) => {
     (state: RootState) => state.auth
   );
   
-  const { sendMessage } = useSocket(currentUser?._id || '');
+  const { sendMessage, markMessagesAsReadSocket  } = useSocket(currentUser?._id || '');
 
   const fetchMessages = async () => {
     if (!recipientId || !currentUser?._id) return;
-    
+  
     try {
       dispatch(setLoading(true));
       const response = await axiosInstance.get<Message[]>(
@@ -49,31 +49,52 @@ export const useChat = (recipientId: string) => {
       dispatch(setLoading(false));
     }
   };
+  
+  const markMessagesAsRead = async () => {
+    if (!recipientId || !currentUser?._id) return;
+    
+    try {
+      await axiosInstance.post(`/messages/markAsRead/${currentUser._id}/${recipientId}`);
+      console.log(`📖 API call to mark messages as read for recipientId: ${recipientId}`);
+      markMessagesAsReadSocket(currentUser._id, recipientId);
+    } catch (error) {
+      console.error('Failed to mark messages as read:', error);
+    }
+  };
 
   useEffect(() => {
-  dispatch(checkCurrentUser());
-}, []);
+    dispatch(checkCurrentUser());
+  }, []);
 
-useEffect(() => {
-  if (recipientId && currentUser?._id) {
-    fetchMessages();
-  }
-}, [recipientId, currentUser?._id]);
+  useEffect(() => {
+    if (recipientId && currentUser?._id) {
+      fetchMessages();
+      markMessagesAsRead();
+    }
+  }, [recipientId, currentUser?._id]);
 
   const handleSendMessage = async () => {
-    if (!messageInput.trim() || !recipientId || !currentUser?._id) return;
+   
+
+    if (!recipientId || !currentUser?._id) return;
 
     const newMessage = {
       senderId: currentUser._id,
       receiverId: recipientId,
       content: messageInput,
-      postId:replayMessage?._id as string
+      postId: replayMessage?._id as string,
+      RequestChef:bidRequest.amount&&bidRequest.description?bidRequest:undefined
     };
-
+   
     try {
       await sendMessage(newMessage);
-      dispatch(replayChat(null))
+      dispatch(replayChat(null));
       setMessageInput('');
+        setBidRequest({
+         amount: '',
+        description: ''
+        });
+      dispatch(updateRequstBid(false))
     } catch (error) {
       console.error('Failed to send message:', error);
     }
@@ -81,6 +102,13 @@ useEffect(() => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessageInput(e.target.value);
+  };
+   const handleBidCHange = (e: React.ChangeEvent<HTMLInputElement| HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+     setBidRequest((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -98,6 +126,8 @@ useEffect(() => {
     handleSendMessage,
     handleInputChange,
     handleKeyPress,
+    bidRequest,
+    handleBidCHange,
     isLoadingCurrentUser,
   };
 };

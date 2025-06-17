@@ -1,5 +1,6 @@
 'use client';
 
+import { useChatPersonList } from '@/components/hookss/useChatPersonList';
 import ToastProvider from '@/components/shared/ToastProvider';
 import Navbar from '@/components/user/Navbar';
 import { useRouter } from 'next/navigation';
@@ -15,6 +16,7 @@ export default function UserLayout({ children }: { children: ReactNode }) {
   const [rel, setRel] = useState({ x: 0, y: 0 });
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const wasDraggingRef = useRef(false);
+const {unreadCount}=useChatPersonList()
 
   useEffect(() => {
     const updateInitialPosition = () => {
@@ -94,7 +96,15 @@ export default function UserLayout({ children }: { children: ReactNode }) {
           onMouseDown={handleMouseDown}
           onClick={handleClick}
         >
-          <FaComment className="h-6 w-6 " />
+           <div className="relative">
+    <FaComment className="h-6 w-6" />
+    
+    {unreadCount > 0 && (
+      <span className="absolute -top-1 -right-1 bg-red-600 text-xs text-white font-bold px-1.5 py-0.5 rounded-full">
+        {unreadCount>9?'9+':unreadCount}
+      </span>
+    )}
+  </div>
         </div>
 
         {/* Page Content */}
