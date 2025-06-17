@@ -112,12 +112,12 @@ function DetailModal({ bidId, onClose, onActionComplete }: DetailModalProps) {
               >
                 Accept
               </button>
-              {/* <button
+              <button
                 className="px-4 py-2 bg-[#E53935] text-white rounded-lg hover:bg-red-600 transition"
                 onClick={handleReject}
               >
                 Reject
-              </button> */}
+              </button>
             </>
           ) : (
             <button
