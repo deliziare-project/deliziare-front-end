@@ -19,6 +19,8 @@ function ChefNavbar() {
 
   const userId = useSelector((state: RootState) => state.auth.currentUser?._id);
   const { notifications, loading } = useSelector((state: RootState) => state.notifications);
+  console.log("noti",notifications);
+  
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   // Close dropdown when clicking outside
