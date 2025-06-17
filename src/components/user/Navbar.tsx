@@ -177,7 +177,8 @@ const Navbar: React.FC = () => {
 
     const unreadCount = notifications.filter((n) => !n.isRead).length;
   return (
-    <nav className="sticky top-0 z-50 bg-[linear-gradient(to_right,rgba(255,200,150,0.6),rgba(255,255,255,0.6))] backdrop-blur">
+    // <nav className=" sticky top-0 z-50 bg-[linear-gradient(to_right,rgba(255,200,150,0.6),rgba(255,255,255,0.6))] backdrop-blur">
+    <nav className="sticky top-0 z-50 backdrop-blur bg-transparent border-0" style={{backgroundColor: 'rgba(0,0,0,0)', border: 'none'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
@@ -211,6 +212,7 @@ const Navbar: React.FC = () => {
                   )}
                 </button>
 
+
                 {/* Notification Dropdown */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg z-50">
@@ -235,6 +237,9 @@ const Navbar: React.FC = () => {
                   </div>
                 )}
               </div>
+
+              
+
 
               {/* Profile Icon */}
               <button
