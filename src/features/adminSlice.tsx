@@ -2,13 +2,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axiosInstance from '@/api/axiosInstance';
 
-export interface deliveryBoy {
-  _id: string;
+interface User{
+   _id: string;
   name: string;
   email: string;
   phone: number;
   role: string;
   isBlock: boolean;
+}
+export interface deliveryBoy {
+ userId:User;
+ vehicleType:string;
+ IDProof:string;
+ license:string
 }
 
 export interface popularChef{
@@ -21,12 +27,20 @@ export interface popularChef{
 
 interface withdrawal{
   _id:string,
-  userId:string,
+  userId:{
+    _id:string,
+    name:string,
+    profileImage:string
+  },
   amount:number,
   role:'chef'|'deliveryBoy',
   status:'pending'|'approved'
 }
 
+interface approve{
+  withdrawal:withdrawal[]
+
+}
 interface deliveryBoyState {
   deliveryBoy: deliveryBoy[];
   loading: boolean;
@@ -62,7 +76,7 @@ export const toggleBlockStatus = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.patch(`/admin/deliveryBoy/${userId}/block`);
-      return response.data; 
+      return response.data.user; 
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Failed to toggle status");
     }
@@ -97,6 +111,17 @@ export const getAllWithdrawals=createAsyncThunk('/wallet/getAllWithdrawals',
   }
 )
 
+export const approveRequest=createAsyncThunk('/withdraw/approveRequest',
+  async(reqId:string,{rejectWithValue})=>{
+    try{
+       const res=await axiosInstance.post(`/wallet/acceptWithdraw/${reqId}`)
+       return res.data
+    }catch(err:any){
+       return rejectWithValue(err.response?.data?.message||'Error in approving request')
+    }
+  }
+)
+
 const hostSlice = createSlice({
   name: "deliveryBoy",
   initialState,
@@ -116,14 +141,18 @@ const hostSlice = createSlice({
       .addCase(fetchDeliveryBoy.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      })
-     .addCase(toggleBlockStatus.fulfilled, (state, action) => {
-        const updatedUser = action.payload.user;
-        const index = state.deliveryBoy.findIndex(user => user._id === updatedUser._id);
+              })
+            .addCase(toggleBlockStatus.fulfilled, (state, action) => {
+        const updatedUser = action.payload; // directly the user object
+        const index = state.deliveryBoy.findIndex(
+          (user) => user.userId._id === updatedUser._id
+        );
         if (index !== -1) {
-            state.deliveryBoy[index] = updatedUser;
+          state.deliveryBoy[index].userId.isBlock = updatedUser.isBlock;
         }
-        })
+      })
+
+
         .addCase(getpopularChef.pending,(state)=>{
           state.chefLoading=true;
           state.chefError=null;
@@ -144,6 +173,22 @@ const hostSlice = createSlice({
         state.withdrawal=action.payload
       })
       .addCase(getAllWithdrawals.rejected,(state,action)=>{
+        state.withdrawError=action.payload as string
+      })
+      .addCase(approveRequest.pending,(state)=>{
+        state.withdrawLoading=true;
+        state.withdrawError=null;
+      })
+      .addCase(approveRequest.fulfilled, (state, action) => {
+        const approvedId = action.payload.requestId ;
+        const index = state.withdrawal.findIndex(w => w._id === approvedId);
+        if (index !== -1) {
+          state.withdrawal[index].status = 'approved';
+        }
+        state.withdrawLoading = false;
+      })
+      .addCase(approveRequest.rejected,(state,action)=>{
+        state.withdrawLoading=false;
         state.withdrawError=action.payload as string
       })
   }

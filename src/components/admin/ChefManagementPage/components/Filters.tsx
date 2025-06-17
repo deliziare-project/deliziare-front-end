@@ -21,7 +21,7 @@ const Filters = ({
   districts
 }: FiltersProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+    <div className=" rounded-lg p-4 mb-6">
       <h2 className="text-lg font-medium text-gray-700 mb-4">Filters</h2>
       
       <div className="flex flex-col md:flex-row gap-4">
@@ -32,7 +32,7 @@ const Filters = ({
           <input
             type="text"
             placeholder="Search by name"
-            className="pl-10 w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            className="pl-10 w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-800 focus:border-transparent transition-all duration-200"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -40,7 +40,7 @@ const Filters = ({
         
         <div className="flex-1">
           <select
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white transition-all duration-200"
+            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-800 focus:border-transparent appearance-none bg-white transition-all duration-200"
             value={filterDistrict}
             onChange={(e) => setFilterDistrict(e.target.value)}
           >
@@ -55,7 +55,7 @@ const Filters = ({
         
         <div className="flex-1">
           <select
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white transition-all duration-200"
+            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-800 focus:border-transparent appearance-none bg-white transition-all duration-200"
             value={filterBlocked}
             onChange={(e) => setFilterBlocked(e.target.value as FilterStatus)}
           >
