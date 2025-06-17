@@ -33,6 +33,8 @@ export default function ChatLayout({ recipientId }: ChatLayoutProps) {
     handleInputChange,
     handleKeyPress,
     isLoadingCurrentUser,
+    bidRequest,
+    handleBidCHange,
   } = useChat(recipientId)
 
   useEffect(() => {
@@ -104,6 +106,8 @@ export default function ChatLayout({ recipientId }: ChatLayoutProps) {
         handleInputChange={handleInputChange}
         handleKeyPress={handleKeyPress}
         handleSendMessage={handleSendMessage}
+        bidRequest={ bidRequest}
+        handleBidCHange={ handleBidCHange}
       />
     </div>
   )

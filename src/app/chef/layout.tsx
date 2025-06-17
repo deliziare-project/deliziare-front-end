@@ -2,6 +2,7 @@
 
 import ChefNavbar from '@/components/chef/chefNavbar';
 import ChefSidebar from '@/components/chef/chefSidebar';
+import { useChatPersonList } from '@/components/hookss/useChatPersonList';
 import ToastProvider from '@/components/shared/ToastProvider';
 import { RootState } from '@/redux/store';
 import { useRouter } from 'next/navigation';
@@ -19,7 +20,7 @@ export default function ChefLayout({ children }: { children: ReactNode }) {
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const wasDraggingRef = useRef(false);
   const [messageCount, setMessageCount] = useState(0)
-  const unreadCount = useSelector((state: RootState) => state.chat.unreadCount);
+  const {unreadCount} = useChatPersonList()
 
 
   useEffect(() => {
