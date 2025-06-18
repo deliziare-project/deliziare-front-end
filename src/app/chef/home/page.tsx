@@ -52,7 +52,7 @@ const page = () => {
 
   return (
     <AuthWrapper routeType='private'>
-      <div className="min-h-screen bg-gradient-to-b from-[#FFF9F5] to-[#9b8f85]">
+      <div className="min-h-screen  ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
