@@ -29,7 +29,7 @@ export default function HeroSection() {
         <Button
           asChild
           size="sm"
-          className="bg-white text-black font-semibold px-4 py-2 rounded-full hover:bg-gray-200"
+          className="bg-orange-600 text-black font-semibold px-4 py-2 rounded-full hover:bg-gray-200"
         >
           <Link href="/register">Sign Up</Link>
         </Button>
