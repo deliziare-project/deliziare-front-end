@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { getChefBids } from '@/features/bidSlice';
+import { Bid, getChefBids } from '@/features/bidSlice';
 import { getAllPay } from '@/features/paymentSlice';
 
 import { format } from 'date-fns';
 import ChefCalendar from '@/components/chef/calender/ChefCalender';
+import { Pay } from '@/features/paymentSlice';
 
 const MyWorkCalendarPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,24 +23,24 @@ const MyWorkCalendarPage = () => {
   }, [dispatch]);
 
   const paymentMap = new Map(
-    (pay || []).map((payment) => [payment.bid?.bidId?._id, payment])
+    (pay || []).map((payment: Pay ) => [payment.bid?.bidId?._id, payment])
   );
 
-  const pendingBids = bids.filter(
-    (bid) =>
-      bid.status === 'accepted' &&
-      paymentMap.has(bid._id)
+  const pendingBids = bids.filter((bid: Bid) =>
+    bid.status === 'accepted' && paymentMap.has(bid._id)
   );
-
-  const calendarEventDates = pendingBids.map((bid) =>
+  
+  const calendarEventDates = pendingBids.map((bid: Bid) =>
     format(new Date(bid.postId.date), 'yyyy-MM-dd')
   );
-
+  
   const ordersForSelectedDate = selectedDate
     ? pendingBids.filter(
-        (bid) => format(new Date(bid.postId.date), 'yyyy-MM-dd') === selectedDate
+        (bid: Bid) =>
+          format(new Date(bid.postId.date), 'yyyy-MM-dd') === selectedDate
       )
     : [];
+  
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -62,7 +63,7 @@ const MyWorkCalendarPage = () => {
             <p className="text-gray-500">No orders on this date.</p>
           ) : (
             <ul className="space-y-4">
-              {ordersForSelectedDate.map((bid) => (
+              {ordersForSelectedDate.map((bid:Bid) => (
                 <li
                   key={bid._id}
                   className="bg-white border border-[#e2d4cf] rounded-xl shadow p-4"

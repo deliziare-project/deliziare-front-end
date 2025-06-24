@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchHosts, toggleBlockStatus } from "@/features/userManagementSlice";
+import { fetchHosts, Host, toggleBlockStatus } from "@/features/userManagementSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import Pagination from "@/components/admin/userManagement/Pagination";
 import SearchAndFilter from "@/components/admin/userManagement/SearchandFilter";
@@ -14,7 +14,9 @@ const USERS_PER_PAGE = 5;
 
 function UserManagement() {
   const dispatch = useDispatch<AppDispatch>();
-  const { hosts, loading, error } = useSelector((state: RootState) => state.hosts);
+  const { hosts, loading, error } = useSelector(
+    (state: RootState) => state.hosts
+  ) as { hosts: Host[]; loading: boolean; error: string | null };
 
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");

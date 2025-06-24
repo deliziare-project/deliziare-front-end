@@ -174,6 +174,7 @@ const ReplayCard: React.FC<ReplayCardProps> = ({ replay }) => {
       await axiosInstance.patch('/bids/accept-bid', {
         bidId: value._id,
         postId: value.postId,
+        
       });
       setStatus('accepted');
     } catch (error) {
