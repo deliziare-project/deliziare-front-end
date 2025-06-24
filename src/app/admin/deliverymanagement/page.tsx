@@ -8,7 +8,7 @@ import SearchAndFilter from "@/components/admin/userManagement/SearchandFilter";
 import UserTableRow from "@/components/admin/userManagement/UserTableRow";
 import UserOverviewCard from "@/components/admin/userManagement/userOverview";
 import UserMobileCard from "@/components/admin/userManagement/UserMobileview";
-import { fetchDeliveryBoy, toggleBlockStatus } from "@/features/adminSlice";
+import { deliveryBoy, fetchDeliveryBoy, toggleBlockStatus } from "@/features/adminSlice";
 import DeliveryTable from "@/components/admin/deliveryBoyManagement/DeliveryTable";
 
 const USERS_PER_PAGE = 5;
@@ -18,7 +18,11 @@ function Page() {
 
   const { deliveryBoy, loading, error } = useSelector(
     (state: RootState) => state.admin
-  );
+  ) as {
+    deliveryBoy: deliveryBoy[];
+    loading: boolean;
+    error: string | null;
+  };
   console.log('delivery',deliveryBoy)
 
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
