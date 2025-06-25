@@ -180,6 +180,8 @@ import { AppDispatch, RootState } from '@/redux/store';
 import { getChefBids } from '@/features/bidSlice';
 import { getAllPay } from '@/features/paymentSlice';
 import { Clock, CalendarDays, MapPin, Utensils, Scale, FileText, CheckCircle2, XCircle, Clock4, IndianRupee } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const TABS = ['pending', 'accepted', 'rejected'];
 
@@ -187,13 +189,30 @@ const ChefBids = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { bids = [], loading, error } = useSelector((state: RootState) => state.chefBids);
   const { pay } = useSelector((state: RootState) => state.payment);
+  const searchParams = useSearchParams();
+  const section = searchParams.get('section');
   
   useEffect(() => {
     dispatch(getAllPay());
     dispatch(getChefBids());
   }, [dispatch]);
 
-  const [activeTab, setActiveTab] = useState('pending');
+ 
+
+const router = useRouter();
+const [activeTab, setActiveTab] = useState('pending');
+
+useEffect(() => {
+  if (section && TABS.includes(section)) {
+    setActiveTab(section);
+  }
+}, [section]);
+
+const handleTabChange = (tab: string) => {
+  setActiveTab(tab);
+  router.replace(`/chef/Bids?section=${tab}`);
+};
+
 
   const filteredBids = Array.isArray(bids)
     ? bids.filter((bid) => bid.status === activeTab)
@@ -223,7 +242,8 @@ const ChefBids = () => {
                 ? 'bg-[#B8755D] text-white shadow-md'
                 : 'bg-transparent text-[#B8755D] hover:bg-[#f0e6e2]'
             }`}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabChange(tab)}
+
           >
             {tab === 'accepted' && <CheckCircle2 size={16} />}
             {tab === 'rejected' && <XCircle size={16} />}
@@ -270,7 +290,7 @@ const ChefBids = () => {
       {/* Bids List */}
       {!loading && !error && filteredBids.length > 0 && (
         <ul className="space-y-4">
-          {[...filteredBids].reverse().map((bid) => (
+          {[...filteredBids].map((bid) => (
             <li
               key={bid._id}
               className="border border-[#e2d4cf] rounded-xl shadow-sm p-6 bg-white hover:shadow-md transition-all duration-300"

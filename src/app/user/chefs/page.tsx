@@ -273,6 +273,7 @@ const HostViewChefPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const postsPerPage = 6;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchChefPosts = async () => {
@@ -497,6 +498,7 @@ const HostViewChefPosts = () => {
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={setCurrentPage}
+                  isLoading={isLoading}
                 />
               </div>
             </div>

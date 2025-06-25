@@ -9,6 +9,8 @@ import {
 } from '@/features/notificationSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { Bell, CheckCircle2, Clock, Loader2, ChevronDown } from 'lucide-react';
+import Navbar from '@/components/deliveryBoy/Navbar';
+import BottomBar from '@/components/deliveryBoy/bottomBar';
 import { useRouter } from 'next/navigation';
 
 export default function NotificationsPage() {
@@ -35,7 +37,9 @@ export default function NotificationsPage() {
   const hasMore = notifications.length > visibleCount; // Check if more notifications exist
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        
       <div className="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
         {/* Header Section */}
         <div className="flex items-center mb-8">
@@ -77,21 +81,15 @@ export default function NotificationsPage() {
                 <div
                   key={index}
                   onClick={() => {
-                    if (notification.type === 'event_available' && notification.postId) {
-                      router.push(`/chef/postDetails/${notification.postId}`);
-                    } else if (notification.type === 'bid_accepted') {
-                      router.push('/chef/Bids?section=accepted');
-                    } else if (notification.type === 'delivery_accepted') {
-                      router.push('/chef/track-order');
-                    } else if (notification.type === 'chef-delivered') {
-                      router.push('/chef/track-order');
-                    } 
-                    else if(notification.type==='withdrawal-approved'){
-                      router.push('/chef/wallet')
-                    }else {
-                      router.push('/chef/notifications');
-                    }
                     
+                    if (notification.type === 'chef-withdrawal') {
+                      router.push('/admin/withdrawals');
+                    } 
+                    else if (notification.type === 'deliveryboy-withdrawal'){
+                      router.push('/admin/withdrawals')
+                    }else {
+                      router.push('/admin/notifications');
+                    }
                   }}
                   className={`p-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] ${
                     !notification.isRead
@@ -109,9 +107,7 @@ export default function NotificationsPage() {
                     >
                       <Bell className="h-6 w-6" />
                     </div>
-                    <div className="ml-4 flex-1"
-                    
-                    >
+                    <div className="ml-4 flex-1">
                       <p
                         className={`text-base leading-6 ${
                           !notification.isRead
@@ -157,6 +153,7 @@ export default function NotificationsPage() {
           </>
         )}
       </div>
+      
     </div>
   );
 }

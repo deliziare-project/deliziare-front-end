@@ -19,6 +19,7 @@ const ChefManagementPage = ({ initialChefs }: { initialChefs: Chef[] }) => {
   const [filterBlocked, setFilterBlocked] = useState<FilterStatus>('all');
   const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
   const [certificateImage, setCertificateImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const districts = useMemo(() => {
     return [...new Set(chefs.map((chef) => chef.district))];
@@ -131,6 +132,7 @@ useEffect(() => {
     currentPage={currentPage}
     totalPages={Math.ceil(filteredChefs.length / itemsPerPage)}
     onPageChange={setCurrentPage}
+    isLoading={isLoading}
   />
 )}
 
