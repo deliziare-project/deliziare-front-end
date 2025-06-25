@@ -14,7 +14,7 @@ import Link from 'next/link';
 const page: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview'>('overview');
   const [isSetPasswordOpen, setSetPasswordOpen] = useState(false);
   const [isCertModalOpen, setCertModalOpen] = useState(false);
 
@@ -36,11 +36,7 @@ const page: React.FC = () => {
     loadChefProfile();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (activeTab === 'posts') {
-      dispatch(fetchChefPosts());
-    }
-  }, [activeTab, dispatch]);
+ 
 
   if (loading) return (
     <div className="flex justify-center items-center min-h-[300px]">
@@ -140,11 +136,11 @@ const page: React.FC = () => {
               <nav className="flex -mb-px">
                 {[
                   { id: 'overview', label: 'Overview', icon: <UserCircle className="w-5 h-5 mr-2" /> },
-                  { id: 'posts', label: 'Posts', icon: <FileText className="w-5 h-5 mr-2" /> },
+                
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id as 'overview' | 'posts')}
+                    onClick={() => setActiveTab(tab.id as 'overview')}
                     className={`flex cursor-pointer items-center justify-center px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
                       activeTab === tab.id
                         ? 'border-[#C26E4B] text-[#5A2D1A]'
@@ -238,76 +234,7 @@ const page: React.FC = () => {
               
             )}
 
-            {/* Posts Tab */}
-            {activeTab === 'posts' && (
-              <div className="space-y-6">
-                {postsLoading ? (
-                  <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#C26E4B]"></div>
-                  </div>
-                ) : postsError ? (
-                  <div className="bg-red-50 border-l-4 border-red-500 p-4">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm text-red-700">{postsError}</p>
-                      </div>
-                    </div>
-                  </div>
-                ) : posts.length > 0 ? (
-                  posts.map((post) => (
-                    <div
-                      key={post._id}
-                      className="border border-[#F0E0D8] rounded-xl p-6 hover:shadow-md transition duration-300 bg-white"
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <h3 className="text-xl font-serif font-semibold text-[#5A2D1A]">{post.title}</h3>
-                        <span className="text-sm text-[#9C8378]">
-                          {new Date(post.createdAt).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                        </span>
-                      </div>
-                      
-                      <p className="text-[#5A2D1A] mb-4">{post.description}</p>
-
-                      {post.images?.[0]?.url && (
-                        <img
-                          src={post.images[0].url}
-                          alt={post.images[0].altText || 'Post image'}
-                          className="w-full h-64 object-cover rounded-lg mb-4 border border-[#F0E0D8]"
-                        />
-                      )}
-
-                      {post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {post.tags.map((tag, idx) => (
-                            <span
-                              key={idx}
-                              className="px-3 py-1 bg-[#F9EBE5] text-[#5A2D1A] text-xs font-medium rounded-full"
-                            >
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-12">
-                    <FileText className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-lg font-medium text-gray-900">No posts yet</h3>
-                    <p className="mt-1 text-sm text-gray-500">Create your first post to showcase your culinary work.</p>
-                  </div>
-                )}
-              </div>
-            )}
+          
           </div>
         </div>
 

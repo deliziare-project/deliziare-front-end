@@ -3,7 +3,7 @@ import { checkCurrentUser, logoutUser } from '@/features/authSlice'
 import { addNotification, fetchNotifications, markNotificationAsRead, NotificationType } from '@/features/notificationSlice'
 import { AppDispatch, RootState } from '@/redux/store'
 import socket, { connectSocket } from '@/socket'
-import { Bell, Clock, LogOut } from 'lucide-react'
+import { Bell, Clock, LogOut, User } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -89,9 +89,10 @@ function Navbar() {
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
-    <div>
-      <nav className="bg-white px-4 sm:px-8 py-3 border-b border-gray-100 sticky top-0 z-20 shadow-md">
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
+   <div className="sticky top-0 z-50 bg-white shadow-md backdrop-blur w-full">
+    <nav className="px-4 sm:px-8 py-3 border-b border-gray-100">
+      <div className="flex justify-between items-center max-w-7xl mx-auto">
+       
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-orange-50 shadow-sm">
               <Image
@@ -189,16 +190,11 @@ function Navbar() {
 
 
             <div className="flex items-center space-x-3">
-              <div className="relative">
+              <div className="relative" 
+              onClick={()=>router.push('/deliveryBoy/profile')}
+              >
                 <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-orange-100 shadow">
-                  <Image
-                    src="/userSideImage/deliveryMan.jpg"
-                    alt="User Profile"
-                    width={36}
-                    height={36}
-                    className="object-cover"
-                    priority
-                  />
+                  <User/>
                 </div>
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
               </div>
