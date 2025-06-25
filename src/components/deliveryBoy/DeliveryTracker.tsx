@@ -8,6 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 interface Props{
   deliveryId:string
 }
+
+interface LocationUpdatePayload {
+  deliveryId: string;
+  coords: { lat: number; lng: number };
+}
+
 const DeliveryBoyTracker: React.FC<Props> = ({deliveryId}) => {
    const dispatch = useDispatch<AppDispatch>();
     const {  currentUser, loading } = useSelector((state: RootState) => state.auth);
@@ -24,7 +30,8 @@ const DeliveryBoyTracker: React.FC<Props> = ({deliveryId}) => {
         }
 
         console.log('Sending location:', coords)
-        socket.emit('locationUpdate', {deliveryId,coords})
+        
+        socket.emit('locationUpdate', {deliveryId,coords} as any)
       },
       (err) => {
         console.error('Geolocation error', err)

@@ -40,7 +40,7 @@ interface Payment {
   
 }
 
-interface Pay {
+export interface Pay {
   _id: string;
   user: string;
   bid: {

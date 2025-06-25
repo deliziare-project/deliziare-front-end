@@ -10,6 +10,8 @@ import {
   Wallet,
   Menu,
   X,
+  Truck,
+
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,10 +26,10 @@ const sidebarItems = [
   { label: 'My Posts', icon: Utensils, path: '/chef/post' },
   { label: 'Bid requests', icon: GitPullRequestDraft, path: '/chef/Bids' },
   { label: 'Orders', icon: CalendarCheck, path: '/chef/orders' },
+  { label: 'Track Order', icon: Truck, path: '/chef/track-order' }, 
   { label: 'Track work', icon: CalendarSearch, path: '/chef/calender' },
   { label: 'Wallet', icon: Wallet, path: '/chef/wallet' }
 ];
-
 function ChefSidebar() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();

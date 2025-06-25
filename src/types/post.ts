@@ -16,6 +16,7 @@ export interface Post {
   menu: string[];
   description: string;
   createdAt: string;
+  deliveryStatus:'pending'|'accepted'|'picked up'|'delivered';
 }
 
 export interface PostsResponse {
