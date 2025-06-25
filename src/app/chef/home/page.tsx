@@ -227,6 +227,7 @@ const OpportunitiesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 4;
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const filteredPosts = posts
     .filter((post) => post.status === 'pending')
@@ -323,20 +324,20 @@ const OpportunitiesPage = () => {
                     {/* Post Header */}
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center">
-                        {post.userId?.profileImage ? (
-                          <div className="relative">
-                            <img
-                              src={post.userId.profileImage}
-                              alt={post.userId?.name}
-                              className="w-14 h-14 rounded-4xl object-cover shadow-lg"
-                            />
-                            
-                          </div>
-                        ) : (
-                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br text-white flex items-center justify-center font-bold text-lg shadow-lg">
-                            {post.userId?.name?.[0]?.toUpperCase() || 'U'}
-                          </div>
-                        )}
+                      {post.userId?.profileImage ? (
+                        <div className="relative">
+                          <img
+                            src={post.userId.profileImage}
+                            alt={post.userId?.name}
+                            className="w-14 h-14 rounded-2xl object-cover shadow-lg"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e3a587] to-[#5A2D1A] text-white flex items-center justify-center font-bold text-lg shadow-lg">
+                          {post.userId?.name?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                      )}
+
                         <div className="ml-4">
                           <h4 className="text-lg font-semibold text-gray-900">{post.userId?.name}</h4>
                           <p className="text-sm text-[#964e2f] font-medium">
@@ -431,24 +432,15 @@ const OpportunitiesPage = () => {
 
               {/* Pagination */}
               {totalPages > 1 && (
-
-                <div className="mt-8">
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                   
-                  />
-
-                {/* <div className="flex justify-center">
+                <div className="flex justify-center">
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-amber-200/50">
                     <Pagination
                       currentPage={currentPage}
                       totalPages={totalPages}
                       onPageChange={setCurrentPage}
+                      isLoading={isLoading}
                     />
-                  </div> */}
-
+                  </div>
                 </div>
               )}
             </>

@@ -17,113 +17,97 @@ const AuthWrapper = ({ children, routeType }: AuthWrapperProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [ready, setReady] = useState(false);
+  // const initializeAuth = async () => {
+  //     await dispatch(checkCurrentUser());
+  // };
+  // initializeAuth()
+  // useEffect(() => {
+   
+  //   if(routeType=='private')initializeAuth();
+  //    setInitialized(true);
+  // }, [dispatch]);
 
+  // Handle routing based on auth state
   useEffect(() => {
     
-    if (routeType === 'private') {
-      dispatch(checkCurrentUser()).finally(() => {
-        setReady(true);
-      });
-    } else {
-      
-      setReady(true);
-    }
-  }, [dispatch, routeType]);
-
-  // useEffect(() => {
-  //   if (!ready || loading) return; 
-
-  //   if (routeType === 'private') {
-  //     if (!isAuthenticated) {
-  //       router.push('/login');
-  //     }
-  //   } else if (routeType === 'public') {
-  //     if (isAuthenticated) {
-  //       if (currentUser?.role === 'admin' && pathname !== '/admin/dashboard') {
-  //         router.push('/admin/dashboard');
-  //       } else if (currentUser?.role === 'host' && !pathname.startsWith('/user')) {
-  //         router.push('/user/home');
-  //       } else if (currentUser?.role === 'chef') {
-  //         if (!currentUser?.isProfileCompleted && pathname !== '/chef/complete-profile') {
-  //           router.push('/chef/complete-profile');
-  //         } else if (currentUser.isProfileCompleted && pathname !== '/chef/home') {
-  //           router.push('/chef/home');
-  //         }
-  //       }
-  //     }
-  //   }
-  // }, [ready, loading, isAuthenticated, router, currentUser, pathname, routeType]);
-
-
-  useEffect(() => {
-    if (!ready || loading) return;
-  
-    if (routeType === 'private') {
-      if (!isAuthenticated) {
-        router.push('/login');
-      } else {
-        // Handle authenticated user redirection
-        if(pathname.startsWith('/chat')){
-         return 
-        }
-        if (currentUser?.role === 'admin' && !pathname.startsWith('/admin')) {
-          router.push('/admin/dashboard');
-        } else if (currentUser?.role === 'host' && !pathname.startsWith('/user')) {
-          router.push('/user/home');
-        } else if (currentUser?.role === 'chef') {
-          if (!currentUser?.isProfileCompleted && pathname !== '/chef/complete-profile') {
-            router.push('/chef/complete-profile');
-          } else if (currentUser.isProfileCompleted && !pathname.startsWith('/chef')) {
-            router.push('/chef/home');
-          }
-        } else if (currentUser?.role === 'deliveryBoy' && !pathname.startsWith('/deliveryBoy')) {
-          router.push('/deliveryBoy/welcome'); 
-        }
-      }
-    } 
-    else if (routeType === 'public') {
+    if ( loading) return;
+    console.log({isAuthenticated, currentUser, loading,routeType })
+   
+   if(routeType === 'public'&&!isAuthenticated) return;
+    // Public route handling
+    if (routeType === 'public') {
       if (isAuthenticated) {
         // Redirect authenticated users away from public routes
-        if (currentUser?.role === 'admin') {
-          router.push('/admin/dashboard');
-        } else if (currentUser?.role === 'host') {
-          router.push('/user/home');
-        } else if (currentUser?.role === 'chef') {
-          router.push('/chef/home');
-        } else if (currentUser?.role === 'deliveryBoy') {
-          router.push('/deliveryBoy/home');  // Added delivery boy redirection
+        const redirectPath = getRoleBasedRedirect(currentUser?.role,currentUser?.isProfileCompleted);
+        if (pathname !== redirectPath) {
+          
+          router.replace(redirectPath);
         }
       }
     }
-  }, [ready, loading, isAuthenticated, router, currentUser, pathname, routeType]);
- 
-  if (!ready || loading) {
+    // Private route handling
+    else {
+      if (!isAuthenticated) {
+       
+       
+        router.replace('/login');
+      } else if (currentUser?.role) {
+        const expectedPath = getRoleBasedPath(currentUser.role);
+        console.log({expectedPath})
+        if (!pathname.startsWith(expectedPath)) {
+          router.replace(getRoleBasedRedirect(currentUser.role,currentUser.isProfileCompleted));
+        }
+      }
+    }
+  }, [ loading, isAuthenticated, currentUser, pathname, router, routeType]);
+
+  if ( loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div
-          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
-          aria-label="Loading spinner"
-        ></div>
-        <span className="ml-4 text-gray-600">Loading user data...</span>
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
-  
-  
-  if (routeType === 'public' && isAuthenticated) {
-    return null;
-  }
-  
+
+  // Only render children if auth state matches route type
   if (
-    (routeType === 'private' && isAuthenticated) ||
-    (routeType === 'public' && !isAuthenticated)
+    (routeType === 'public' && !isAuthenticated) ||
+    (routeType === 'private' && isAuthenticated && isAuthorized(pathname, currentUser?.role))
   ) {
     return <>{children}</>;
   }
-  
+
   return null;
-  
 };
+
+// Helper functions
+function getRoleBasedPath(role?: string): string {
+  switch (role) {
+    case 'admin': return '/admin';
+    case 'chef': return '/chef';
+    case 'deliveryBoy': return '/deliveryBoy';
+    case 'host': return '/user';
+    default: return '/';
+  }
+}
+
+function getRoleBasedRedirect(role?: string,isProfileCompleted?:boolean): string {
+  switch (role) {
+    case 'admin': return '/admin/dashboard';
+    case 'chef': return isProfileCompleted ? '/chef/home' : '/chef/complete-profile';
+    case 'deliveryBoy': return '/deliveryBoy/welcome';
+    case 'host': return '/user/home';
+    default: return '/';
+  }
+}
+
+function isAuthorized(path: string, role?: string): boolean {
+  if (!role) return false;
+  
+  const rolePath = getRoleBasedPath(role);
+  return path.startsWith(rolePath) || 
+         path.startsWith('/chat') || 
+         (role === 'chef' && path === '/chef/complete-profile');
+}
 
 export default AuthWrapper;

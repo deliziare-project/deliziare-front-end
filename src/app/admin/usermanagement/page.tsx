@@ -22,6 +22,7 @@ function UserManagement() {
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(fetchHosts());
@@ -140,6 +141,7 @@ function UserManagement() {
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={(page) => setCurrentPage(page)}
+              isLoading={isLoading}
             />
           </div>
         </>

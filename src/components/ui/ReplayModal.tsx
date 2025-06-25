@@ -131,7 +131,7 @@
 // export default ReplayModal;
 
 
-
+'use-client'
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ArrowUpDown, Mail, Phone } from 'lucide-react';

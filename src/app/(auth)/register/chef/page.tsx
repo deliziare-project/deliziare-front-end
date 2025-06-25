@@ -1,3 +1,4 @@
+'use client'
 import ChefRegisterPage from '@/components/auth/ChefRegister'
 import AuthWrapper from '@/components/AuthWrapper'
 import React from 'react'
