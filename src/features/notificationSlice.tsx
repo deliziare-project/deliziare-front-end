@@ -12,6 +12,7 @@ export interface NotificationType {
   createdAt: string;
   updatedAt: string;
   type:string;
+  
 }
 
 

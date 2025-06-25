@@ -3,22 +3,53 @@ import { checkCurrentUser, logoutUser } from '@/features/authSlice'
 import { addNotification, fetchNotifications, markNotificationAsRead, NotificationType } from '@/features/notificationSlice'
 import { AppDispatch, RootState } from '@/redux/store'
 import socket, { connectSocket } from '@/socket'
-import { Bell, LogOut } from 'lucide-react'
+import { Bell, Clock, LogOut } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { formatDistanceToNow } from 'date-fns';
+import { useRef, useState } from 'react';
+
 
 function Navbar() {
   const { currentUser } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter();
   const { notifications } = useSelector((state: RootState) => state.notifications)
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
 
   useEffect(() => {
     dispatch(checkCurrentUser());
     dispatch(fetchNotifications());
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen && unreadCount > 0) {
+      dispatch(markNotificationAsRead());
+    }
+  };
+  
   
   useEffect(() => {
     if (currentUser?._id) {
@@ -79,8 +110,12 @@ function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
-          <div className="relative group" onMouseEnter={handleBellClick}>
-  <button className="relative p-2 rounded-full hover:bg-orange-50 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400">
+          <div className="relative" ref={dropdownRef}>
+  <button
+    ref={buttonRef}
+    onClick={toggleDropdown}
+    className="relative p-2 rounded-full hover:bg-orange-50 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400"
+  >
     <Bell className="w-5 h-5 text-gray-600" />
     {unreadCount > 0 && (
       <span className="absolute top-1 right-1 min-w-[18px] h-5 px-1 bg-[#FF4D00] text-white text-xs rounded-full flex items-center justify-center border-2 border-white">
@@ -89,29 +124,68 @@ function Navbar() {
     )}
   </button>
 
-  {/* Dropdown on hover */}
-  <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300">
-    <div className="max-h-80 overflow-y-auto">
-      {notifications.length === 0 ? (
-        <div className="p-4 text-sm text-gray-500 text-center">No notifications</div>
-      ) : (
-        notifications.slice(0, 5).map((n) => (
-          <div key={n._id} className="px-4 py-2 text-sm text-gray-700 border-b last:border-b-0 hover:bg-orange-50">
-            {n.message}
-          </div>
-        ))
+  <div
+    className={`absolute right-0 mt-3 w-80 bg-white shadow-lg rounded-xl z-50 max-h-96 overflow-y-auto border border-gray-100 transition-all duration-200 ease-in-out ${
+      isOpen
+        ? 'opacity-100 translate-y-0 pointer-events-auto'
+        : 'opacity-0 -translate-y-2 pointer-events-none'
+    }`}
+  >
+    <div className="p-4 border-b border-gray-200">
+      <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
+      {notifications.length > 10 && (
+        <p className="text-xs text-gray-500 mt-1">
+          Showing 10 of {notifications.length} notifications
+        </p>
       )}
     </div>
-    <div className="border-t text-center">
+
+    {notifications.length === 0 ? (
+      <div className="p-4 text-center text-sm text-gray-500">No notifications</div>
+    ) : (
+      notifications.slice(0, 10).map((n) => (
+        <div
+          key={n._id}
+          className={`p-4 border-b border-gray-200 last:border-b-0 hover:bg-orange-50 transition-colors duration-150 ${
+            !n.isRead ? 'bg-orange-50 font-medium' : 'bg-white'
+          }`}
+          onClick={() => {
+            if (n.type === 'deliveryboy-order' && n.postId) {
+              router.push(`/deliveryBoy/request`);
+            } 
+             else if (n.type === 'withdrawal-approved') {
+              router.push(`/deliveryBoy/earning`);
+            } else {
+              router.push(`/deliveryBoy/notifications`);
+            }
+            setIsOpen(false);
+          }}
+        >
+          <p className="text-sm text-gray-800 leading-5">{n.message}</p>
+          {n.createdAt && (
+            <p className="mt-1 text-xs text-gray-500 flex items-center">
+              <Clock className="w-3 h-3 mr-1" />
+              {formatDistanceToNow(new Date(n.createdAt), { addSuffix: true })}
+            </p>
+          )}
+        </div>
+      ))
+    )}
+
+    <div className="p-4 border-t border-gray-200 text-center">
       <button
-        onClick={() => router.push('/notifications')}
-        className="text-xs text-orange-500 py-2 w-full hover:underline"
+        onClick={() => {
+          setIsOpen(false);
+          router.push('/deliveryBoy/notifications');
+        }}
+        className="text-sm text-orange-600 hover:text-orange-800 font-medium"
       >
-        View All
+        View all notifications ({notifications.length})
       </button>
     </div>
   </div>
 </div>
+
 
 
             <div className="flex items-center space-x-3">

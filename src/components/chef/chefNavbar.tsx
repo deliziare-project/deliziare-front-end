@@ -412,12 +412,15 @@ function ChefNavbar() {
                   if (notification.type === 'event_available' && notification.postId) {
                     router.push(`/chef/postDetails/${notification.postId}`);
                   } else if (notification.type === 'bid_accepted') {
-                    router.push('/chef/bid-requests?section=accepted');
+                    router.push('/chef/Bids?section=accepted');
                   } else if (notification.type === 'delivery_accepted') {
-                    router.push('/delivery/accepted');
-                  } else if (notification.type === 'delivered') {
-                    router.push('/delivery/history');
-                  } else {
+                    router.push('/chef/track-order');
+                  } else if (notification.type === 'chef-delivered') {
+                    router.push('/chef/track-order');
+                  } 
+                  else if(notification.type==='withdrawal-approved'){
+                    router.push('/chef/wallet')
+                  }else {
                     router.push('/chef/notifications');
                   }
                   setIsOpen(false);

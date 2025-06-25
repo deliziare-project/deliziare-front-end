@@ -447,11 +447,17 @@ const Navbar: React.FC = () => {
                               !notification.isRead ? 'bg-orange-50 font-medium' : 'bg-white'
                             }`}
                             onClick={() => {
-                              if (notification.postId) {
-                                router.push(`/user/posts/${notification.postId}`);
-                                setIsDropdownOpen(false);
+                              if (notification.type === 'order-picked') {
+                                router.push('/user/order');
+                              } else if (notification.type=='delivered') {
+                                router.push('/user/order');
                               }
+                              else{
+                                router.push('/user/notifications')
+                              }
+                              setIsDropdownOpen(false);
                             }}
+                            
                           >
                             <p className="text-sm text-gray-800">
                               {notification.message || 'New Notification'}

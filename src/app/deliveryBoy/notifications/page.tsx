@@ -9,6 +9,8 @@ import {
 } from '@/features/notificationSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { Bell, CheckCircle2, Clock, Loader2, ChevronDown } from 'lucide-react';
+import Navbar from '@/components/deliveryBoy/Navbar';
+import BottomBar from '@/components/deliveryBoy/bottomBar';
 import { useRouter } from 'next/navigation';
 
 export default function NotificationsPage() {
@@ -18,7 +20,7 @@ export default function NotificationsPage() {
   );
   const userId = useSelector((state: RootState) => state.auth.currentUser?._id);
   const [visibleCount, setVisibleCount] = useState(10); // Initial number of notifications to show
-  const router = useRouter();
+  const router = useRouter()
   useEffect(() => {
     if (userId) {
       dispatch(fetchNotifications());
@@ -35,7 +37,9 @@ export default function NotificationsPage() {
   const hasMore = notifications.length > visibleCount; // Check if more notifications exist
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Navbar/>
       <div className="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
         {/* Header Section */}
         <div className="flex items-center mb-8">
@@ -77,19 +81,13 @@ export default function NotificationsPage() {
                 <div
                   key={index}
                   onClick={() => {
-                    if (notification.type === 'event_available' && notification.postId) {
-                      router.push(`/chef/postDetails/${notification.postId}`);
-                    } else if (notification.type === 'bid_accepted') {
-                      router.push('/chef/Bids?section=accepted');
-                    } else if (notification.type === 'delivery_accepted') {
-                      router.push('/chef/track-order');
-                    } else if (notification.type === 'chef-delivered') {
-                      router.push('/chef/track-order');
+                    if (notification.type === 'deliveryboy-order' && notification.postId) {
+                      router.push(`/deliveryBoy/request`);
                     } 
-                    else if(notification.type==='withdrawal-approved'){
-                      router.push('/chef/wallet')
-                    }else {
-                      router.push('/chef/notifications');
+                     else if (notification.type === 'withdrawal-approved') {
+                      router.push(`/deliveryBoy/earning`);
+                    } else {
+                      router.push(`/deliveryBoy/notifications`);
                     }
                     
                   }}
@@ -99,7 +97,9 @@ export default function NotificationsPage() {
                       : 'bg-white border border-gray-200 shadow-sm hover:shadow-md'
                   }`}
                 >
-                  <div className="flex items-start">
+                  <div className="flex items-start"
+                  
+                  >
                     <div
                       className={`flex-shrink-0 h-12 w-12 rounded-full flex items-center justify-center transition-colors duration-200 ${
                         !notification.isRead
@@ -109,9 +109,7 @@ export default function NotificationsPage() {
                     >
                       <Bell className="h-6 w-6" />
                     </div>
-                    <div className="ml-4 flex-1"
-                    
-                    >
+                    <div className="ml-4 flex-1">
                       <p
                         className={`text-base leading-6 ${
                           !notification.isRead
@@ -157,6 +155,7 @@ export default function NotificationsPage() {
           </>
         )}
       </div>
+      <BottomBar/>
     </div>
   );
 }
