@@ -1,3 +1,4 @@
+'use-client'
 import React, { useState } from 'react';
 import { MessageBubble } from './animations/MessageAnimations';
 import { Message } from '../../types/message';

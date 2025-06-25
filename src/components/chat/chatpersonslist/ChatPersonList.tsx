@@ -114,15 +114,23 @@ const ChatPersonList: React.FC = () => {
                           className={`h-14 w-14 rounded-full overflow-hidden ring-2 ring-offset-2 
                           ${isOnline ? 'ring-green-100' : 'ring-gray-100'} transition-all duration-300`}
                         >
-                          <img
-                            src={user.profileImage}
-                            alt={`${user.name}'s profile`}
-                            className="h-full w-full object-cover transform transition-transform duration-300 hover:scale-110"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`;
-                            }}
-                          />
+                          {user.profileImage ? (
+                            <img
+                              src={user.profileImage}
+                              alt={`${user.name}'s profile`}
+                              className="h-full w-full object-cover transform transition-transform duration-300 hover:scale-110"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = ''; // remove image so fallback appears
+                              }}
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-700 font-bold text-xl">
+                              {user.name?.charAt(0).toUpperCase() || 'U'}
+                            </div>
+                          )}
+
                         </div>
                         {isOnline && (
                           <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 ring-2 ring-white" />

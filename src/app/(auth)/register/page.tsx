@@ -1,3 +1,4 @@
+'use client'
 import RegisterHome from '@/components/auth/RegisterHome'
 import AuthWrapper from '@/components/AuthWrapper'
 import React from 'react'

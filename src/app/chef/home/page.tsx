@@ -227,6 +227,7 @@ const OpportunitiesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 4;
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const filteredPosts = posts
     .filter((post) => post.status === 'pending')
@@ -437,6 +438,7 @@ const OpportunitiesPage = () => {
                       currentPage={currentPage}
                       totalPages={totalPages}
                       onPageChange={setCurrentPage}
+                      isLoading={isLoading}
                     />
                   </div>
                 </div>
