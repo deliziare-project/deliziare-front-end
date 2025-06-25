@@ -106,22 +106,21 @@ const Home: React.FC = () => {
                     Welcome to Fast Order
                   </div> */}
 
-                  <h1 className="text-4xl lg:text-4xl font-semibold leading-tight">
-                    <span className="text-gray-900 ">Where Every Meal</span>
-                    <br />
-                    <span className="text-gray-900">Feels Like</span>
-                    <br />
-                    <span className="bg-gradient-to-r from-[#2D4F2B] via-[#16610E] to-[#708A58] bg-clip-text text-transparent">
-                      Home
-                    </span>
-                  </h1>
+                  <div className="space-y-4">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight tracking-tight">
+                      <span className="text-gray-900">Where Every Meal</span>
+                      <br />
+                      <span className="text-gray-900">Feels Like</span>
+                      <br />
+                      <span className="bg-gradient-to-r from-[#2D4F2B] via-[#16610E] to-[#708A58] bg-clip-text text-transparent">
+                        Home
+                      </span>
+                    </h1>
 
-                  <p className="text-sm text-gray-600 leading-relaxed max-w-lg">
-                    At Deliziare, we believe food is more than fuel — it's a
-                    feeling. Explore our handcrafted menu, enjoy warm flavors,
-                    and treat yourself to dishes made with tradition and care.
-                    Come hungry. Leave happy.
-                  </p>
+                    <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-md sm:max-w-lg">
+                      At Deliziare, we believe food is more than fuel — it's a feeling. Explore our handcrafted menu, enjoy warm flavors, and treat yourself to dishes made with tradition and care. Come hungry. Leave happy.
+                    </p>
+                  </div>
 
                   <div className="flex flex-col sm:flex-row gap-2">
                     <h1 className="flex items-center justify-center px-3 text-[#A4B465]   font-sm text-sm  transition-colors duration-300 ">

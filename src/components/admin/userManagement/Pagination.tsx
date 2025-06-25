@@ -16,20 +16,20 @@ const Pagination: React.FC<PaginationProps> = ({
   isLoading = false,
 }) => {
   const baseClasses =
-    "flex items-center px-3 py-1 rounded-md border transition-colors";
+    "flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 transition-all duration-200 shadow-sm";
 
   const activeClasses =
-    "border-[#f78752] text-white bg-[#f78752] hover:bg-[#e57240]";
+    "bg-[#708A58] text-white border-[#708A58] hover:bg-[#5A6F48] hover:border-[#5A6F48]";
 
   const disabledClasses =
-    "border-[#f78752] text-slate-400 bg-white cursor-not-allowed";
+    "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed";
 
   return (
-    <div className="flex items-center justify-between mt-6 px-2">
+    <div className="flex items-center justify-center gap-4 mt-6 px-4">
       {isLoading ? (
-        <div className="ml-4 animate-spin text-[#f78752]">
+        <div className="flex items-center justify-center w-10 h-10 animate-spin text-[#708A58]">
           <svg
-            className="h-5 w-5"
+            className="w-6 h-6"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -57,25 +57,25 @@ const Pagination: React.FC<PaginationProps> = ({
             className={`${baseClasses} ${
               currentPage === 1 || isLoading ? disabledClasses : activeClasses
             }`}
+            aria-label="Previous page"
           >
-            <ChevronLeft size={18} className="mr-1" />
+            <ChevronLeft size={20} />
           </button>
 
-          <p className="text-sm font-medium text-slate-600 mx-4">
-            Page <span className="text-slate-800">{currentPage}</span> of{" "}
-            <span className="text-slate-800">{totalPages}</span>
+          <p className="text-sm font-semibold text-gray-700">
+            Page <span className="text-[#708A58]">{currentPage}</span> of{" "}
+            <span className="text-[#708A58]">{totalPages}</span>
           </p>
 
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages || isLoading}
             className={`${baseClasses} ${
-              currentPage === totalPages || isLoading
-                ? disabledClasses
-                : activeClasses
+              currentPage === totalPages || isLoading ? disabledClasses : activeClasses
             }`}
+            aria-label="Next page"
           >
-            <ChevronRight size={18} className="ml-1" />
+            <ChevronRight size={20} />
           </button>
         </>
       )}
