@@ -16,45 +16,29 @@ function ReqUi() {
   const [selectedBidId, setSelectedBidId] = useState<string | null>(null)
   const [bids, setBids] = useState<any[]>([])
 
-  useEffect(() => {
-    dispatch(getAllBids())
-  }, [dispatch])
-
-  const completedBids = allbids?.filter(
-    (bid) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending'
-  ) || []
-
+  // Fetch and filter bids
   useEffect(() => {
     dispatch(getAllBids()).then((res: any) => {
       const filtered = res.payload?.filter(
         (bid: any) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending'
       )
-      setBids(filtered?.slice(0, 3) || [])
+      setBids([...filtered]?.reverse().slice(0, 3) || [])
     })
   }, [dispatch])
+
+  const openModal = (id: string) => setSelectedBidId(id)
+  const closeModal = () => setSelectedBidId(null)
 
   const removeBid = (bidIdToRemove: string) => {
     setBids((prevBids) => prevBids.filter((b) => b._id !== bidIdToRemove))
     closeModal()
   }
 
-  const displayedBids = bids
-
-  const openModal = (id: string) => {
-    setSelectedBidId(id)
-  }
-
-  const closeModal = () => {
-    setSelectedBidId(null)
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-b  py-6 px-4 sm:px-6 md:px-12 lg:px-20">
+    <div className="min-h-screen bg-gradient-to-b py-6 px-4 sm:px-6 md:px-12 lg:px-20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-[#E53935] mb-4">
-            Latest Delivery Requests
-          </h2>
+          <h2 className="text-4xl font-bold text-[#E53935] mb-4">Latest Delivery Requests</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             View and manage your pending delivery orders
           </p>
@@ -73,13 +57,11 @@ function ReqUi() {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-700">
-                  Error: {error}
-                </p>
+                <p className="text-sm text-red-700">Error: {error}</p>
               </div>
             </div>
           </div>
-        ) : completedBids.length === 0 ? (
+        ) : bids.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
             <div className="relative w-64 h-64 mb-6">
               <Image
@@ -97,7 +79,7 @@ function ReqUi() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayedBids?.map((bid) => (
+            {bids.map((bid) => (
               <div
                 key={bid._id}
                 onClick={() => openModal(bid._id)}
@@ -136,11 +118,13 @@ function ReqUi() {
           <DetailModal
             bidId={selectedBidId}
             onClose={closeModal}
-            onActionComplete={removeBid} 
+            onActionComplete={removeBid}
           />
         )}
 
-        {completedBids.length > 3 && (
+        {allbids?.filter(
+          (bid) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending'
+        )?.length > 3 && (
           <div className="mt-12 text-center">
             <button
               onClick={() => router.push('/deliveryBoy/request')}
@@ -159,170 +143,3 @@ function ReqUi() {
 }
 
 export default ReqUi
-
-
-
-
-
-// 'use client'
-
-// import { getAllBids } from '@/features/bidSlice'
-// import { AppDispatch, RootState } from '@/redux/store'
-// import { useRouter } from 'next/navigation'
-// import React, { useEffect, useState } from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// import DetailModal from './DetailModal'
-// import { CalendarDays, Clock, MapPin } from 'lucide-react'
-
-// interface Location {
-//   lat: number;
-//   lng: number;
-//   _id: string;
-// }
-
-// interface Post {
-//   _id: string;
-//   eventName: string;
-//   date: string;
-//   time: string;
-//   district: string;
-//   deliveryStatus: string;
-//   description: string;
-//   location: Location;
-//   menu: string[];
-//   quantity: number;
-//   status: string;
-//   userId: string;
-//   createdAt: string;
-//   updatedAt: string;
-//   __v: number;
-// }
-
-// interface Bid {
-//   _id: string;
-//   bidAmount: number;
-//   chefId: string;
-//   createdAt: string;
-//   description: string;
-//   postId: Post;
-//   readByPostOwner: boolean;
-//   readByUser: boolean;
-//   status: string;
-//   updatedAt: string;
-//   __v: number;
-// }
-
-// function ReqUi() {
-//   const dispatch = useDispatch<AppDispatch>()
-//   const router = useRouter()
-//   const { allbids, loading, error } = useSelector((state: RootState) => state.chefBids)
-//   const [selectedBidId, setSelectedBidId] = useState<string | null>(null)
-//   const [bids, setBids] = useState<Bid[]>([])
-
-//   useEffect(() => {
-//     const fetchBids = async () => {
-//       try {
-//         const actionResult = await dispatch(getAllBids())
-//         const fetchedBids = actionResult.payload as Bid[] || []
-        
-//         console.log("Fetched bids:", fetchedBids) // Debug log
-        
-//         // Filter bids that are completed and need delivery
-//         const filteredBids = fetchedBids.filter(
-//           (bid) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending'
-//         )
-        
-//         setBids(filteredBids.slice(0, 3))
-//       } catch (err) {
-//         console.error("Failed to fetch bids:", err)
-//       }
-//     }
-
-//     fetchBids()
-//   }, [dispatch])
-
-//   const removeBid = (bidIdToRemove: string) => {
-//     setBids((prevBids) => prevBids.filter((b) => b._id !== bidIdToRemove))
-//     closeModal()
-//   }
-
-//   const openModal = (id: string) => {
-//     setSelectedBidId(id)
-//   }
-
-//   const closeModal = () => {
-//     setSelectedBidId(null)
-//   }
-
-//   return (
-//     <div className="py-8 px-4 sm:px-6 md:px-12 lg:px-20 flex justify-center">
-//       <div className="w-full max-w-3xl">
-//         <h2 className="text-3xl font-semibold text-[#B8755D] mb-6 pb-2">
-//           Latest Order Requests
-//         </h2>
-
-//         {loading ? (
-//           <p className="text-gray-500">Loading...</p>
-//         ) : error ? (
-//           <p className="text-red-500">Error: {error}</p>
-//         ) : bids.length === 0 ? (
-//           <p className="text-gray-500">No pending delivery requests found.</p>
-//         ) : (
-//           <>
-//             <ul className="space-y-4">
-//               {bids.map((bid) => (
-//                 <li
-//                   key={bid._id}
-//                   onClick={() => openModal(bid._id)}
-//                   className="bg-white rounded-lg p-5 shadow-md border border-gray-100 hover:shadow-lg transition cursor-pointer"
-//                 >
-//                   <h3 className="text-lg font-semibold text-[#B8755D] mb-2">
-//                     {bid.postId?.eventName || 'Untitled Event'}
-//                   </h3>
-//                   <div className="text-sm text-gray-600 space-y-1">
-//                     <p className="flex items-center gap-2">
-//                       <CalendarDays className="w-4 h-4 text-gray-500" />
-//                       {bid.postId?.date || 'Date not specified'}
-//                     </p>
-//                     <p className="flex items-center gap-2">
-//                       <Clock className="w-4 h-4 text-gray-500" />
-//                       {bid.postId?.time || 'Time not specified'}
-//                     </p>
-//                     <p className="flex items-center gap-2">
-//                       <MapPin className="w-4 h-4 text-gray-500" />
-//                       {bid.postId?.district || 'Location not specified'}
-//                     </p>
-//                   </div>
-//                   <div className="mt-3 text-sm">
-//                     <span className="font-medium">Bid Amount:</span> ₹{bid.bidAmount}
-//                   </div>
-//                 </li>
-//               ))}
-//             </ul>
-
-//             {selectedBidId && (
-//               <DetailModal
-//                 bidId={selectedBidId}
-//                 onClose={closeModal}
-//                 onActionComplete={removeBid}
-//               />
-//             )}
-
-//             {allbids && allbids.length > 3 && (
-//               <div className="mt-6 text-right">
-//                 <button
-//                   onClick={() => router.push('/deliveryBoy/request')}
-//                   className="text-blue-600 underline hover:text-blue-800 transition"
-//                 >
-//                   View All Orders →
-//                 </button>
-//               </div>
-//             )}
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default ReqUi

@@ -13,7 +13,7 @@ type Props = {
 const ChefProfileview = ({ chefId }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const { chefProfile, loading, error } = useSelector((state: RootState) => state.profile);
-
+  const {currentUser}=useSelector((state:RootState)=>state.auth)
  const handleStartChat = () => {
     dispatch(openChat(chefId))
   }
@@ -51,13 +51,15 @@ const ChefProfileview = ({ chefId }: Props) => {
             </div>
           )}
    <div className="mt-4">
-  <button
+  {
+    currentUser?.role == 'host' ?(<button
     className="flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-5 rounded-full shadow-md transition duration-200"
     onClick={handleStartChat}
   >
     <FaComments className="text-lg" />
     Message
-  </button>
+  </button>):(null)
+  }
 </div>
         </div>
       </div>

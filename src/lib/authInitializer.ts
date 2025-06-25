@@ -10,21 +10,22 @@ export default function AuthInitializer() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const response = await axiosInstance.get('/users/me');
-        dispatch(checkCurrentUser());
-      } catch (err) {
-        console.log("User not authenticated or session expired.");
-        // Stay unauthenticated silently
-      }
-    };
+   
+const checkcookie=async()=>{
+  const res=await axiosInstance.get('/users/check-cookie',{ withCredentials: true })
+       if(res.data.message) {
+            try {
+        
+            dispatch(checkCurrentUser());
+            } catch (err) {
+            console.log("User not authenticated or session expired.");
+   
+             }
+       }
+}
+checkcookie()
 
-    // ✅ Only call init if refreshToken exists
-    if (typeof document !== 'undefined' && document.cookie.includes('refreshToken')) {
-      init();
-    }
-  }, []);
+  }, [dispatch]);
 
   return null;
 }

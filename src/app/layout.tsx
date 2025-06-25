@@ -5,8 +5,8 @@ import { Providers } from "./providers";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Head from "next/head";
 // layout.tsx
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 
 
 

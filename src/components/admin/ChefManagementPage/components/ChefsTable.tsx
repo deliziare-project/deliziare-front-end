@@ -15,7 +15,7 @@ console.log(chefs);
     <div className="overflow-hidden bg-white shadow-sm rounded-lg border border-gray-100">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
-          <thead className="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider border-b border-gray-200">
+          <thead className="bg-[#de6d37] text-white uppercase text-xs tracking-wider border-b border-gray-200">
             <tr>
                <th className="px-6 py-4">Profile</th>
               <th className="px-6 py-4">Name</th>
@@ -31,7 +31,7 @@ console.log(chefs);
               chefs.map((chef) => (
                 <tr 
                   key={chef.id} 
-                  className="hover:bg-blue-50/30 transition-colors duration-150"
+                  className="hover:bg-[#fdf4f0] transition-colors duration-150"
                 >
                   <td className="px-6 py-4 text-gray-600">
 
@@ -39,10 +39,10 @@ console.log(chefs);
                       <img
                         src={chef?.profileImage}
                         alt="avatar.png"
-                        className="w-16 h-16 rounded-full object-cover"
+                        className="w-12 h-12 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-16 h-16 rounded-full bg-[#fcd8bd] text-[#8b3e0f] flex items-center justify-center text-xl font-semibold">
+                     <div className="w-12 h-12 rounded-full bg-orange-50 text-amber-600 flex items-center justify-center text-lg font-medium border-2 border-white shadow-sm">
                         {chef.name?.[0]?.toUpperCase() || "U"}
                       </div>
                     )}
@@ -70,7 +70,7 @@ console.log(chefs);
                   <td className="px-6 py-4 text-center">
                     <button
                       onClick={() => onViewCertificate(chef.certificate)}
-                      className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-150"
+                      className="inline-flex items-center text-orange-600 hover:text-orange-800 text-sm font-medium transition-colors duration-150"
                     >
                       <Eye size={16} className="mr-1" />
                       View

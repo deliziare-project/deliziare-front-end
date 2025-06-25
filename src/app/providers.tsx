@@ -5,7 +5,9 @@ import { store } from '../redux/store';
 import AuthInitializer from '@/lib/authInitializer';
 import FloatingChat from '@/components/chat/FloatingChat';
 
+
 export function Providers({ children }: { children: React.ReactNode }) {
+
   return (
     <Provider store={store}>
       <AuthInitializer /> 
