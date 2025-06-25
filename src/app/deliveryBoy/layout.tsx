@@ -1,4 +1,5 @@
 import BottomBar from "@/components/deliveryBoy/bottomBar";
+import DeliveryBoyTracker from "@/components/deliveryBoy/DeliveryTracker";
 import Navbar from "@/components/deliveryBoy/Navbar";
 import ToastProvider from "@/components/shared/ToastProvider";
 import type { Metadata, Viewport } from "next";
@@ -32,6 +33,7 @@ export default function DeliveryLayout({
 }) {
   return (
     <ToastProvider>
+       {/* <DeliveryBoyTracker /> */}
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow">{children}</main>
       </div>

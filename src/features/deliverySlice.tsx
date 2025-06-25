@@ -1,10 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axiosInstance from '@/api/axiosInstance';
 
+interface UserId{
+  name:string;
+  phone:number;
+}
 export interface Bid {
   _id: string;
   postId: {
     _id:string;
+    userId:UserId;
     eventName: string;
     date: string;
     time: string;

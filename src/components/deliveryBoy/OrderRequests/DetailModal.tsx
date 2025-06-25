@@ -11,6 +11,7 @@ import {
   List,
   X,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -23,6 +24,8 @@ interface DetailModalProps {
 function DetailModal({ bidId, onClose, onActionComplete }: DetailModalProps) {
   const [bid, setBid] = useState<any>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const router= useRouter()
+  console.log(bid)
 
   useEffect(() => {
     if (bidId) {
@@ -35,17 +38,25 @@ function DetailModal({ bidId, onClose, onActionComplete }: DetailModalProps) {
 
   const handleAccept = () => {
     dispatch(acceptDelivery(bidId))
+   
       .then(() => {
+         router.push('/deliveryBoy/orders')
         showSuccess('You accepted the order');
-        onActionComplete(bidId); // remove from list
+       
       })
       .catch((err) => console.error('Failed to accept delivery:', err));
   };
 
-  const handleReject = () => {
+ const handleReject = async () => {
+  try {
+    await axiosInstance.post('/delivery/orderReject', { bidId }); 
     showSuccess('You rejected the order');
-    onActionComplete(bidId); // remove from list
-  };
+    onActionComplete(bidId); 
+  } catch (err) {
+    console.error('Failed to reject delivery:', err);
+  }
+};
+
 
   if (!bid) return null;
 
@@ -78,8 +89,14 @@ function DetailModal({ bidId, onClose, onActionComplete }: DetailModalProps) {
               <Clock className="w-4 h-4 text-[#E53935]" />
             </div>
             <span>
-              {bid.postId?.date} at {bid.postId?.time}
+              {new Date(bid.postId?.date).toLocaleDateString('en-GB')} at{' '}
+              {new Date(`1970-01-01T${bid.postId?.time}`).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              })}
             </span>
+
           </div>
           <div className="flex items-center gap-2">
             <div className="bg-red-50 p-2 rounded-lg">
@@ -102,6 +119,18 @@ function DetailModal({ bidId, onClose, onActionComplete }: DetailModalProps) {
             ))}
           </ul>
         </div>
+        <div className="flex items-center gap-2 mt-5">
+        <div className="bg-red-50 p-2 rounded-lg">
+          <svg className="w-4 h-4 text-[#E53935]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-10v2m0 12v2m8-10a8 8 0 11-16 0 8 8 0 0116 0z" />
+          </svg>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Delivery Charge</p>
+          <p className="font-semibold text-gray-700">₹ {bid.deliveryCharge}</p>
+        </div>
+      </div>
+
 
         <div className="mt-6 flex justify-end gap-3">
           {bid.postId?.deliveryStatus === 'pending' ? (

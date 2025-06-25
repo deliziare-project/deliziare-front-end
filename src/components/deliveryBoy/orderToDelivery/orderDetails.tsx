@@ -12,6 +12,7 @@ import {
   Info
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import DeliveryBoyTracker from '../DeliveryTracker'
 
 const DeliveryMap = dynamic(() => import('./mapview'), { ssr: false })
 
@@ -34,11 +35,12 @@ const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose, refreshOrde
       dispatch(clearSelectedOrder())
     }
   }, [dispatch, show, postId])
+  console.log(selectedOrder)
 
   if (!show) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/25 bg-opacity-30 backdrop-blur">
       <div className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-xl relative max-h-[90vh] overflow-y-auto">
         {/* Close Button */}
         <button
@@ -93,6 +95,24 @@ const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose, refreshOrde
                 </span>
               </div>
             </div>
+           <div className="pt-4">
+            <h3 className="text-lg font-semibold text-red-700 mb-3">User Details</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.183 0 4.22.523 6.04 1.447M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span><strong>Name:</strong> {selectedOrder.bidId.postId.userId.name}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25l6.165 4.11a.75.75 0 00.82 0l6.165-4.11m-6.165 4.11V19.5m0-7.14l6.165 4.11a.75.75 0 00.82 0l6.165-4.11" />
+                </svg>
+                <span><strong>Phone:</strong> {selectedOrder.bidId.postId.userId.phone}</span>
+              </div>
+            </div>
+          </div>
+
 
             {/* Map Section */}
             <div className="pt-4">
@@ -101,6 +121,10 @@ const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose, refreshOrde
           </div>
         )}
       </div>
+      {selectedOrder && (
+  <DeliveryBoyTracker deliveryId={selectedOrder._id} />
+)}
+
     </div>
   )
 }

@@ -283,7 +283,6 @@ function ChefNavbar() {
 
   const userId = useSelector((state: RootState) => state.auth.currentUser?._id);
   const { notifications, loading } = useSelector((state: RootState) => state.notifications);
-
   const unreadCount = notifications.filter((n) => !n.isRead).length;
   const displayedNotifications = notifications.slice(0, 10); // Show only first 10 notifications
 

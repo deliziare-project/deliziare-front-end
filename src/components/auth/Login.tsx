@@ -92,10 +92,10 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     const user = registrationData?.user;
-    if (success && user) {
+    if (success && user&&!loading) {
       redirectBasedOnRole(user.role);
     }
-  }, [success, registrationData]);
+  }, [success, registrationData,loading]);
 
   return (
     <div

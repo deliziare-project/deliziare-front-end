@@ -92,11 +92,15 @@ function ReqUi() {
                   <div className="space-y-3 text-gray-600">
                     <div className="flex items-center">
                       <CalendarDays className="w-5 h-5 text-gray-500 mr-2" />
-                      <span>{bid.postId?.date}</span>
+                      {new Date(bid.postId?.date).toLocaleDateString('en-GB')}
                     </div>
                     <div className="flex items-center">
                       <Clock className="w-5 h-5 text-gray-500 mr-2" />
-                      <span>{bid.postId?.time}</span>
+                      <span> {new Date(`1970-01-01T${bid.postId?.time}`).toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}</span>
                     </div>
                     <div className="flex items-center">
                       <MapPin className="w-5 h-5 text-gray-500 mr-2" />
