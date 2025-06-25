@@ -9,10 +9,9 @@ const Footer: React.FC = () => {
         {/* <p className="text-red-500 uppercase tracking-wide">Just another tagline</p> */}
 
         <ul className="flex justify-center gap-6 text-sm font-semibold">
-          <li><a href="#" className="hover:text-[#708A58] transition">Home</a></li>
-          <li><a href="#" className="hover:text-[#708A58] transition">Chef</a></li>
-          <li><a href="#" className="hover:text-[#708A58] transition">Posts</a></li>
-          <li><a href="#" className="hover:text-[#708A58] transition">Contact</a></li>
+          <li><a href="/user/home" className="hover:text-[#708A58] transition">Home</a></li>
+          <li><a href="/user/chefs" className="hover:text-[#708A58] transition">Chef</a></li>
+          <li><a href="/user/posts" className="hover:text-[#708A58] transition">Posts</a></li>
         </ul>
 
         <div className="flex justify-center gap-5 text-xl">
