@@ -265,7 +265,7 @@ const OpportunitiesPage = () => {
             <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-[#e3a587] to-[#5A2D1A] shadow-xl mb-6 transform hover:scale-105 transition-transform duration-300">
               <ChefHat size={32} className="text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold  mb-4 text-[#8f4526] bg-clip-text ">
+            <h1 className="text-3xl md:text-3xl font-bold  mb-4 text-[#8f4526] bg-clip-text ">
               Culinary Opportunities
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
