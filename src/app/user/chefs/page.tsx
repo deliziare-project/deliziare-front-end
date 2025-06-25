@@ -272,7 +272,7 @@ const HostViewChefPosts = () => {
   const [savedPosts, setSavedPosts] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
-  const postsPerPage = 4;
+  const postsPerPage = 6;
 
   useEffect(() => {
     const fetchChefPosts = async () => {

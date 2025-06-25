@@ -10,6 +10,7 @@ export interface NotificationType {
   isRead: boolean;
   createdAt: string;
   updatedAt: string;
+  type:string;
 }
 
 interface ServerToClientEvents {

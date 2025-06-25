@@ -6,20 +6,35 @@ interface Props {
   inactiveUsers: number;
 }
 
-const UserOverviewCard: React.FC<Props> = ({ totalUsers, activeUsers, inactiveUsers }) => {
+const UserOverviewCard: React.FC<Props> = ({
+  totalUsers,
+  activeUsers,
+  inactiveUsers,
+}) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      <div className="bg-white rounded-lg shadow p-4">
-        <h3 className="text-[#8b3e0f] text-lg font-semibold">Total Customers</h3>
-        <p className="text-2xl font-bold text-[#5a2e0e]">{totalUsers}</p>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+      {/* Total Users */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 className="text-gray-600 text-sm font-medium uppercase mb-2">
+          Total 
+        </h3>
+        <p className="text-3xl font-bold text-[#5a2e0e]">{totalUsers}</p>
       </div>
-      <div className="bg-green-50 rounded-lg shadow p-4">
-        <h3 className="text-green-800 text-lg font-semibold">Active Customers</h3>
-        <p className="text-2xl font-bold text-green-700">{activeUsers}</p>
+
+      {/* Active Users */}
+      <div className="bg-green-50 rounded-xl shadow-sm border border-green-100 p-6">
+        <h3 className="text-green-800 text-sm font-medium uppercase mb-2">
+          Active 
+        </h3>
+        <p className="text-3xl font-bold text-green-700">{activeUsers}</p>
       </div>
-      <div className="bg-red-50 rounded-lg shadow p-4">
-        <h3 className="text-red-800 text-lg font-semibold">Inactive Customers</h3>
-        <p className="text-2xl font-bold text-red-700">{inactiveUsers}</p>
+
+      {/* Inactive Users */}
+      <div className="bg-red-50 rounded-xl shadow-sm border border-red-100 p-6">
+        <h3 className="text-red-800 text-sm font-medium uppercase mb-2">
+          Inactive 
+        </h3>
+        <p className="text-3xl font-bold text-red-700">{inactiveUsers}</p>
       </div>
     </div>
   );
