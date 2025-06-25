@@ -187,13 +187,12 @@ const page = () => {
               </div>
 
               {totalPages > 1 && (
-                <div className="mt-8 flex justify-center">
+                <div className="mt-8">
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
-                    // activeColor="#C26E4B"
-                    // inactiveColor="#E8D5CC"
+                   
                   />
                 </div>
               )}

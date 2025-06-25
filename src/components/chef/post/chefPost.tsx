@@ -80,7 +80,7 @@ const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <textarea
             rows={4}
-            {...register('description')}
+            {...register('description',{required:'Description is required'})}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#B8755D]"
           />
           {errors.description && (

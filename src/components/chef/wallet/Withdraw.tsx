@@ -11,24 +11,37 @@ interface Props {
 
 const ChefWithdrawalForm = ({ onClose, balance }: Props) => {
   const [amount, setAmount] = useState('')
+  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const validateAmount = (value: string) => {
+    const numeric = parseFloat(value)
+    if (!value) return 'Amount is required'
+    if (isNaN(numeric)) return 'Amount must be a number'
+    if (numeric <= 0) return 'Amount must be greater than 0'
+    if (numeric < 100) return 'Minimum withdrawal amount is ₹100'
+    if (numeric > 50000) return 'Maximum withdrawal per request is ₹50,000'
+    if (numeric > balance) return 'Amount exceeds your wallet balance'
+    return ''
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setAmount(value)
+    setError(validateAmount(value))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const numericAmount = parseFloat(amount)
-
-    if (isNaN(numericAmount) || numericAmount <= 0) {
-      toast.error('Please enter a valid amount')
-      return
-    }
-
-    if (numericAmount > balance) {
-      toast.error('Amount exceeds wallet balance')
+    const validationError = validateAmount(amount)
+    if (validationError) {
+      setError(validationError)
       return
     }
 
     setLoading(true)
     try {
+      const numericAmount = parseFloat(amount)
       const res = await axiosInstance.post('/wallet/chefWithdraw', {
         amount: numericAmount,
       })
@@ -41,10 +54,6 @@ const ChefWithdrawalForm = ({ onClose, balance }: Props) => {
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleWithdrawFull = () => {
-    setAmount(balance.toFixed(2))
   }
 
   return (
@@ -66,19 +75,27 @@ const ChefWithdrawalForm = ({ onClose, balance }: Props) => {
               type="number"
               id="amount"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+              onChange={handleChange}
+              className={`mt-1 block w-full px-4 py-2 border ${
+                error ? 'border-red-500' : 'border-gray-300'
+              } rounded-md shadow-sm focus:ring-red-500 focus:border-red-500`}
               placeholder="Enter amount"
               min="1"
+              max="50000"
               step="0.01"
               required
             />
+            {error && (
+              <p className="mt-1 text-sm text-red-600">
+                {error}
+              </p>
+            )}
             <button
               type="button"
-              onClick={handleWithdrawFull}
-              className="mt-2 text-sm text-red-600 underline hover:text-red-800"
+              className="mt-2 text-sm text-red-600  hover:text-red-800"
+              // onClick={() => setAmount(balance.toFixed(2))}
             >
-              Withdraw Full Balance (₹{balance.toFixed(2)})
+               Balance: ₹{balance.toFixed(2)}
             </button>
           </div>
 

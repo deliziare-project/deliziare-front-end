@@ -5,7 +5,10 @@ import socket, { connectSocket } from '@/socket'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
-const DeliveryBoyTracker: React.FC = () => {
+interface Props{
+  deliveryId:string
+}
+const DeliveryBoyTracker: React.FC<Props> = ({deliveryId}) => {
    const dispatch = useDispatch<AppDispatch>();
     const {  currentUser, loading } = useSelector((state: RootState) => state.auth);
    const userId=currentUser?._id
@@ -21,7 +24,7 @@ const DeliveryBoyTracker: React.FC = () => {
         }
 
         console.log('Sending location:', coords)
-        socket.emit('locationUpdate', coords)
+        socket.emit('locationUpdate', {deliveryId,coords})
       },
       (err) => {
         console.error('Geolocation error', err)

@@ -119,6 +119,7 @@ import { useDispatch, useSelector } from "react-redux";
 import socket from "@/socket";
 import { AppDispatch, RootState } from "@/redux/store";
 import { addNotification, fetchNotifications, markNotificationAsRead } from "@/features/notificationSlice";
+import { FaFirstOrder } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -196,6 +197,7 @@ const Navbar: React.FC = () => {
             <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
             <NavLink href="/user/chefs" icon={<ChefHat size={18} />} label="Chef" />
             <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
+             <NavLink href="/user/order" icon={<FaFirstOrder size={18} />} label="order" />
 
             <div className="flex items-center space-x-4 ml-4">
               {/* Notification Bell */}

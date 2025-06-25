@@ -152,10 +152,17 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   };
 
   const isEditDisabled = () => {
-    const eventDate = new Date(editedPost.date);
-    const now = new Date();
-    return (eventDate.getTime() - now.getTime()) / (1000 * 3600 * 24) < 2;
-  };
+  const eventDate = new Date(editedPost.date);
+  const now = new Date();
+
+  const daysLeft = (eventDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
+  const isTooClose = daysLeft < 2;
+
+  const hasAcceptedBid = replays.some((bid) => bid.status === 'accepted');
+
+  return isTooClose || hasAcceptedBid;
+};
+
 
   return (
     <>

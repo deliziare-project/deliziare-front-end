@@ -50,7 +50,9 @@ const certificateSlice = createSlice({
   name: "certificate",
   initialState,
   reducers: {
-  
+  setCertificateUrl: (state, action) => {
+      state.certificateUrl = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -74,10 +76,11 @@ const certificateSlice = createSlice({
 });
 
 
-export const setCertificateUrl = (url: string) => ({
-  type: 'certificate/setCertificateUrl',
-  payload: url,
-});
+// export const setCertificateUrl = (url: string) => ({
+//   type: 'certificate/setCertificateUrl',
+//   payload: url,
+// });
 
 
 export default certificateSlice.reducer;
+export const  {setCertificateUrl} =certificateSlice.actions
