@@ -15,9 +15,15 @@ function OrderRequest() {
   const { allbids, loading, error } = useSelector((state: RootState) => state.chefBids)
   const [bids, setBids] = useState<any[]>([])
     
-  useEffect(() => {
-    dispatch(getAllBids())
-  }, [dispatch])
+useEffect(() => {
+  dispatch(getAllBids())
+}, [dispatch])
+
+useEffect(() => {
+  const filtered = allbids?.filter((bid) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending') || []
+  setBids(filtered)
+}, [allbids])
+
 
   const completedBids = allbids?.filter((bid) => bid.status === 'completed' && bid.postId?.deliveryStatus === 'pending') || []
 
@@ -76,7 +82,7 @@ function OrderRequest() {
         ) : (
           <>
             <div className="grid gap-6">
-              {[...completedBids].reverse().map((bid) => (
+              {[...bids].reverse().map((bid) => (
                 <div
                   key={bid._id}
                   onClick={() => openModal(bid._id)}

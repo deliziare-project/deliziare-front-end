@@ -9,12 +9,14 @@ import { fetchChefPosts } from '@/features/chefPostSlice';
 import { UserCircle, FileText, Utensils, Award, BookOpen, Edit3, MapPin } from 'lucide-react';
 import SetPasswordModal from '@/components/user/userProfile/SetPasswordModal';
 import AuthWrapper from '@/components/AuthWrapper';
+import Link from 'next/link';
 
 const page: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'overview' | 'posts'>('overview');
   const [isSetPasswordOpen, setSetPasswordOpen] = useState(false);
+  const [isCertModalOpen, setCertModalOpen] = useState(false);
 
   const { posts, loading: postsLoading, error: postsError } = useSelector((state: RootState) => state.chefPost);
   const { chef, loading, error } = useSelector((state: RootState) => state.chef);
@@ -204,7 +206,7 @@ const page: React.FC = () => {
                   <div className=" rounded-lg p-5 border border-[#F0E0D8]">
                     <h3 className="flex items-center text-lg font-serif font-semibold text-[#5A2D1A] mb-3">
                       <Award className="w-5 h-5 mr-2 text-[#C26E4B]" />
-                      Certifications & Qualifications
+                       Qualifications
                     </h3>
                     <ul className="space-y-2">
                       {chef.qualifications.map((q: string, idx: number) => (
@@ -216,7 +218,24 @@ const page: React.FC = () => {
                     </ul>
                   </div>
                 )}
-              </div>
+                {chef.certificate && (
+                  <div className="rounded-lg p-5 border border-[#F0E0D8]">
+                    <h3 className="flex items-center text-lg font-serif font-semibold text-[#5A2D1A] mb-3">
+                      <Award className="w-5 h-5 mr-2 text-[#C26E4B]" />
+                      Certificate
+                    </h3>
+                    <div className="mt-2">
+                      <button
+                        onClick={() => setCertModalOpen(true)}
+                        className="inline-flex items-center text-[#C26E4B] hover:text-[#A85A3A] underline text-sm"
+                      >
+                        View Certificate
+                      </button>
+                    </div>
+                  </div>
+                )}
+               </div>
+              
             )}
 
             {/* Posts Tab */}
@@ -294,6 +313,36 @@ const page: React.FC = () => {
 
         <SetPasswordModal isOpen={isSetPasswordOpen} onClose={() => setSetPasswordOpen(false)} />
       </div>
+
+      {isCertModalOpen && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 bg-opacity-50 backdrop-sm">
+    <div className="bg-white rounded-lg p-6 max-w-3xl w-full relative">
+      <button
+        onClick={() => setCertModalOpen(false)}
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+
+      <h2 className="text-lg font-semibold mb-4 text-[#5A2D1A]">Certificate Preview</h2>
+
+      {chef.certificate.endsWith('.pdf') ? (
+        <iframe
+          src={chef.certificate}
+          className="w-full h-[500px]  rounded"
+          title="Certificate PDF"
+        />
+      ) : (
+        <img
+          src={chef.certificate}
+          alt="Certificate"
+          className="w-full max-h-[500px] object-contain rounded "
+        />
+      )}
+    </div>
+  </div>
+)}
+
     </AuthWrapper>
   );
 };
