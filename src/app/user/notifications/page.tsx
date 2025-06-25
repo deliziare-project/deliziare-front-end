@@ -9,6 +9,7 @@ import {
 } from '@/features/notificationSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { Bell, CheckCircle2, Clock, Loader2, ChevronDown } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function NotificationsPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +18,7 @@ export default function NotificationsPage() {
   );
   const userId = useSelector((state: RootState) => state.auth.currentUser?._id);
   const [visibleCount, setVisibleCount] = useState(10); // Initial number of notifications to show
-
+  const router = useRouter()
   useEffect(() => {
     if (userId) {
       dispatch(fetchNotifications());
@@ -75,6 +76,17 @@ export default function NotificationsPage() {
               {visibleNotifications.map((notification, index) => (
                 <div
                   key={notification._id || index}
+                  onClick={() => {
+                    if (notification.type === 'order-picked') {
+                      router.push('/user/order');
+                    } else if (notification.type=='delivered') {
+                      router.push('/user/order');
+                    }
+                    else{
+                      router.push('/user/notifications')
+                    }
+                    
+                  }}
                   className={`p-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] ${
                     !notification.isRead
                       ? 'bg-green-50 border-l-4 border-green-600 shadow-md'

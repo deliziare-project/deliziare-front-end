@@ -10,6 +10,7 @@ import L from 'leaflet'
 import axiosInstance from '@/api/axiosInstance'
 import { Map as LeafletMap } from 'leaflet'
 import { showSuccess } from '@/components/shared/ToastUtilis'
+import { useRouter } from 'next/navigation'
 
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false })
@@ -101,6 +102,7 @@ const DeliveryMap: React.FC<DeliveryMapProps> = ({ mapHeight = '100vh', refreshO
   const [isDelivered, setIsDelivered] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+   const router = useRouter()
   const mapRef = useRef<LeafletMap | null>(null)
 
   useEffect(() => {
@@ -133,6 +135,7 @@ const DeliveryMap: React.FC<DeliveryMapProps> = ({ mapHeight = '100vh', refreshO
       } else {
         setShowDeliverButton(false)
         setIsDelivered(true)
+        router.push('/deliveryBoy/earning')
       }
       
       showSuccess(`Order marked as ${action === 'pickup' ? 'picked up' : 'delivered'}`)

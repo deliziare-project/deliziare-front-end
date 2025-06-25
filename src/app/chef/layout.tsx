@@ -96,10 +96,12 @@ export default function ChefLayout({ children }: { children: ReactNode }) {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 ml-64 min-h-screen bg-gray-50">
-          <div className="sticky top-0 z-40">
+        <div className="flex-1 md:ml-64 min-h-screen bg-gray-50">
+
+           <div className="sticky top-0 z-40">
             <ChefNavbar />
           </div>
+
 
           {/* Draggable Chat Icon */}
           <div

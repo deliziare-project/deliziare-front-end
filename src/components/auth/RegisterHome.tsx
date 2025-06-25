@@ -159,29 +159,35 @@
 // };
 
 // export default RegisterHome;
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import ChefRegister from '../auth/ChefRegister';
-import DeliveryBoyRegister from '../auth/DeliveryBoyRegister';
-import RegisterPage from '../auth/UserRegister';
+import dynamic from 'next/dynamic';
+
+// Dynamically import forms with `ssr: false` to skip SSR entirely
+const ChefRegister = dynamic(() => import('../auth/ChefRegister'), { ssr: false });
+const DeliveryBoyRegister = dynamic(() => import('../auth/DeliveryBoyRegister'), { ssr: false });
+const RegisterPage = dynamic(() => import('../auth/UserRegister'), { ssr: false });
 
 type FormType = 'user' | 'chef' | 'deliveryboy';
 
 const RegisterHome: React.FC = () => {
   const [activeForm, setActiveForm] = useState<FormType>('user');
 
-  // Load saved form type on mount
   useEffect(() => {
-    const savedForm = localStorage.getItem('activeForm') as FormType | null;
-    if (savedForm) {
-      setActiveForm(savedForm);
+    if (typeof window !== 'undefined') {
+      const savedForm = localStorage.getItem('activeForm') as FormType | null;
+      if (savedForm) {
+        setActiveForm(savedForm);
+      }
     }
   }, []);
 
-  // Save active form type when it changes
   useEffect(() => {
-    localStorage.setItem('activeForm', activeForm);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('activeForm', activeForm);
+    }
   }, [activeForm]);
 
   const renderForm = () => {
@@ -204,24 +210,24 @@ const RegisterHome: React.FC = () => {
           <div className="flex justify-center gap-4 -mb-2">
             <button
               onClick={() => setActiveForm('user')}
-              className={`px-6 py-2 rounded-full font-medium transition-all ${activeForm === 'user' 
-                ? 'bg-[#708A58] text-white shadow-md' 
+              className={`px-6 py-2 rounded-full font-medium transition-all ${activeForm === 'user'
+                ? 'bg-[#708A58] text-white shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               User
             </button>
             <button
               onClick={() => setActiveForm('chef')}
-              className={`px-6 py-2 rounded-full font-medium transition-all ${activeForm === 'chef' 
-                ? 'bg-orange-700 text-white shadow-md' 
+              className={`px-6 py-2 rounded-full font-medium transition-all ${activeForm === 'chef'
+                ? 'bg-orange-700 text-white shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               Chef
             </button>
             <button
               onClick={() => setActiveForm('deliveryboy')}
-              className={`px-6 py-2 rounded-full font-medium transition-all ${activeForm === 'deliveryboy' 
-                ? 'bg-blue-600 text-white shadow-md' 
+              className={`px-6 py-2 rounded-full font-medium transition-all ${activeForm === 'deliveryboy'
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               Delivery

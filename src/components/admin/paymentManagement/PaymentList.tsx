@@ -15,6 +15,7 @@ const AdminPaymentList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const postsPerPage = 10;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAllPayments());
@@ -147,6 +148,7 @@ const AdminPaymentList = () => {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    isLoading={isLoading}
                   />
                 </div>
               )}

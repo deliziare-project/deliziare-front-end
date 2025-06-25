@@ -283,7 +283,6 @@ function ChefNavbar() {
 
   const userId = useSelector((state: RootState) => state.auth.currentUser?._id);
   const { notifications, loading } = useSelector((state: RootState) => state.notifications);
-
   const unreadCount = notifications.filter((n) => !n.isRead).length;
   const displayedNotifications = notifications.slice(0, 10); // Show only first 10 notifications
 
@@ -412,12 +411,15 @@ function ChefNavbar() {
                   if (notification.type === 'event_available' && notification.postId) {
                     router.push(`/chef/postDetails/${notification.postId}`);
                   } else if (notification.type === 'bid_accepted') {
-                    router.push('/chef/bid-requests?section=accepted');
+                    router.push('/chef/Bids?section=accepted');
                   } else if (notification.type === 'delivery_accepted') {
-                    router.push('/delivery/accepted');
-                  } else if (notification.type === 'delivered') {
-                    router.push('/delivery/history');
-                  } else {
+                    router.push('/chef/track-order');
+                  } else if (notification.type === 'chef-delivered') {
+                    router.push('/chef/track-order');
+                  } 
+                  else if(notification.type==='withdrawal-approved'){
+                    router.push('/chef/wallet')
+                  }else {
                     router.push('/chef/notifications');
                   }
                   setIsOpen(false);

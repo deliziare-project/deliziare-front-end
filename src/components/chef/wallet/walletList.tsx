@@ -91,7 +91,7 @@ const WalletInfo = () => {
         </div>
       ) : (
         <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
-          {filteredTransactions.map((tx, idx) => (
+          {[...filteredTransactions].reverse().map((tx, idx) => (
             <div
               key={idx}
               className={`p-5 rounded-lg transition-all duration-200 hover:shadow-md ${

@@ -1,21 +1,31 @@
-
 'use client';
 
 import { useEffect } from 'react';
+import io from 'socket.io-client';
 import axiosInstance from '@/api/axiosInstance';
 
-const LocationTracker = () => {
+const socket = io('http://localhost:5000', { transports: ['websocket'] }); // Replace with your server URL
+
+const LocationTracker = ({ deliveryId }: { deliveryId: string }) => {
   useEffect(() => {
     let watchId: number;
 
     const sendLocation = async (lat: number, lng: number) => {
       try {
+        // Send to backend for persistence
         await axiosInstance.post('/location/update-location', {
           lat,
           lng,
-          
+          deliveryId,
         });
-        console.log('Location sent:', lat, lng);
+
+        // Emit via socket for live update
+        socket.emit('locationUpdate', {
+          deliveryId,
+          coords: { lat, lng },
+        });
+
+        console.log('📡 Location sent:', lat, lng);
       } catch (err) {
         console.error('Error sending location:', err);
       }
@@ -43,9 +53,9 @@ const LocationTracker = () => {
     return () => {
       if (watchId) navigator.geolocation.clearWatch(watchId);
     };
-  }, []);
+  }, [deliveryId]);
 
-  return null; // No UI, just background tracking
+  return null; // background only
 };
 
 export default LocationTracker;

@@ -302,6 +302,7 @@ import { useDispatch, useSelector } from "react-redux";
 import socket from "@/socket";
 import { AppDispatch, RootState } from "@/redux/store";
 import { addNotification, fetchNotifications, markNotificationAsRead } from "@/features/notificationSlice";
+import { FaFirstOrder } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 
 const Navbar: React.FC = () => {
@@ -401,6 +402,7 @@ const Navbar: React.FC = () => {
             <NavLink href="/user/home" icon={<BookOpen size={18} />} label="Home" />
             <NavLink href="/user/chefs" icon={<ChefHat size={18} />} label="Chef" />
             <NavLink href="/user/posts" icon={<BookOpen size={18} />} label="Posts" />
+             <NavLink href="/user/order" icon={<FaFirstOrder size={18} />} label="order" />
 
             <div className="flex items-center space-x-4 ml-4">
               {/* Notification Bell with Dropdown */}
@@ -447,11 +449,17 @@ const Navbar: React.FC = () => {
                               !notification.isRead ? 'bg-orange-50 font-medium' : 'bg-white'
                             }`}
                             onClick={() => {
-                              if (notification.postId) {
-                                router.push(`/user/posts/${notification.postId}`);
-                                setIsDropdownOpen(false);
+                              if (notification.type === 'order-picked') {
+                                router.push('/user/order');
+                              } else if (notification.type=='delivered') {
+                                router.push('/user/order');
                               }
+                              else{
+                                router.push('/user/notifications')
+                              }
+                              setIsDropdownOpen(false);
                             }}
+                            
                           >
                             <p className="text-sm text-gray-800">
                               {notification.message || 'New Notification'}

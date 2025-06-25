@@ -1,16 +1,17 @@
-import PasswordResetOtp from '@/components/auth/PasswordResetOtp'
-import AuthWrapper from '@/components/AuthWrapper'
-import React from 'react'
+'use client';
 
-function page() {
+import React, { Suspense } from 'react';
+import PasswordResetOtp from '@/components/auth/PasswordResetOtp';
+import AuthWrapper from '@/components/AuthWrapper';
+
+function Page() {
   return (
-    <div>
-      <AuthWrapper routeType='public'>
-      <PasswordResetOtp/>
-      </AuthWrapper>
-        
-    </div>
-  )
+    <AuthWrapper routeType="public">
+      <Suspense fallback={<div className="min-h-screen flex justify-center items-center">Loading...</div>}>
+        <PasswordResetOtp />
+      </Suspense>
+    </AuthWrapper>
+  );
 }
 
-export default page
+export default Page;
