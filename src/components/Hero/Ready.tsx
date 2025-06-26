@@ -33,7 +33,7 @@ export function Ready() {
                   
                   className="bg-white text-[#B87333] hover:bg-gray-100 font-semibold px-8 py-3 rounded-full cursor-pointer"
                 >
-                  <Link href="/auth/register">
+                  <Link href="/register">
                     Get Started Now
                   </Link>
                 </button>

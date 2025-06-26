@@ -64,12 +64,12 @@ export default function HeroSection() {
               <Button
                 asChild
                 size="lg"
-                className=" bg-orange-600 text-white hover:bg-orange-700 font-semibold px-8 py-3 rounded-full"
+                className=" bg-orange-600 text-white hover:bg-orange-700 font-semibold px-20 py-3 rounded-full"
               >
                 <Link href="/register">Get Started</Link>
               </Button>
 
-              <Button
+              {/* <Button
                 asChild
                 variant="outline"
                 size="lg"
@@ -78,7 +78,7 @@ export default function HeroSection() {
                 <Link href="/chefs" className="flex items-center">
                   Explore Chefs <ChevronRight className="ml-2 h-4 w-4" />
                 </Link>
-              </Button>
+              </Button> */}
             </div>
           </motion.div>
         </div>
