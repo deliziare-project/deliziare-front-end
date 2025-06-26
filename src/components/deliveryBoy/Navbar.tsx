@@ -190,14 +190,16 @@ function Navbar() {
 
 
             <div className="flex items-center space-x-3">
-              <div className="relative" 
-              onClick={()=>router.push('/deliveryBoy/profile')}
+             <div
+                className="relative cursor-pointer group"
+                onClick={() => router.push('/deliveryBoy/profile')}
               >
-                <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-orange-100 shadow">
-                  <User/>
+                <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center border-2 border-orange-200 shadow-sm group-hover:shadow-md transition-all duration-200">
+                  <User className="w-5 h-5 text-orange-600 group-hover:scale-105 transition-transform duration-200" />
                 </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
               </div>
+
               <div className="hidden sm:block text-right">
                 <p className="text-sm font-semibold text-gray-700 leading-tight">{currentUser?.name}</p>
                 <p className="text-xs text-gray-400">Online</p>

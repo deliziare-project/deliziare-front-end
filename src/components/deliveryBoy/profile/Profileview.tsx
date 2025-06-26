@@ -151,14 +151,14 @@ function Profileview() {
         </div>
       </div>
 
-      {/* Image Preview Modal Only */}
+      {/* Image Preview Modal */}
       {modalImage && !isPDF(modalImage) && (
         <div
           onClick={closeModal}
-          className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-center items-center z-50"
         >
           <div
-            className="bg-white p-4 rounded relative max-w-[90vw] max-h-[90vh] shadow-lg w-full"
+            className="bg-white p-4 rounded relative w-full max-w-md max-h-[70vh] shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -168,11 +168,11 @@ function Profileview() {
               ×
             </button>
             <h3 className="text-lg font-semibold mb-4 text-center">{modalTitle}</h3>
-            <div className="w-full h-full overflow-auto">
+            <div className="w-full overflow-auto flex justify-center">
               <img
                 src={modalImage}
                 alt={modalTitle}
-                className="max-w-full max-h-[80vh] object-contain mx-auto"
+                className="max-w-full max-h-[60vh] object-contain rounded shadow"
               />
             </div>
           </div>
