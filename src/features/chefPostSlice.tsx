@@ -61,6 +61,23 @@ export const fetchChefPosts = createAsyncThunk(
   }
 );
 
+
+export const updateChefPost = createAsyncThunk(
+  'chefPost/update',
+  async ({ id, data }: { id: string; data: FormData }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.put(`/chefs/update-post/${id}`, data,{
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response.data.message || 'Update failed');
+    }
+  }
+);
+
 const chefPostSlice = createSlice({
   name: 'chefPost',
   initialState,
@@ -102,6 +119,20 @@ const chefPostSlice = createSlice({
       .addCase(fetchChefPosts.rejected, (state, action) => {
         state.postsLoading = false;
         state.postsError = action.payload as string;
+      })
+      .addCase(updateChefPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateChefPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true; // ✅ This must be set!
+      })
+      .addCase(updateChefPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        state.success = false;
       });
   },
 });
