@@ -11,25 +11,25 @@ const eventTypes = [
     id: "corporate-events",
     title: "Corporate Events",
     description: "Impress clients and colleagues with exceptional catering.",
-    imageUrl: "/images/corporate.jpg", // Place image in public/images/
+    imageUrl: "/home/event1.jpg", // Place image in public/images/
   },
   {
     id: "birthday-celebrations",
     title: "Birthday Celebrations",
     description: "Make your birthday special with personalized menus.",
-    imageUrl: "/images/birthday.jpg",
+    imageUrl: "/home/event2.jpeg",
   },
   {
     id: "private-dining",
     title: "Private Dining",
     description: "Intimate dining experiences in the comfort of your home.",
-    imageUrl: "/images/private-dining.jpg",
+    imageUrl: "/home/event3.jpg",
   },
   {
     id: "wedding-feasts",
     title: "Wedding Feasts",
     description: "Celebrate your special day with unforgettable cuisine.",
-    imageUrl: "/images/wedding.jpg",
+    imageUrl: "/home/event4.jpg",
   },
 ];
 

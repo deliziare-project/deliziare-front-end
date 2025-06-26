@@ -77,6 +77,7 @@ const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose, refreshOrde
                   <strong>Chef:</strong> {selectedOrder.bidId.chefId.name}
                 </span>
               </div>
+              
               <div className="flex items-center gap-2">
                 <CalendarDays className="w-5 h-5 text-red-600" />
                 <span>
@@ -96,7 +97,7 @@ const OrderDetailsModal: React.FC<Props> = ({ postId, show, onClose, refreshOrde
               </div>
             </div>
            <div className="pt-4">
-            <h3 className="text-lg font-semibold text-red-700 mb-3">User Details</h3>
+            <h3 className="text-lg font-semibold text-red-700 mb-3">Customer Details</h3>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
